@@ -26,6 +26,7 @@ public class Storage {
     public static void stop(){
         transfer.setPower(0);
         activestorage = false;
+        Intake.stop();
         timer.reset();
     }
 
@@ -42,10 +43,7 @@ public class Storage {
     }
 
     public static void StorageForcedStop(){
-        if(getState().equals(Status.STORAGEFULL)){
-            stop();
-            Intake.stop();
-        }
+        if(getState().equals(Status.STORAGEFULL)) stop();
     }
 
 }

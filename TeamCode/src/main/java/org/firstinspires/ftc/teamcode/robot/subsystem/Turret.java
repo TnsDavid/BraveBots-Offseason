@@ -11,8 +11,10 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 public class Turret {
 
     static double NEUTRAL_POSITION= .5;
-    public static double x, y, heading, xCorner, yCorner, dist, fieldRelative, robotRelative, turretRelative;
+    public static double x, y, heading, xCorner, yCorner, dist, fieldRelative, robotRelative, turretRelative, TOF, virtualDist;
     public static final double FIELD_LENGTH= 3.65, launchTime= .2,goalCircleRasius= .18;
+    public static final double at = -0.467223, bt = 2.54517, ct = -2.64603;
+    public static final double turretTOFCoef = 0.9, shooterTOFCoef = 1.05;
     public static BetterServoEx turret1, turret2;
     public static boolean reseted = false;
 
@@ -69,10 +71,19 @@ public class Turret {
 
             yCorner= FIELD_LENGTH- y;
             xCorner= Robot.a== Alliance.RED ? FIELD_LENGTH- x : x;
+
             dist = Math.hypot(xCorner, yCorner);
 
             double Vx = Robot.pinpoint.getVelX(DistanceUnit.METER);
             double Vy = Robot.pinpoint.getVelY(DistanceUnit.METER);
+
+            if(dist < 3.3) TOF = at * Math.pow(dist, 2) + bt * dist + ct;
+            else TOF = 0.77;
+
+            xCorner -= Vx * TOF;
+            yCorner -= Vy * TOF;
+
+            virtualDist = Math.hypot(xCorner, yCorner);
 
             heading= Math.toDegrees(heading);
             xCorner -= goalCircleRasius;
