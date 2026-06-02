@@ -59,12 +59,11 @@ public class Shooter {
     public static double boost;
     public static void update(){
         double distt= Turret.dist;
+        double virtualDistt = Turret.virtualDist;
 
         if(distt< 3.3) {
-
-//        if(distt<3) {
-            velocity = Range.clip(a2 * Math.pow(distt, 2) + b2 * distt + c2 + offset, 0, 2100);
-            hoodPos = Range.clip(a1*Math.pow(distt,2)+ b1*distt+c1, 0.09,0.3172);
+            velocity = Range.clip(a2 * Math.pow(virtualDistt, 2) + b2 * virtualDistt + c2 + offset, 0, 2100);
+            hoodPos = Range.clip(a1*Math.pow(virtualDistt,2)+ b1*virtualDistt+c1, 0.09,0.3172);
         }
         else {
             velocity = 1220+offset;
