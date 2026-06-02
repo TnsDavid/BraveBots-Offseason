@@ -56,6 +56,8 @@ public class Turret {
 
         }
     }
+
+    //TODO: PUNETI SOTM;
     public static double offset = 0;
     public static void update(){
         Pose robotPose= Robot.robotPose;

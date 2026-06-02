@@ -13,11 +13,10 @@ public class Storage {
 
 
     public enum Status{
-        ONEBALL, TWOBALL , STORAGEFULL;
+       EMPTY , ONEBALL, TWOBALL , STORAGEFULL;
 
         }
-    public static  Status status;
-
+    public static  Status status =Status.EMPTY;
     public static void start(){
         transfer.setPower(-0.94);
         timer.startTime();
