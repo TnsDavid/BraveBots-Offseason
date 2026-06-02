@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.subsystem;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
@@ -67,6 +68,9 @@ public class Turret {
             yCorner= FIELD_LENGTH- y;
             xCorner= Robot.a== Alliance.RED ? FIELD_LENGTH- x : x;
             dist = Math.hypot(xCorner, yCorner);
+
+            double Vx = Robot.pinpoint.getVelX(DistanceUnit.METER);
+            double Vy = Robot.pinpoint.getVelY(DistanceUnit.METER);
 
             heading= Math.toDegrees(heading);
             xCorner -= goalCircleRasius;
