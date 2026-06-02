@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannelController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -31,6 +32,7 @@ import java.util.List;
 public class Robot {
     public static Pose robotPose;
     public static GoBildaPinpointDriver pinpoint;
+    public static VoltageSensor voltageSensor;
     public DcMotorController controlHubMotors, expansionHubMotors;
     DcMotorControllerEx exExpansionHubMotors;
     public Limelight3A ll;
@@ -97,6 +99,7 @@ public class Robot {
             odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
             odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         }
+        voltageSensor= hm.voltageSensor.iterator().next();
         ll= hm.get(Limelight3A.class, "ll");
         ll.pipelineSwitch(0);
         ll.setPollRateHz(100);

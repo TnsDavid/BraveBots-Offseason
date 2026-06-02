@@ -26,6 +26,7 @@ public class Storage {
     public static void stop(){
         transfer.setPower(0);
         activestorage = false;
+        timer.reset();
     }
 
     public static Status getState() {
