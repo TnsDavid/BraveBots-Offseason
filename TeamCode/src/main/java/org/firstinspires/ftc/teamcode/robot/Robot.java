@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BreakBeam;
+import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
 import java.util.List;
 
@@ -100,10 +101,7 @@ public class Robot {
             odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         }
         voltageSensor= hm.voltageSensor.iterator().next();
-        ll= hm.get(Limelight3A.class, "ll");
-        ll.pipelineSwitch(0);
-        ll.setPollRateHz(100);
-        ll.start();
+        LLMath.init(hm);
         //WebcamName name= hm.get(WebcamName.class, "camera");
         //camera= OpenCvCameraFactory.getInstance().createWebcam(name);
 
