@@ -67,14 +67,14 @@ public class LLMath {
         return Math.tan(Math.toRadians(tx)) * hyp + xOffset;
     }
     public static LinkedList<Pose> getRobotRelativePoses(){
-        LinkedList<Pose> ballPoseRobotRelative = new LinkedList<>();
+        LinkedList<Pose> ballPosesRobotRelative = new LinkedList<>();
         for(Pose ballParams : results){
             double xComp = getBallX(ballParams.getX(), ballParams.getY());
             double yComp = getBallY(ballParams.getY());
             Pose pose = new Pose(xComp, yComp);
-            ballPoseRobotRelative.add(pose);
+            ballPosesRobotRelative.add(pose);
         }
-        return ballPoseRobotRelative;
+        return ballPosesRobotRelative;
     }
 
     public static Pose getFieldRelativePose(Pose p){
@@ -88,7 +88,6 @@ public class LLMath {
         );
     }
     public static Pose getBestRobotRelativePose(){
-        update();
         LinkedList<Pose> ballPoses = getRobotRelativePoses();
         Pose bestPose = new Pose();
         double maxSeenInArea = 0;
@@ -105,11 +104,17 @@ public class LLMath {
     }
 
     public static void scan(Follower flw){
+        update();
         Pose robotRelPose = getBestRobotRelativePose();
         Pose fieldRelPose = getFieldRelativePose(robotRelPose);
 
         Path path = new Path(new BezierLine(flw.getPose(), fieldRelPose));
         path.setConstantHeadingInterpolation(Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
         flw.followPath(path);
+    }
+
+    public static Pose test(){
+        update();
+        return getFieldRelativePose(getBestRobotRelativePose());
     }
 }
