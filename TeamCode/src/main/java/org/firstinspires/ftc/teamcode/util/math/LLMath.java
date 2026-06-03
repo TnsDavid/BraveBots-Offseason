@@ -2,11 +2,19 @@ package org.firstinspires.ftc.teamcode.util.math;
 
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
+import com.pedropathing.paths.Path;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -58,19 +66,30 @@ public class LLMath {
         double hyp = Math.hypot(y, zOffset - ballHeight);
         return Math.tan(Math.toRadians(tx)) * hyp + xOffset;
     }
-    public static LinkedList<Pose> getRoboRelativePoses(){
-        LinkedList<Pose> ballPoseRoboRelative = new LinkedList<>();
+    public static LinkedList<Pose> getRobotRelativePoses(){
+        LinkedList<Pose> ballPoseRobotRelative = new LinkedList<>();
         for(Pose ballParams : results){
             double xComp = getBallX(ballParams.getX(), ballParams.getY());
             double yComp = getBallY(ballParams.getY());
             Pose pose = new Pose(xComp, yComp);
-            ballPoseRoboRelative.add(pose);
+            ballPoseRobotRelative.add(pose);
         }
-        return ballPoseRoboRelative;
+        return ballPoseRobotRelative;
     }
-    public static Pose scan(){
+
+    public static Pose getFieldRelativePose(Pose p){
+        Vector v = new Vector();
+        v.setOrthogonalComponents(p.getX(), p.getY());
+        v.rotateVector(Robot.robotPose.getHeading());
+
+        return new Pose(
+                Robot.robotPose.getX() + v.getXComponent(),
+                Robot.robotPose.getY() + v.getYComponent()
+        );
+    }
+    public static Pose getBestRobotRelativePose(){
         update();
-        LinkedList<Pose> ballPoses = getRoboRelativePoses();
+        LinkedList<Pose> ballPoses = getRobotRelativePoses();
         Pose bestPose = new Pose();
         double maxSeenInArea = 0;
         for(Pose ballPose : ballPoses){
@@ -83,5 +102,14 @@ public class LLMath {
             }
         }
         return bestPose;
+    }
+
+    public static void scan(Follower flw){
+        Pose robotRelPose = getBestRobotRelativePose();
+        Pose fieldRelPose = getFieldRelativePose(robotRelPose);
+
+        Path path = new Path(new BezierLine(flw.getPose(), fieldRelPose));
+        path.setConstantHeadingInterpolation(Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
+        flw.followPath(path);
     }
 }
