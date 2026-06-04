@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DigitalChannelController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
@@ -38,16 +39,17 @@ import java.util.List;
 public class Robot {
     public static Pose robotPose;
     public static GoBildaPinpointDriver pinpoint;
+
+    public static final float odometryResolution = 34.310551f;
     public static VoltageSensor voltageSensor;
     List<LynxModule> hubs;
     LynxModule controlHub, expansionHub;
-
     public DcMotorController controlHubMotors, expansionHubMotors;
     DcMotorControllerEx exExpansionHubMotors;
     public Limelight3A ll;
     public BetterServo hood, blocker;
 
-    public BreakBeam breakBeam;
+    DigitalChannel upLaser, downLaser;
 
     public BetterServoEx turret1, turret2;
     public GoBildaPinpointDriver odo;
@@ -105,7 +107,7 @@ public class Robot {
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake= new BetterMotorEx(controlHubMotors,2);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         transfer = new BetterMotorEx(expansionHubMotors, 2);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -119,7 +121,6 @@ public class Robot {
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setDirection(DcMotorSimple.Direction.REVERSE);
-        blocker = new BetterServo(controlHubServos, 0);
     }
     private void assignHardware(){
         Blocker.blocker=blocker;
@@ -129,6 +130,8 @@ public class Robot {
         Shooter.motor1=shooter;
         Shooter.motor2=shooter2;
         Storage.transfer=transfer;
+        Storage.up=upLaser;
+        Storage.down=downLaser;
         Intake.motor=intake;
         Drivetrain.leftBack=BackLeft;
         Drivetrain.leftFront=FrontLeft;
@@ -141,7 +144,8 @@ public class Robot {
         turret2= new BetterServoEx(controlHubServos, 0);
         turret1.setPwmRange(new PwmControl.PwmRange(500, 2500));
         turret2.setPwmRange(new PwmControl.PwmRange(500, 2500));
-        hood= new BetterServo(controlHubServos, 1);
+        hood= new BetterServo(expansionHubServos, 1);
+        blocker = new BetterServo(controlHubServos, 1);
     }
 
     public void initializeRest(){
@@ -151,9 +155,13 @@ public class Robot {
             odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
             odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.CM);
             odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-            odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+            odo.setEncoderResolution(odometryResolution, DistanceUnit.MM);
         }
         voltageSensor= hm.voltageSensor.iterator().next();
+        upLaser = hm.get(DigitalChannel.class, "laserup");
+        downLaser = hm.get(DigitalChannel.class, "laserdown");
+        upLaser.setMode(DigitalChannel.Mode.INPUT);
+        downLaser.setMode(DigitalChannel.Mode.INPUT);
         //LLMath.init(hm);
     }
     ElapsedTime timer;
@@ -172,10 +180,10 @@ public class Robot {
 
         // odo.update();
 
-        if(opModeType.equals(OpModeType.TELEOP)) {
-            pinpoint.update();
-            robotPose= new Pose(pinpoint.getPosX(DistanceUnit.METER), pinpoint.getPosY(DistanceUnit.METER), pinpoint.getHeading(AngleUnit.RADIANS));
-        }
+//        if(opModeType.equals(OpModeType.TELEOP)) {
+//            pinpoint.update();
+//            robotPose= new Pose(pinpoint.getPosX(DistanceUnit.METER), pinpoint.getPosY(DistanceUnit.METER), pinpoint.getHeading(AngleUnit.RADIANS));
+//        }
 
 
     }

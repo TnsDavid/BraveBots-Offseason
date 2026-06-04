@@ -1,33 +1,45 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
+
+import java.util.List;
+
+@TeleOp
 public class Senzor_Digital extends LinearOpMode {
     DigitalChannel Laser1;
     DigitalChannel Laser2;
+
+    Robot r;
     DigitalChannel Laser3;
+
+    List<LynxModule> hubs;
     @Override
     public void runOpMode() throws InterruptedException{
-        Laser1=hardwareMap.get(DigitalChannel.class, "Laser_Jos");
-        Laser2=hardwareMap.get(DigitalChannel.class, "Laser_Mediu");
-        Laser3=hardwareMap.get(DigitalChannel.class, "Laser_Sus");
+
+        r = new Robot(hardwareMap , telemetry , Alliance.RED ).initialize().setOpModeType(Robot.OpModeType.TELEOP);
+        Laser1=hardwareMap.get(DigitalChannel.class, "laser");
+        Laser2=hardwareMap.get(DigitalChannel.class, "laser1");
 
         Laser1.setMode(DigitalChannel.Mode.INPUT);
         Laser2.setMode(DigitalChannel.Mode.INPUT);
-        Laser3.setMode(DigitalChannel.Mode.INPUT);
         boolean detected_1;
         boolean detected_2;
-        boolean detected_3;
         waitForStart();
         while(opModeIsActive()){
-
             detected_1=Laser1.getState();
             detected_2=Laser2.getState();
-            detected_3=Laser3.getState();
 
             if(detected_1){
                 telemetry.addLine("Object 1 Detected");
+                Storage.stop();
             }
             else telemetry.addLine("No Object 1 Detected");
 
@@ -35,11 +47,6 @@ public class Senzor_Digital extends LinearOpMode {
                 telemetry.addLine("Object 2 Detected");
             }
             else telemetry.addLine("No Object 2 Detected");
-
-            if(detected_3){
-                telemetry.addLine("Object 3 Detected");
-            }
-            else telemetry.addLine("No Object 3 Detected");
 
             telemetry.update();
 

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DigitalChannelImpl;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
@@ -54,6 +56,10 @@ public class Storage {
 
     public static void StorageForcedStop(){
         if(getState().equals(Status.STORAGEFULL)) stop();
+    }
+
+    public static void checkUpLaser(){
+        if(up.getState()) stop();
     }
 
 }
