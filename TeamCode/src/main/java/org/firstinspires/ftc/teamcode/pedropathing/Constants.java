@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
+    public static double dtLength = 26.8/2;
+    public static double dtWidth = 34.4/2;
     public static double xOffset , yOffset;
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(7);

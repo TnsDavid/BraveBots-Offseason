@@ -11,7 +11,7 @@ import java.util.List;
 public class EncoderLocalizer extends LinearOpMode {
 
     DcMotorEx frontLeft,frontRight,backLeft,backRight;
-    MecanumDriveTest drivetrain;
+    MecanumDrive drivetrain;
 
     double position, lastposition;
 
@@ -27,7 +27,7 @@ public class EncoderLocalizer extends LinearOpMode {
         }
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        drivetrain = new MecanumDriveTest(backLeft, backRight, frontLeft , frontRight);
+        //drivetrain = new MecanumDriveTest(backLeft, backRight, frontLeft , frontRight);
 
         waitForStart();
         while(opModeIsActive()){

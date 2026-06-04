@@ -20,7 +20,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Hang;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
@@ -34,12 +39,19 @@ public class Robot {
     public static Pose robotPose;
     public static GoBildaPinpointDriver pinpoint;
     public static VoltageSensor voltageSensor;
+    List<LynxModule> hubs;
+    LynxModule controlHub, expansionHub;
+
     public DcMotorController controlHubMotors, expansionHubMotors;
     DcMotorControllerEx exExpansionHubMotors;
     public Limelight3A ll;
+    public BetterServo hood, blocker;
 
+    public BreakBeam breakBeam;
+
+    public BetterServoEx turret1, turret2;
     public GoBildaPinpointDriver odo;
-
+    public BetterMotorEx intake, transfer, shooter, shooter2, hang,FrontRight,FrontLeft,BackLeft,BackRight;
     public ServoController controlHubServos, expansionHubServos;
 
     public DigitalChannelController controller;
@@ -48,8 +60,10 @@ public class Robot {
     public Telemetry t;
     public static Alliance a= null;
 
-    List<LynxModule> hubs;
-
+    public Robot(HardwareMap hm, Telemetry t){
+        this.hm= hm;
+        this.t= t;
+    }
     public enum OpModeType{
         TELEOP, AUTO
     }
@@ -80,18 +94,57 @@ public class Robot {
         controller = hm.get(DigitalChannelController.class, "Control Hub");
     }
     public void initializeMotors() {
-
+        FrontLeft=new BetterMotorEx(controlHubMotors,0);
+        BackLeft=new BetterMotorEx(controlHubMotors,1);
+        FrontRight=new BetterMotorEx(expansionHubMotors,0);
+        BackRight=new BetterMotorEx(expansionHubMotors,1);
+        FrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake= new BetterMotorEx(controlHubMotors,2);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        transfer = new BetterMotorEx(expansionHubMotors, 2);
+        transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        transfer.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooter= new BetterMotorEx(controlHubMotors, 3).setCachingTolerance(.01)
+                .setMaxVelocity(2100);
+        //    .setPFCoefficients(Shooter.p, Shooter.f);
+        shooter2= new BetterMotorEx(expansionHubMotors, 3).setCachingTolerance(.01)
+                .setMaxVelocity(2100);
+        //   .setPFCoefficients(Shooter.p, Shooter.f);
+        shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
+        blocker = new BetterServo(controlHubServos, 0);
     }
     private void assignHardware(){
-
+        Blocker.blocker=blocker;
+        Turret.turret1=turret1;
+        Turret.turret2=turret2;
+        Shooter.servo=hood;
+        Shooter.motor1=shooter;
+        Shooter.motor2=shooter2;
+        Storage.transfer=transfer;
+        Intake.motor=intake;
+        Drivetrain.leftBack=BackLeft;
+        Drivetrain.leftFront=FrontLeft;
+        Drivetrain.rightBack=BackRight;
+        Drivetrain.rightFront=FrontRight;
     }
 
     public void initializeServos(){
-
+        turret1= new BetterServoEx(expansionHubServos, 0);
+        turret2= new BetterServoEx(controlHubServos, 0);
+        turret1.setPwmRange(new PwmControl.PwmRange(500, 2500));
+        turret2.setPwmRange(new PwmControl.PwmRange(500, 2500));
+        hood= new BetterServo(controlHubServos, 1);
     }
 
     public void initializeRest(){
-        //odo= hm.get(GoBildaPinpointDriver.class, "nigg");
         if(opModeType== null)
             throw new IllegalArgumentException("OpMode type nesetat");
         if(opModeType== OpModeType.TELEOP) {
@@ -101,10 +154,7 @@ public class Robot {
             odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         }
         voltageSensor= hm.voltageSensor.iterator().next();
-        LLMath.init(hm);
-        //WebcamName name= hm.get(WebcamName.class, "camera");
-        //camera= OpenCvCameraFactory.getInstance().createWebcam(name);
-
+        //LLMath.init(hm);
     }
     ElapsedTime timer;
     public void update(){
@@ -128,5 +178,18 @@ public class Robot {
         }
 
 
+    }
+    public Robot initialize()
+    {
+        hubs= hm.getAll(LynxModule.class);
+        hubs.forEach((hub)-> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
+        controlHub= hubs.get(0);
+        expansionHub= hubs.get(1);
+        initializeControllers();
+        initializeMotors();
+        initializeServos();
+        initializeRest();
+        assignHardware();
+        return this;
     }
 }

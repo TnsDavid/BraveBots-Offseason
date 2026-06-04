@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
 import com.arcrobotics.ftclib.controller.wpilibcontroller.SimpleMotorFeedforward;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.exception.TargetPositionNotSetException;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.util.math.PIDController;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
 
+@Configurable
 public class Shooter {
     public static BetterMotorEx motor1, motor2;
     public static BetterServo servo,SE;
@@ -53,9 +55,13 @@ public class Shooter {
 
         }
     }
-    public static double hoodPos;
+    public static double hoodPos = 0;
     public static double est;
     public static double offset=0;
+    public static void updateTest(){
+        motor1.update();
+        servo.setPosition(hoodPos);
+    }
     public static double boost;
     public static void update(){
         double distt= Turret.dist;
@@ -70,12 +76,7 @@ public class Shooter {
             hoodPos = 0.2011;
         }
 
-//        else {
-//            velocity= 1220+offset;
-//            hoodPos= 0.2131;
-//        }
-            setVelocity(velocity);
-            setVelocity(0);
+        setVelocity(velocity);
         servo.setPosition(hoodPos);
         motor1.update();
     }

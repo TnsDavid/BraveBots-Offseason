@@ -2,28 +2,30 @@ package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import java.util.List;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 
 
-public class MecanumDriveTest{
-     public DcMotorEx FrontRight;
-     public DcMotorEx FrontLeft;
-     public DcMotorEx BackLeft;
-     public DcMotorEx BackRight;
+public class MecanumDrive {
 
-     double tpr = 1550;
-     double diameter = 5;
+    public DcMotorEx FrontRight;
+    public DcMotorEx FrontLeft;
+    public DcMotorEx BackLeft;
+    public DcMotorEx BackRight;
+    double tpr = 1550;
+    double diameter = 5;
 
-    public MecanumDriveTest(DcMotorEx leftback, DcMotorEx rightback, DcMotorEx leftfront , DcMotorEx rightfront) {
-        BackLeft = leftback;
-        BackRight = rightback;
-        FrontRight = rightfront;
-        FrontLeft = leftfront;
+    public MecanumDrive(Robot robot) {
+        BackLeft = robot.BackLeft;
+        BackRight = robot.BackRight;
+        FrontRight = robot.FrontRight;
+        FrontLeft = robot.FrontLeft;
     }
-
-
+    boolean robotCentric;
+    public MecanumDrive fieldCentric(boolean robotCentric){
+        this.robotCentric= robotCentric;
+        return this;
+    }
     public  void drive(double x, double y, double rx){
         x*= 1.1;
 
@@ -58,8 +60,8 @@ public class MecanumDriveTest{
     }
 
     public void resetMotorEncoder(DcMotorEx motor){
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 }

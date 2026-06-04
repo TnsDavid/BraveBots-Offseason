@@ -13,17 +13,27 @@ public class Storage {
 
 
     public enum Status{
-       EMPTY , ONEBALL, TWOBALL , STORAGEFULL;
+        EMPTY , ONEBALL, TWOBALL , STORAGEFULL;
 
-        }
+    }
     public static  Status status =Status.EMPTY;
     public static void start(){
-        transfer.setPower(-0.94);
-        timer.startTime();
+        transfer.setPower(0.94);
+        timer = new ElapsedTime();
         activestorage = true;
     }
 
     public static void stop(){
+        transfer.setPower(0);
+        activestorage = false;
+    }
+
+    public static void toggle(){
+        if(activestorage) stop();
+        else start();
+    }
+
+    public static void forceStop(){
         transfer.setPower(0);
         activestorage = false;
         Intake.stop();
