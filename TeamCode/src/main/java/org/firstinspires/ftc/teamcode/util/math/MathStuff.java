@@ -20,4 +20,10 @@ public class MathStuff {
         if (num > upper) return upper;
         return num;
     }
+    public static double milimetersToInches(double mm) {
+        return mm / 25.4;
+    }
+    public static double inchesToMilimeters(double inches) {
+        return inches * 25.4;
+    }
 }
