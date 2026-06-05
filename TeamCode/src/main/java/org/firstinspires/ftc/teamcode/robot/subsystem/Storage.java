@@ -5,17 +5,23 @@ import com.qualcomm.robotcore.hardware.DigitalChannelImpl;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.opmodes.Test;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
 public class Storage {
     public static BetterMotorEx transfer;
-    public static DigitalChannel up, middle , down ;
+    public static DigitalChannel up, down ;
     public static boolean activestorage;
-    public static ElapsedTime timer ;
+    public static ElapsedTime timer;
+    public static double last, minimumUpdateTime = 300;
 
 
     public enum Status{
-        EMPTY , ONEBALL, TWOBALL , STORAGEFULL;
+        EMPTY(0) , ONEBALL(1), TWOBALL(2) , STORAGEFULL(3);
+        final double nustiu;
+        Status(double nustiu){
+            this.nustiu = nustiu;
+        }
 
     }
     public static  Status status =Status.EMPTY;
@@ -43,13 +49,14 @@ public class Storage {
     }
 
     public static Status getState() {
-        if (timer.seconds() > 0.3) {
-            if (!down.getState() && !middle.getState() && up.getState()) {
+        if (System.currentTimeMillis() - last > minimumUpdateTime) {
+            if (!down.getState() && up.getState())
                 status = Status.ONEBALL;
-            } else if(!down.getState()&& middle.getState() && up.getState()){
-                status = Status.TWOBALL;
-            }
-            else status = Status.STORAGEFULL;
+            else if( down.getState() && up.getState() )
+                status = Status.STORAGEFULL;
+            else
+                status = Status.EMPTY;
+            last = System.currentTimeMillis();
         }
         return status;
     }
@@ -60,6 +67,13 @@ public class Storage {
 
     public static void checkUpLaser(){
         if(up.getState()) stop();
+    }
+    public static void update() {
+        getState();
+        if( !status.equals(Status.EMPTY) && !Shooter.readyForShoot )
+            stop();
+        else if( !status.equals(Status.EMPTY) && Shooter.readyForShoot )
+            start();
     }
 
 }

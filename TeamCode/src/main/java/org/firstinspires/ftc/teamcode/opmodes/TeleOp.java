@@ -33,7 +33,7 @@ public abstract class TeleOp extends BetterOpMode {
 
     public Alliance a;
     volatile boolean driveThreadRunning;
-    public boolean fieldCentric= true;
+    public boolean fieldCentric= true, readyForShoot = false;
     boolean updateTurret= true;
     public abstract void setAlliance();
     Robot robot;

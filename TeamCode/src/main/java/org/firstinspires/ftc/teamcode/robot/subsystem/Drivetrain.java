@@ -1,9 +1,15 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.tests.TestFCDrivetrain;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
 public class Drivetrain {
     public static BetterMotorEx leftFront,leftBack,rightBack,rightFront;
+    //public static boolean robotCentric = false;
+    public static GoBildaPinpointDriver pinpoint;
     public static void drive(double x, double y , double turn){
         double theta = Math.atan2(y,x);
         double power = Math.hypot(x,y);
@@ -38,5 +44,19 @@ public class Drivetrain {
         rightFront.setPower(climbPower);
         leftBack.setPower(climbPower);
         rightBack.setPower(climbPower);
+    }
+    public static void betterDrive(double rawX, double rawY, double rotation) {
+        double finalX, finalY;
+        if( !TestFCDrivetrain.robotCentric ) {
+            double robotHeading = pinpoint.getHeading(AngleUnit.RADIANS);
+            finalX = rawX * Math.cos(-robotHeading) - rawY * Math.sin(-robotHeading);
+            finalY = rawX * Math.sin(-robotHeading) + rawY * Math.cos(-robotHeading);
+        } else {
+            finalX = rawX;
+            finalY = rawY;
+        }
+
+        drive(finalX, finalY, rotation);
+
     }
 }

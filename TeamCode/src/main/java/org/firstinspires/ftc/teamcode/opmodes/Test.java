@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.math.MathFunctions;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.Range;
 
@@ -17,6 +19,9 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
+import org.firstinspires.ftc.teamcode.tasks.core.Scheduler;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ptGaoc;
+import org.firstinspires.ftc.teamcode.tests.BlockerPositionTest;
 import org.firstinspires.ftc.teamcode.tests.MecanumDrive;
 
 import java.util.List;
@@ -25,46 +30,63 @@ import java.util.List;
 @Configurable
 public class Test extends LinearOpMode {
     Robot robila;
+    public static double pos,velocity;
     MecanumDrive drive;
-    boolean intakestarted=false;
-    double velocity= 0;
-    boolean shooterEnabled = true;
+    public static boolean shooterEnabled = true;
+    //public static boolean readyForShoot = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robila= new Robot(hardwareMap, telemetry, Alliance.BLUE).setOpModeType(Robot.OpModeType.TELEOP).initialize();
+        robila= new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
         Turret.turret1.setPosition(0.5);
         Turret.turret2.setPosition(0.5);
+        Shooter.motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //Shooter.motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //Shooter.motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Shooter.setCoefs();
         Blocker.block();
-
         waitForStart();
         while(opModeIsActive())
         {
-            if(shooterEnabled)
-                Shooter.setVelocity(1000);
-            else
-                Shooter.setVelocity(0);
-
-           Shooter.servo.setPosition(Shooter.servo.getPosition()+ gamepad2.left_stick_y * 0.0025);
+            if(!shooterEnabled) Shooter.velocity = 0;
+            Shooter.setVelocity(Shooter.velocity);
+            pos=MathFunctions.clamp((gamepad2.right_trigger-gamepad2.left_trigger),0.45,1);
+            Shooter.servo.setPosition(pos);
             Turret.turret1.setPosition(Turret.turret1.getPosition() + gamepad2.right_stick_x * 0.0025);
             Turret.turret2.setPosition(Turret.turret2.getPosition() + gamepad2.right_stick_x * 0.0025);
 
+            //if(gamepad2.rightBumperWasPressed())
+                Shooter.setCoefs();
             if(gamepad2.crossWasPressed())
                 shooterEnabled = !shooterEnabled;
 
             if(gamepad1.crossWasPressed()) Intake.toggle();
             if(gamepad1.circleWasPressed()) Storage.toggle();
             if(gamepad1.triangleWasPressed()) Blocker.toggle();
+          //  BlockerPositionTest
+            if(gamepad1.touchpadWasPressed()) robila.resetPinPoint();
+            if( gamepad1.leftBumperWasPressed() ) {
+                Scheduler.now(ptGaoc::new);
+            }
 
             //Storage.checkUpLaser();
-
-            Drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            telemetry.addData("velocity", velocity);
-            telemetry.addData("hood pos", Shooter.hoodPos);
-
-            Shooter.updateTest();
             robila.update();
+            Drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            telemetry.addData("velocity", Shooter.motor1.getVelocity());
+            telemetry.addData("target velocity", Shooter.velocity);
+            telemetry.addData("hood pos", Shooter.servo.getPosition());
+            telemetry.addData("tur pos", Turret.turret1.getPosition());
+            telemetry.addData("shooter enabled", shooterEnabled);
+            telemetry.addData("x", Robot.robotPose.getX());
+            telemetry.addData("y", Robot.robotPose.getY());
+            telemetry.addData("heading", Robot.robotPose.getHeading());
+            telemetry.addData("status", Storage.status);
+
+            //Shooter.updateTest();
+            Scheduler.update();
+            Storage.update();
+            Shooter.motor1.update();
             telemetry.update();
         }
     }

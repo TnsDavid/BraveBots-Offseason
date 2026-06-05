@@ -40,7 +40,7 @@ public class Robot {
     public static Pose robotPose;
     public static GoBildaPinpointDriver pinpoint;
 
-    public static final float odometryResolution = 34.310551f;
+    public static double odometryResolution = 34.310551;
     public static VoltageSensor voltageSensor;
     List<LynxModule> hubs;
     LynxModule controlHub, expansionHub;
@@ -82,8 +82,14 @@ public class Robot {
     }
     public Robot(HardwareMap hm, Alliance a){
         this.hm= hm;
-
         this.a= a;
+    }
+    public double dtlength=0.435;//metri
+    public double dtwidth=0.432; //metri
+    public void resetPinPoint(){
+        odo.setPosX(a==Alliance.RED ? dtwidth / 2 : 3.65-(dtwidth/2), DistanceUnit.METER);
+        odo.setPosY(dtlength / 2, DistanceUnit.METER);
+        robotPose=new Pose(odo.getPosX(DistanceUnit.METER),odo.getPosY(DistanceUnit.METER),odo.getHeading(AngleUnit.RADIANS));
     }
     public void initializeControllers(){
         controlHubMotors= hm.get(DcMotorController.class, "Control Hub");
@@ -113,11 +119,11 @@ public class Robot {
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         transfer.setDirection(DcMotorSimple.Direction.FORWARD);
         shooter= new BetterMotorEx(controlHubMotors, 3).setCachingTolerance(.01)
-                .setMaxVelocity(2100);
-        //    .setPFCoefficients(Shooter.p, Shooter.f);
+                .setMaxVelocity(2100)
+                .setPFCoefficients(Shooter.p, Shooter.f);
         shooter2= new BetterMotorEx(expansionHubMotors, 3).setCachingTolerance(.01)
-                .setMaxVelocity(2100);
-        //   .setPFCoefficients(Shooter.p, Shooter.f);
+                .setMaxVelocity(2100)
+                .setPFCoefficients(Shooter.p, Shooter.f);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -137,6 +143,7 @@ public class Robot {
         Drivetrain.leftFront=FrontLeft;
         Drivetrain.rightBack=BackRight;
         Drivetrain.rightFront=FrontRight;
+        Drivetrain.pinpoint = odo;
     }
 
     public void initializeServos(){
@@ -153,9 +160,10 @@ public class Robot {
             throw new IllegalArgumentException("OpMode type nesetat");
         if(opModeType== OpModeType.TELEOP) {
             odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
-            odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.CM);
-            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+            odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.INCH);
+            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
             odo.setEncoderResolution(odometryResolution, DistanceUnit.MM);
+            resetPinPoint();
         }
         voltageSensor= hm.voltageSensor.iterator().next();
         upLaser = hm.get(DigitalChannel.class, "laserup");
@@ -172,10 +180,10 @@ public class Robot {
         //hubs.forEach(LynxModule::close);
 
 
-
-//        if(opModeType== OpModeType.TELEOP)
-//            odo.update(GoBildaPinpointDriver.ReadData.ONLY_UPDATE_HEADING);
-//
+        if(opModeType== OpModeType.TELEOP){
+            odo.update();
+            robotPose= new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
+        }
 //        robotHeading = odo.getHeading(AngleUnit.DEGREES);
 
         // odo.update();
