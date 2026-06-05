@@ -45,6 +45,9 @@ public class Shooter {
         motor2.setPower(motor1.getPower());
     }
     public static boolean wereCoeffsSet = false;
+    public static void setReady() {
+        readyForShoot = !readyForShoot;
+    }
     public static void setVelocity2(double vel){
         if(!wereCoeffsSet)
         {

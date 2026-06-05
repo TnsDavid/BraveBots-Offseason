@@ -23,32 +23,39 @@ import org.firstinspires.ftc.teamcode.tasks.core.Scheduler;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ptGaoc;
 import org.firstinspires.ftc.teamcode.tests.BlockerPositionTest;
 import org.firstinspires.ftc.teamcode.tests.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.BetterOpMode;
+import org.firstinspires.ftc.teamcode.util.wrappers.BetterGamepad;
 
 import java.util.List;
 
 @TeleOp
 @Configurable
-public class Test extends LinearOpMode {
+public class Test extends BetterOpMode {
     Robot robila;
     public static double pos,velocity;
-    MecanumDrive drive;
+    //MecanumDrive drive;
     public static boolean shooterEnabled = true;
-    //public static boolean readyForShoot = false;
+    public static boolean readyForShoot = false;
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        robila= new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
+   public void initialize() {
+        robila = new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
+        gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
+                        .whenPressed(ptGaoc::new, BetterGamepad.Type.MAIN);
         Turret.turret1.setPosition(0.5);
         Turret.turret2.setPosition(0.5);
         Shooter.motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //Shooter.motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //Shooter.motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public void initialize_loop() {
         Shooter.setCoefs();
         Blocker.block();
-        waitForStart();
-        while(opModeIsActive())
-        {
+    }
+    public void on_start() {
+    }
+
+    public void active_loop() {
             if(!shooterEnabled) Shooter.velocity = 0;
             Shooter.setVelocity(Shooter.velocity);
             pos=MathFunctions.clamp((gamepad2.right_trigger-gamepad2.left_trigger),0.45,1);
@@ -66,9 +73,6 @@ public class Test extends LinearOpMode {
             if(gamepad1.triangleWasPressed()) Blocker.toggle();
           //  BlockerPositionTest
             if(gamepad1.touchpadWasPressed()) robila.resetPinPoint();
-            if( gamepad1.leftBumperWasPressed() ) {
-                Scheduler.now(ptGaoc::new);
-            }
 
             //Storage.checkUpLaser();
             robila.update();
@@ -88,6 +92,9 @@ public class Test extends LinearOpMode {
             Storage.update();
             Shooter.motor1.update();
             telemetry.update();
+
         }
+    public void end() {
+
     }
 }
