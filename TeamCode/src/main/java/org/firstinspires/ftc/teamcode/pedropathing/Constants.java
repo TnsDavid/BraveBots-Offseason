@@ -29,7 +29,7 @@ public class Constants {
             .strafePodX(xOffset)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
-            .customEncoderResolution(MathStuff.milimetersToInches(Robot.odometryResolution))
+            .customEncoderResolution(Robot.odometryResolution)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
     public static MecanumConstants driveConstants = new MecanumConstants()
