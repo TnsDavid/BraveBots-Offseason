@@ -40,7 +40,7 @@ public class Robot {
     public static Pose robotPose;
     public static GoBildaPinpointDriver pinpoint;
 
-    public static double odometryResolution = 34.310551 * 25.4; //ticks/mm*mm/inch = ticks/inch
+    public static double odometryResolution = 34.310551; //ticks/mm*mm/inch = ticks/inch
     public static VoltageSensor voltageSensor;
     List<LynxModule> hubs;
     LynxModule controlHub, expansionHub;

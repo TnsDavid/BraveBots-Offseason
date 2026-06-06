@@ -19,6 +19,8 @@ public class Constants {
     public static double dtWidth = 0.432;
     /// TO DO: LUAT PINPOINT DE LA CAPAT MAINE
     public static double xOffset = -5.655235314961, yOffset = -0.743804527559;
+
+    public static final double odometryResolution = 34.310551 * 25.4;
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(7);
 
@@ -29,19 +31,19 @@ public class Constants {
             .strafePodX(xOffset)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
-            .customEncoderResolution(Robot.odometryResolution)
+            .customEncoderResolution(odometryResolution)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
-            .rightFrontMotorName("frontRight")
-            .rightRearMotorName("backRight")
-            .leftRearMotorName("backLeft")
-            .leftFrontMotorName("frontLeft")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+            .rightFrontMotorName("frontLeft")
+            .rightRearMotorName("backLeft")
+            .leftRearMotorName("backRight")
+            .leftFrontMotorName("frontRight")
+            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .pathConstraints(pathConstraints)
