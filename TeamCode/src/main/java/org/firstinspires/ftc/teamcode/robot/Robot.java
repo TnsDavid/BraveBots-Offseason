@@ -160,8 +160,8 @@ public class Robot {
             throw new IllegalArgumentException("OpMode type nesetat");
         if(opModeType== OpModeType.TELEOP) {
             odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
-            odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.INCH);
-            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+            odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.MM);
+            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
             odo.setEncoderResolution(odometryResolution, DistanceUnit.MM);
             resetPinPoint();
         }

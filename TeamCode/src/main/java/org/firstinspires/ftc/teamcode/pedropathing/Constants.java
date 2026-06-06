@@ -18,9 +18,9 @@ public class Constants {
     public static double dtLength =0.435;
     public static double dtWidth = 0.432;
     /// TO DO: LUAT PINPOINT DE LA CAPAT MAINE
-    public static double xOffset = -5.655235314961, yOffset = -0.743804527559;
+    public static double xOffset = -3.963, yOffset = -1.029;//0.98
 
-    public static final double odometryResolution = 34.310551 * 25.4;
+    public static final double odometryResolution = 34.310551 * 25.4; //ticks per mm *
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(7);
 

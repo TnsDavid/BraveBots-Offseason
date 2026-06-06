@@ -17,16 +17,12 @@ public class Storage {
 
 
     public enum Status{
-        EMPTY(0) , ONEBALL(1), TWOBALL(2) , STORAGEFULL(3);
-        final double nustiu;
-        Status(double nustiu){
-            this.nustiu = nustiu;
-        }
+        EMPTY , ONEBALL, TWOBALL , STORAGEFULL
 
     }
     public static  Status status =Status.EMPTY;
     public static void start(){
-        transfer.setPower(0.94);
+        transfer.setPower(1);
         timer = new ElapsedTime();
         activestorage = true;
     }
@@ -54,8 +50,9 @@ public class Storage {
                 status = Status.ONEBALL;
             else if( down.getState() && up.getState() )
                 status = Status.STORAGEFULL;
-            else
+            else if( !down.getState() && !up.getState() )
                 status = Status.EMPTY;
+
             last = System.currentTimeMillis();
         }
         return status;

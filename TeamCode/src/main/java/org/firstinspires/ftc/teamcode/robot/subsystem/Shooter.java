@@ -36,11 +36,11 @@ public class Shooter {
         motor1.setPFCoefficients(-p * kp, f);
         motor2.setPFCoefficients(-p * kp, f);
     }
-    public static double voltageThreshold = 11.1;
+    public static double voltageThreshold = 11.2;
     public static void setVelocity(double vel){
-//        double voltage = Robot.voltageSensor.getVoltage()
-//        double coeff = (voltage < voltageThreshold) ? voltageThreshold / voltage : 1;
-//        vel *= coeff;
+        double voltage = Robot.voltageSensor.getVoltage();
+        double coeff = (voltage < voltageThreshold) ? voltageThreshold / voltage : 1;
+        vel *= coeff;
         motor1.setVelocity(vel);
         motor2.setPower(motor1.getPower());
     }

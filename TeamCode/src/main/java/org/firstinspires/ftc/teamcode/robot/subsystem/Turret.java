@@ -73,17 +73,17 @@ public class Turret {
             xCorner= Robot.a== Alliance.RED ? FIELD_LENGTH- x : x;
 
             dist = Math.hypot(xCorner, yCorner);
-
-            double Vx = Robot.pinpoint.getVelX(DistanceUnit.METER);
-            double Vy = Robot.pinpoint.getVelY(DistanceUnit.METER);
-
-            if(dist < 3.3) TOF = at * Math.pow(dist, 2) + bt * dist + ct;
-            else TOF = 0.77;
-
-            xCorner -= Vx * TOF;
-            yCorner -= Vy * TOF;
-
-            virtualDist = Math.hypot(xCorner, yCorner);
+//
+//            double Vx = Robot.pinpoint.getVelX(DistanceUnit.METER);
+//            double Vy = Robot.pinpoint.getVelY(DistanceUnit.METER);
+//
+//            if(dist < 3.3) TOF = at * Math.pow(dist, 2) + bt * dist + ct;
+//            else TOF = 0.77;
+//
+//            xCorner -= Vx * TOF;
+//            yCorner -= Vy * TOF;
+//
+//            virtualDist = Math.hypot(xCorner, yCorner);
 
             heading= Math.toDegrees(heading);
             xCorner -= goalCircleRasius;
@@ -99,7 +99,7 @@ public class Turret {
             turretRelative+=offset;
             turretRelative = Range.clip(turretRelative,0,360);
             double finalPos= turretRelative/360;
-            if(finalPos>= 0.05 && finalPos<=0.95) {
+            if(finalPos>= 0.1425 && finalPos<=0.91) {
                 if(reseted) {
                     turret1.setPosition(finalPos);
                     turret2.setPosition(finalPos);
@@ -118,6 +118,9 @@ public class Turret {
         while (h> 180) h-=360;
         while (h< -180) h+= 360;
         return h;
+    }
+    public static double getPositon() {
+        return turret1.getPosition();
     }
 
 }

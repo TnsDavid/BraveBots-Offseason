@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.util.Ghiocel;
 public class ptGaoc implements Task {
      Command command;
      public ptGaoc() {
-         command = new Command();
-         command.addTask(Shooter::setReady)
+         command = new Command()
+                 .addTask(Shooter::setReady)
                  .waitSeconds(.2)
                  .addTask(Blocker::unblock)
                  .waitSeconds(1)
