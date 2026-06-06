@@ -21,9 +21,9 @@ public class Shooter {
 
     public static final double a1 =-0.0697152, b1 = 0.410972, c1 = -0.401803;
     public static final double a2 =-9.19567, b2 =229.70232, c2 = 504.01862;
-    public static double p= 0.00003,i,d,f = 0.77;
+    public static double p= 0.000033,i,d,f = 0.67;
     public static double pCoef=-5;
-    public static double velDiff = 300;
+    public static double velDiff = 200;
     //public static double velocity = 0.0;
     static PIDFCoefficients shootercoeffs = new PIDFCoefficients(p, i, d, f);
 
@@ -45,7 +45,7 @@ public class Shooter {
         motor2.setPower(motor1.getPower());
     }
     public static boolean wereCoeffsSet = false;
-    public static void setReady() {
+     public static void setReady() {
         readyForShoot = !readyForShoot;
     }
     public static void setVelocity2(double vel){

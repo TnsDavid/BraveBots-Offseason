@@ -84,12 +84,13 @@ public class Robot {
         this.hm= hm;
         this.a= a;
     }
-    public double dtlength=0.435;//metri
-    public double dtwidth=0.432; //metri
-    public void resetPinPoint(){
-        odo.setPosX(a==Alliance.RED ? dtwidth / 2 : 3.65-(dtwidth/2), DistanceUnit.METER);
+    public double dtlength=.356;//metri
+    public double dtwidth=.38; //metri
+    public void resetPinPoint() {
+        odo.setPosX(a == Alliance.RED ? dtwidth / 2 : 3.65 - (dtwidth / 2), DistanceUnit.METER);
         odo.setPosY(dtlength / 2, DistanceUnit.METER);
-        robotPose=new Pose(odo.getPosX(DistanceUnit.METER),odo.getPosY(DistanceUnit.METER),odo.getHeading(AngleUnit.RADIANS));
+        odo.setHeading(Math.toRadians(90), AngleUnit.RADIANS);
+        robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
     }
     public void initializeControllers(){
         controlHubMotors= hm.get(DcMotorController.class, "Control Hub");
@@ -160,8 +161,8 @@ public class Robot {
             throw new IllegalArgumentException("OpMode type nesetat");
         if(opModeType== OpModeType.TELEOP) {
             odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
-            odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.MM);
-            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+            odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.INCH);
+            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
             odo.setEncoderResolution(odometryResolution, DistanceUnit.MM);
             resetPinPoint();
         }

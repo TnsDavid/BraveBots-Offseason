@@ -24,6 +24,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.tasks.core.Scheduler;
+import org.firstinspires.ftc.teamcode.tasks.core.Task;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootTest;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ptGaoc;
 import org.firstinspires.ftc.teamcode.tests.BlockerPositionTest;
 import org.firstinspires.ftc.teamcode.tests.MecanumDrive;
@@ -31,6 +33,7 @@ import org.firstinspires.ftc.teamcode.util.BetterOpMode;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterGamepad;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @TeleOp
 @Configurable
@@ -44,12 +47,12 @@ public class Test extends BetterOpMode {
     @Override
    public void initialize() {
         robila = new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
-        gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
-                        .whenPressed(ptGaoc::new, BetterGamepad.Type.MAIN);
         Turret.turret1.setPosition(0.5);
         Turret.turret2.setPosition(0.5);
         Shooter.motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
+                .whenPressed(ShootTest::new, BetterGamepad.Type.MAIN);
         //Shooter.motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //Shooter.motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -66,11 +69,9 @@ public class Test extends BetterOpMode {
     public void active_loop() {
             if(!shooterEnabled) Shooter.velocity = 0;
             Shooter.setVelocity(Shooter.velocity);
-            pos=MathFunctions.clamp((gamepad2.right_trigger-gamepad2.left_trigger),0.45,1);
-            Shooter.servo.setPosition(pos);
+            Shooter.servo.setPosition(Shooter.servo.getPosition()+ 0.0025 *( gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER ) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)));
            // Turret.setNeutralPosition(Turret.getPositon()+gamepad2.right_stick_x*0.025);
 
-            Shooter.setCoefs();
             if(gamepad2.crossWasPressed())
                 shooterEnabled = !shooterEnabled;
 
@@ -98,9 +99,7 @@ public class Test extends BetterOpMode {
             telemetry.addData("distance to goal", dist);
 
 
-            //Shooter.updateTest();
             Scheduler.update();
-            Storage.update();
             Turret.update();
             Shooter.motor1.update();
             telemetry.update();
