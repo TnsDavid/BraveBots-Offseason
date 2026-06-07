@@ -2,19 +2,23 @@ package org.firstinspires.ftc.teamcode.util.wrappers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.tasks.core.Command;
-import org.firstinspires.ftc.teamcode.tasks.core.InstantTask;
-import org.firstinspires.ftc.teamcode.tasks.core.Scheduler;
-import org.firstinspires.ftc.teamcode.tasks.core.Task;
+import org.firstinspires.ftc.teamcode.tasks.command_based.core.InstantTask;
+import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
+import org.firstinspires.ftc.teamcode.tasks.command_based.core.Scheduler;
+import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class BetterGamepad {
-    com.qualcomm.robotcore.hardware.Gamepad gp;
+    Gamepad gp;
     int numberOfButtons= 14;
     Button[] buttons= new Button[numberOfButtons];
     Command command;
+    public void killScheduler(){
+        command.removeAllTasks();
+    }
+
 
     public BetterGamepad(Gamepad gp){
         this.gp= gp;
@@ -99,7 +103,7 @@ public class BetterGamepad {
 
         public void whenPressed(Supplier<Task> s, Type type, boolean now){
             this.s= s;
-            this.now= now;
+            this.now    = now;
             this.type= type;
         }
 
@@ -148,7 +152,7 @@ public class BetterGamepad {
                             Scheduler.schedule(button.s);
                     }
                     else{
-                        Scheduler.inParalel(button.s);
+                        Scheduler.inParallel(button.s);
                     }
                 }
             }

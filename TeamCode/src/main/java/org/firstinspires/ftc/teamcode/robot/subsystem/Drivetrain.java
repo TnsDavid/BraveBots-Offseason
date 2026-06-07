@@ -45,9 +45,10 @@ public class Drivetrain {
         leftBack.setPower(climbPower);
         rightBack.setPower(climbPower);
     }
+    public static boolean robotCentric = true;
     public static void betterDrive(double rawX, double rawY, double rotation) {
         double finalX, finalY;
-        if( !TestFCDrivetrain.robotCentric ) {
+        if( !robotCentric ) {
             double robotHeading = pinpoint.getHeading(AngleUnit.RADIANS);
             finalX = rawX * Math.cos(-robotHeading) - rawY * Math.sin(-robotHeading);
             finalY = rawX * Math.sin(-robotHeading) + rawY * Math.cos(-robotHeading);

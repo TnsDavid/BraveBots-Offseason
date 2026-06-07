@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
 public class Intake {
     public static BetterMotorEx motor;
-    static ElapsedTime timer;
+    static ElapsedTime timer = new ElapsedTime();
     public static boolean intaking = false;
     public static void start(){
         motor.setPower(.94);

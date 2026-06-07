@@ -49,7 +49,8 @@ public class Robot {
     public Limelight3A ll;
     public BetterServo hood, blocker;
 
-    DigitalChannel upLaser, downLaser;
+    DigitalChannel upLaser;
+    BreakBeam downLaser;
 
     public BetterServoEx turret1, turret2;
     public GoBildaPinpointDriver odo;
@@ -138,7 +139,7 @@ public class Robot {
         Shooter.motor2=shooter2;
         Storage.transfer=transfer;
         Storage.up=upLaser;
-        Storage.down=downLaser;
+        Storage.bdown=downLaser;
         Intake.motor=intake;
         Drivetrain.leftBack=BackLeft;
         Drivetrain.leftFront=FrontLeft;
@@ -168,7 +169,7 @@ public class Robot {
         }
         voltageSensor= hm.voltageSensor.iterator().next();
         upLaser = hm.get(DigitalChannel.class, "laserup");
-        downLaser = hm.get(DigitalChannel.class, "laserdown");
+        downLaser = new BreakBeam(controller, 0);
         upLaser.setMode(DigitalChannel.Mode.INPUT);
         downLaser.setMode(DigitalChannel.Mode.INPUT);
         //LLMath.init(hm);

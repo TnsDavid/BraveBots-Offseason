@@ -45,7 +45,7 @@ public class Test extends BetterOpMode {
     public static boolean readyForShoot = false;
 
     @Override
-   public void initialize() {
+    public void initialize() {
         robila = new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
         Turret.turret1.setPosition(0.5);
         Turret.turret2.setPosition(0.5);
@@ -53,60 +53,58 @@ public class Test extends BetterOpMode {
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
                 .whenPressed(ShootTest::new, BetterGamepad.Type.MAIN);
+
         //Shooter.motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //Shooter.motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     @Override
     public void initialize_loop() {
-        Shooter.setCoefs();
         Blocker.block();
+        Shooter.setCoefs();
     }
     @Override
     public void on_start() {
     }
-
     @Override
     public void active_loop() {
-            if(!shooterEnabled) Shooter.velocity = 0;
-            Shooter.setVelocity(Shooter.velocity);
-            Shooter.servo.setPosition(Shooter.servo.getPosition()+ 0.0025 *( gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER ) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)));
-           // Turret.setNeutralPosition(Turret.getPositon()+gamepad2.right_stick_x*0.025);
+        if(!shooterEnabled) Shooter.velocity = 0;
+        Shooter.setVelocity(Shooter.velocity);
 
-            if(gamepad2.crossWasPressed())
-                shooterEnabled = !shooterEnabled;
+        //Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
+        if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
+        if(gamepad1.crossWasPressed()) Intake.toggle();
+        if(gamepad1.circleWasPressed()) Storage.toggle();
+        if(gamepad1.triangleWasPressed()) Blocker.toggle();
+        if(gamepad2.rightBumperWasPressed()) Turret.reseted = !Turret.reseted;
+        if(gamepad1.optionsWasPressed()) robila.resetPinPoint();
+        if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
 
-            if(gamepad1.crossWasPressed()) Intake.toggle();
-            if(gamepad1.circleWasPressed()) Storage.toggle();
-            if(gamepad1.triangleWasPressed()) Blocker.toggle();
-            if(gamepad2.rightBumperWasPressed()) Turret.reseted = !Turret.reseted;
-            if(gamepad1.optionsWasPressed()) robila.resetPinPoint();
+        Drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        //Storage.checkUpLaser();
 
+        telemetry.addData("velocity", Shooter.motor1.getVelocity());
+        telemetry.addData("target velocity", Shooter.velocity);
+        telemetry.addData("hood pos", Shooter.servo.getPosition());
+        telemetry.addData("tur pos", Turret.turret1.getPosition());
+        telemetry.addData("shooter enabled", shooterEnabled);
+        telemetry.addData("x", Robot.robotPose.getX());
+        telemetry.addData("y", Robot.robotPose.getY());
+        telemetry.addData("heading", Math.toDegrees(Robot.robotPose.getHeading()));
+        telemetry.addData("status", Storage.status);
+        telemetry.addData("xCorner", xCorner);
+        telemetry.addData("yCorner", yCorner);
+        telemetry.addData("distance to goal", dist);
+        telemetry.addData("robot centric", Drivetrain.robotCentric);
 
-            //Storage.checkUpLaser();
-            robila.update();
-            Drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            telemetry.addData("velocity", Shooter.motor1.getVelocity());
-            telemetry.addData("target velocity", Shooter.velocity);
-            telemetry.addData("hood pos", Shooter.servo.getPosition());
-            telemetry.addData("tur pos", Turret.turret1.getPosition());
-            telemetry.addData("shooter enabled", shooterEnabled);
-            telemetry.addData("x", Robot.robotPose.getX());
-            telemetry.addData("y", Robot.robotPose.getY());
-            telemetry.addData("heading", Math.toDegrees(Robot.robotPose.getHeading()));
-            telemetry.addData("status", Storage.status);
-            telemetry.addData("xCorner", xCorner);
-            telemetry.addData("yCorner", yCorner);
-            telemetry.addData("distance to goal", dist);
+        robila.update();
+        Storage.update();
+        Shooter.update();
+        Turret.update();
+        //Shooter.motor1.update();
+        telemetry.update();
 
-
-            Scheduler.update();
-            Turret.update();
-            Shooter.motor1.update();
-            telemetry.update();
-
-        }
-        @Override
+    }
+    @Override
     public void end() {
-
     }
 }

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 public class ShootTest implements Task {
     private Command s;
 
-    public static double  velocityThreshold = 300,coef = 2, increment= 0.013 , waitTime= 0.1, waitTime2= 0.1;
+    public static double  velocityThreshold = 300,coef = 2, increment= 0.013 , waitTime= 0.02, waitTime2= 0.05;
 
 
     public double pos;
@@ -21,7 +21,7 @@ public class ShootTest implements Task {
     public ShootTest(){
         s= new Command()
                 .addTask(() -> pos = Shooter.servo.getPosition())
-                .addTask(()-> Shooter.readyForShoot)
+                .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.3)
                 .addTask(Intake::start)
@@ -32,9 +32,11 @@ public class ShootTest implements Task {
                 .addTask(()->Shooter.servo.setPosition(pos-coef* increment))
                 .waitSeconds(1)
                 .addTask(Storage::stop)
-                .addTask(()->{
-                    Shooter.servo.setPosition(pos);
-                });
+                .addTask(Intake::stop)
+                .addTask(Blocker::block)
+                .addTask(() -> Shooter.readyForShoot = false)
+                .addTask(() -> Storage.count = 0)
+                .addTask(()-> Shooter.servo.setPosition(pos));
     }
 
     @Override
