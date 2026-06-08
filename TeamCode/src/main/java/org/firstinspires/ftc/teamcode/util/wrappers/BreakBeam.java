@@ -18,6 +18,7 @@ public class BreakBeam extends DigitalChannelImpl implements HardwareDevice {
     public BreakBeam(DigitalChannelController controller, int channel) {
         super(controller, channel);
     }
+
     public enum Status{
         CLEAR, BROKEN
     }

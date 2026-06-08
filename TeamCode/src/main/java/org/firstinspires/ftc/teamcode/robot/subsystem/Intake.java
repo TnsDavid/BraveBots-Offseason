@@ -31,7 +31,7 @@ public class Intake {
     public static void toggle(){
         if(!intaking){
             start();
-            Storage.start();
+            if(Storage.count2 < 2) Storage.start();
         }
         else{
             stop();

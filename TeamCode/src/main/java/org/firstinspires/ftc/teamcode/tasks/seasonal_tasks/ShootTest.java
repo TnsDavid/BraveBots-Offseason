@@ -34,8 +34,12 @@ public class ShootTest implements Task {
                 .addTask(Storage::stop)
                 .addTask(Intake::stop)
                 .addTask(Blocker::block)
-                .addTask(() -> Storage.count = 0)
-                .addTask(() -> Shooter.readyForShoot = false)
+                .addTask(() -> {
+                    Storage.count2 = 0;
+                    Storage.startedTimer2 = false;
+                    Shooter.readyForShoot = false;
+                    Storage.seenUp = false;
+                })
                 .addTask(()-> Shooter.servo.setPosition(pos));
     }
 

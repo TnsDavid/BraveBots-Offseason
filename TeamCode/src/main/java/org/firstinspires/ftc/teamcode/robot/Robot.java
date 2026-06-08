@@ -38,7 +38,6 @@ import java.util.List;
 
 public class Robot {
     public static Pose robotPose;
-    public static GoBildaPinpointDriver pinpoint;
 
     public static double odometryResolution = 34.310551; //ticks/mm*mm/inch = ticks/inch
     public static VoltageSensor voltageSensor;
@@ -48,9 +47,7 @@ public class Robot {
     DcMotorControllerEx exExpansionHubMotors;
     public Limelight3A ll;
     public BetterServo hood, blocker;
-
-    DigitalChannel upLaser;
-    BreakBeam downLaser;
+    BreakBeam downLaser, upLaser;
 
     public BetterServoEx turret1, turret2;
     public GoBildaPinpointDriver odo;
@@ -138,8 +135,8 @@ public class Robot {
         Shooter.motor1=shooter;
         Shooter.motor2=shooter2;
         Storage.transfer=transfer;
-        Storage.up=upLaser;
         Storage.bdown=downLaser;
+        Storage.bup=upLaser;
         Intake.motor=intake;
         Drivetrain.leftBack=BackLeft;
         Drivetrain.leftFront=FrontLeft;
@@ -168,10 +165,8 @@ public class Robot {
             resetPinPoint();
         }
         voltageSensor= hm.voltageSensor.iterator().next();
-        upLaser = hm.get(DigitalChannel.class, "laserup");
-        downLaser = new BreakBeam(controller, 2);
-        upLaser.setMode(DigitalChannel.Mode.INPUT);
-        downLaser.setMode(DigitalChannel.Mode.INPUT);
+        downLaser = new BreakBeam(controller, 3);
+        upLaser = new BreakBeam(controller, 5);
         //LLMath.init(hm);
     }
     ElapsedTime timer;
@@ -203,6 +198,8 @@ public class Robot {
         hubs.forEach((hub)-> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
         controlHub= hubs.get(0);
         expansionHub= hubs.get(1);
+        Storage.count=0;
+        Storage.count2=0;
         initializeControllers();
         initializeMotors();
         initializeServos();

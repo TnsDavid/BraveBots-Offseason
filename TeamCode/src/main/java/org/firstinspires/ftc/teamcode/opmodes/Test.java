@@ -5,16 +5,9 @@ import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.xCorner;
 import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.yCorner;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.math.MathFunctions;
-import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
@@ -23,17 +16,9 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
-import org.firstinspires.ftc.teamcode.tasks.core.Scheduler;
-import org.firstinspires.ftc.teamcode.tasks.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootTest;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ptGaoc;
-import org.firstinspires.ftc.teamcode.tests.BlockerPositionTest;
-import org.firstinspires.ftc.teamcode.tests.MecanumDrive;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterGamepad;
-
-import java.util.List;
-import java.util.function.Supplier;
 
 @TeleOp
 @Configurable
@@ -53,7 +38,7 @@ public class Test extends BetterOpMode {
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
                 .whenPressed(ShootTest::new, BetterGamepad.Type.MAIN);
-
+        Shooter.servo.setPosition(Shooter.minHoodpos);
         //Shooter.motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //Shooter.motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -68,7 +53,6 @@ public class Test extends BetterOpMode {
     @Override
     public void active_loop() {
         if(!shooterEnabled) Shooter.velocity = 0;
-        Shooter.setVelocity(Shooter.velocity);
 
         //Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
@@ -79,6 +63,8 @@ public class Test extends BetterOpMode {
         if(gamepad1.optionsWasPressed()) robila.resetPinPoint();
         if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
         if(gamepad1.leftBumperWasPressed()) Storage.count = 0;
+        if(gamepad1.squareWasPressed()) Storage.seenUp = false;
+
 
         Drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         //Storage.checkUpLaser();
@@ -97,9 +83,14 @@ public class Test extends BetterOpMode {
         telemetry.addData("robot centric", Drivetrain.robotCentric);
         telemetry.addData("count", Storage.count);
         telemetry.addData("bm status", Storage.bdown.getBeamState());
+        telemetry.addData("bm up status", Storage.bup.getBeamState());
+        telemetry.addData("count2", Storage.count2);
+        telemetry.addData("seen", Storage.seenUp);
+        telemetry.addData("readyfsh", Shooter.readyForShoot);
+        telemetry.addData("startedtimer", Storage.startedTimer2);
 
         robila.update();
-        Storage.update2();
+        Storage.update3();
         Shooter.update();
         Turret.update();
         //Shooter.motor1.update();

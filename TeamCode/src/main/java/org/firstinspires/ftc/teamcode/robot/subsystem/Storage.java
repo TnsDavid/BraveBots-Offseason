@@ -17,7 +17,7 @@ public class Storage {
     public static BreakBeam bup, bmiddle, bdown;
     public static boolean activestorage;
     public static ElapsedTime timer;
-    public static double last, updateTime = 50;
+    public static double last, updateTime = 100;
 
 
     public enum Status {
@@ -43,13 +43,6 @@ public class Storage {
         else start();
     }
 
-    public static void forceStop() {
-        transfer.setPower(0);
-        activestorage = false;
-        Intake.stop();
-        timer.reset();
-    }
-
     public static Status getState() {
         if (System.currentTimeMillis() - last > updateTime) {
             if (bdown.getBeamState().equals(BreakBeam.Status.CLEAR) && up.getState())
@@ -64,21 +57,15 @@ public class Storage {
         return status;
     }
 
-    public static void StorageForcedStop() {
-        if (getState().equals(Status.STORAGEFULL)) stop();
-    }
-
-    public static void checkUpLaser() {
-        if (up.getState()) stop();
-    }
-
-
     public static void update(){
         getState();
         if ((status.equals(Status.ONEBALL) || status.equals(Status.STORAGEFULL)) && !Shooter.readyForShoot) stop();
     }
 
     public static int count = 0;
+    public static ElapsedTime ballup;
+    public static double storageStopTimer = 240;
+    public static boolean startedTimer = false;
 
     public static void update2() {
         if(bdown.getBeamState().equals(BreakBeam.Status.BROKEN) && System.currentTimeMillis() - last > updateTime){
@@ -99,6 +86,46 @@ public class Storage {
                 status = Status.STORAGEFULL;
                 break;
         }
-        if(count >= 1 && !Shooter.readyForShoot) stop();
+        if(count >= 1 && !Shooter.readyForShoot){
+            if(count == 1){
+                if(!startedTimer){
+                    ballup = new ElapsedTime();
+                    startedTimer = true;
+                }
+                if(ballup.milliseconds()>storageStopTimer) stop();
+            }else stop();
+        }
+    }
+
+    public static boolean seenUp = false;
+    public static boolean startedTimer2 = false;
+    public static int count2 = 0;
+
+    public static double storageStopTime = 100;
+
+    public static void update3(){
+        if(!startedTimer2 && bup.isBeamBroken() && !Shooter.readyForShoot){
+            ballup = new ElapsedTime();
+            startedTimer2 = true;
+        }
+        if(ballup != null && ballup.milliseconds()>storageStopTime && startedTimer2) stop();
+        if(bdown.isBeamBroken() && System.currentTimeMillis() - last > updateTime){
+            if(count2 < 3) count2++;
+            last = System.currentTimeMillis();
+        }
+        switch(count2){
+            case 0:
+                status = Status.EMPTY;
+                break;
+            case 1:
+                status = Status.ONEBALL;
+                break;
+            case 2:
+                status = Status.TWOBALL;
+                break;
+            case 3:
+                status = Status.STORAGEFULL;
+                break;
+        }
     }
 }
