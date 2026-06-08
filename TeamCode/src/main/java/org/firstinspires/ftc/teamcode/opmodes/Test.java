@@ -78,6 +78,7 @@ public class Test extends BetterOpMode {
         if(gamepad2.rightBumperWasPressed()) Turret.reseted = !Turret.reseted;
         if(gamepad1.optionsWasPressed()) robila.resetPinPoint();
         if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
+        if(gamepad1.leftBumperWasPressed()) Storage.count = 0;
 
         Drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         //Storage.checkUpLaser();
@@ -85,7 +86,6 @@ public class Test extends BetterOpMode {
         telemetry.addData("velocity", Shooter.motor1.getVelocity());
         telemetry.addData("target velocity", Shooter.velocity);
         telemetry.addData("hood pos", Shooter.servo.getPosition());
-        telemetry.addData("tur pos", Turret.turret1.getPosition());
         telemetry.addData("shooter enabled", shooterEnabled);
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());
@@ -95,9 +95,11 @@ public class Test extends BetterOpMode {
         telemetry.addData("yCorner", yCorner);
         telemetry.addData("distance to goal", dist);
         telemetry.addData("robot centric", Drivetrain.robotCentric);
+        telemetry.addData("count", Storage.count);
+        telemetry.addData("bm status", Storage.bdown.getBeamState());
 
         robila.update();
-        Storage.update();
+        Storage.update2();
         Shooter.update();
         Turret.update();
         //Shooter.motor1.update();

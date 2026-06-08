@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DigitalChannelImpl;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,13 +10,14 @@ import org.firstinspires.ftc.teamcode.opmodes.Test;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BreakBeam;
 
+@Configurable
 public class Storage {
     public static BetterMotorEx transfer;
     public static DigitalChannel up;
     public static BreakBeam bup, bmiddle, bdown;
     public static boolean activestorage;
     public static ElapsedTime timer;
-    public static double last, minimumUpdateTime = 300;
+    public static double last, updateTime = 50;
 
 
     public enum Status {
@@ -49,7 +51,7 @@ public class Storage {
     }
 
     public static Status getState() {
-        if (System.currentTimeMillis() - last > minimumUpdateTime) {
+        if (System.currentTimeMillis() - last > updateTime) {
             if (bdown.getBeamState().equals(BreakBeam.Status.CLEAR) && up.getState())
                 status = Status.ONEBALL;
             else if (bdown.getBeamState().equals(BreakBeam.Status.BROKEN)&& up.getState())
@@ -70,11 +72,33 @@ public class Storage {
         if (up.getState()) stop();
     }
 
-    public static double count = 0;
 
     public static void update(){
         getState();
-        if (status.equals(Status.ONEBALL)) stop();
-        else if(Shooter.readyForShoot) start();
+        if ((status.equals(Status.ONEBALL) || status.equals(Status.STORAGEFULL)) && !Shooter.readyForShoot) stop();
+    }
+
+    public static int count = 0;
+
+    public static void update2() {
+        if(bdown.getBeamState().equals(BreakBeam.Status.BROKEN) && System.currentTimeMillis() - last > updateTime){
+            if(count < 3) count++;
+            last = System.currentTimeMillis();
+        }
+        switch(count){
+            case 0:
+                status = Status.EMPTY;
+                break;
+            case 1:
+                status = Status.ONEBALL;
+                break;
+            case 2:
+                status = Status.TWOBALL;
+                break;
+            case 3:
+                status = Status.STORAGEFULL;
+                break;
+        }
+        if(count >= 1 && !Shooter.readyForShoot) stop();
     }
 }

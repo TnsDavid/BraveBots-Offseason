@@ -169,7 +169,7 @@ public class Robot {
         }
         voltageSensor= hm.voltageSensor.iterator().next();
         upLaser = hm.get(DigitalChannel.class, "laserup");
-        downLaser = new BreakBeam(controller, 0);
+        downLaser = new BreakBeam(controller, 2);
         upLaser.setMode(DigitalChannel.Mode.INPUT);
         downLaser.setMode(DigitalChannel.Mode.INPUT);
         //LLMath.init(hm);
