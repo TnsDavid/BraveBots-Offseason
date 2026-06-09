@@ -67,8 +67,13 @@ public class Robot {
     public enum OpModeType{
         TELEOP, AUTO
     }
-    OpModeType opModeType= null;
+    public enum PlayStyle{
+        CLOSE, FAR
+    }
 
+    public static PlayStyle playStyle;
+
+    OpModeType opModeType= null;
     public Robot setOpModeType(OpModeType type){
         opModeType= type;
         return this;
@@ -84,6 +89,9 @@ public class Robot {
     }
     public double dtlength=.356;//metri
     public double dtwidth=.38; //metri
+    public static void switchPlayStyle(){
+        playStyle = playStyle == PlayStyle.CLOSE ? PlayStyle.FAR : PlayStyle.CLOSE;
+    }
     public void resetPinPoint() {
         odo.setPosX(a == Alliance.RED ? dtwidth / 2 : 3.65 - (dtwidth / 2), DistanceUnit.METER);
         odo.setPosY(dtlength / 2, DistanceUnit.METER);
@@ -135,8 +143,8 @@ public class Robot {
         Shooter.motor1=shooter;
         Shooter.motor2=shooter2;
         Storage.transfer=transfer;
-        Storage.bdown=downLaser;
-        Storage.bup=upLaser;
+        Storage.bDown=downLaser;
+        Storage.bUp=upLaser;
         Intake.motor=intake;
         Drivetrain.leftBack=BackLeft;
         Drivetrain.leftFront=FrontLeft;
@@ -167,6 +175,9 @@ public class Robot {
         voltageSensor= hm.voltageSensor.iterator().next();
         downLaser = new BreakBeam(controller, 3);
         upLaser = new BreakBeam(controller, 5);
+        Storage.count=0;
+        Storage.startedTimer = false;
+        playStyle = PlayStyle.CLOSE;
         //LLMath.init(hm);
     }
     ElapsedTime timer;
@@ -198,8 +209,6 @@ public class Robot {
         hubs.forEach((hub)-> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
         controlHub= hubs.get(0);
         expansionHub= hubs.get(1);
-        Storage.count=0;
-        Storage.count2=0;
         initializeControllers();
         initializeMotors();
         initializeServos();

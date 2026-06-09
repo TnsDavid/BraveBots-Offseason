@@ -39,6 +39,7 @@ public class Test extends BetterOpMode {
         gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
                 .whenPressed(ShootTest::new, BetterGamepad.Type.MAIN);
         Shooter.servo.setPosition(Shooter.minHoodpos);
+        Storage.startedTimer = false;
         //Shooter.motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //Shooter.motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -52,19 +53,16 @@ public class Test extends BetterOpMode {
     }
     @Override
     public void active_loop() {
-        if(!shooterEnabled) Shooter.velocity = 0;
-
         //Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
+        Shooter.setVelocity(Shooter.velocity);
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
         if(gamepad1.crossWasPressed()) Intake.toggle();
-        if(gamepad1.circleWasPressed()) Storage.toggle();
         if(gamepad1.triangleWasPressed()) Blocker.toggle();
         if(gamepad2.rightBumperWasPressed()) Turret.reseted = !Turret.reseted;
         if(gamepad1.optionsWasPressed()) robila.resetPinPoint();
         if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
         if(gamepad1.leftBumperWasPressed()) Storage.count = 0;
-        if(gamepad1.squareWasPressed()) Storage.seenUp = false;
-
+        if(gamepad1.shareWasPressed()) Robot.switchPlayStyle();
 
         Drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         //Storage.checkUpLaser();
@@ -82,16 +80,20 @@ public class Test extends BetterOpMode {
         telemetry.addData("distance to goal", dist);
         telemetry.addData("robot centric", Drivetrain.robotCentric);
         telemetry.addData("count", Storage.count);
-        telemetry.addData("bm status", Storage.bdown.getBeamState());
-        telemetry.addData("bm up status", Storage.bup.getBeamState());
-        telemetry.addData("count2", Storage.count2);
-        telemetry.addData("seen", Storage.seenUp);
+        telemetry.addData("bm status", Storage.bDown.getBeamState());
+        telemetry.addData("bm up status", Storage.bUp.getBeamState());;
         telemetry.addData("readyfsh", Shooter.readyForShoot);
-        telemetry.addData("startedtimer", Storage.startedTimer2);
+        telemetry.addData("startedtimer", Storage.startedTimer);
+        telemetry.addData("play style", Robot.playStyle);
 
         robila.update();
-        Storage.update3();
-        Shooter.update();
+        Storage.update();
+        if(shooterEnabled) Shooter.update();
+        else{
+            Shooter.motor1.setPower(0);
+            Shooter.motor2.setPower(0);
+        }
+
         Turret.update();
         //Shooter.motor1.update();
         telemetry.update();
