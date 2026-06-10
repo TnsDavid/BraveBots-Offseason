@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.yCorner;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -53,8 +54,7 @@ public class Test extends BetterOpMode {
     }
     @Override
     public void active_loop() {
-        //Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
-        Shooter.setVelocity(Shooter.velocity);
+       // Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
         if(gamepad1.crossWasPressed()) Intake.toggle();
         if(gamepad1.triangleWasPressed()) Blocker.toggle();
@@ -66,7 +66,7 @@ public class Test extends BetterOpMode {
 
         Drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         //Storage.checkUpLaser();
-
+        Shooter.setVelocity(Shooter.velocity);
         telemetry.addData("velocity", Shooter.motor1.getVelocity());
         telemetry.addData("target velocity", Shooter.velocity);
         telemetry.addData("hood pos", Shooter.servo.getPosition());
@@ -95,7 +95,6 @@ public class Test extends BetterOpMode {
         }
 
         Turret.update();
-        //Shooter.motor1.update();
         telemetry.update();
 
     }

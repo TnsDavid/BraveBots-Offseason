@@ -36,6 +36,8 @@ import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
 import java.util.List;
 
+//TODO: TELEOP PE PLAYSTYLE
+
 public class Robot {
     public static Pose robotPose;
 
@@ -50,7 +52,7 @@ public class Robot {
     BreakBeam downLaser, upLaser;
 
     public BetterServoEx turret1, turret2;
-    public GoBildaPinpointDriver odo;
+    public static GoBildaPinpointDriver odo;
     public BetterMotorEx intake, transfer, shooter, shooter2, hang,FrontRight,FrontLeft,BackLeft,BackRight;
     public ServoController controlHubServos, expansionHubServos;
 

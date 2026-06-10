@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 public class ShootTest implements Task {
     private Command s;
 
-    public static double coef = 2, increment= 0.009, waitTime= 0.015, waitTime2= 0.05;
+    public static double coef = 1.4, increment= 0.009, waitTime= 0.01, waitTime2= 0.05;
 
 
     public double pos;

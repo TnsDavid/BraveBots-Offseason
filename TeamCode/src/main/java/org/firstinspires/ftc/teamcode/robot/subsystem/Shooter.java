@@ -21,7 +21,8 @@ public class Shooter {
 
 
     public static final double aVClose = -56.69335, bVClose = 587.26292, cVClose = 748.70738;
-    public static final double aHClose = -0.00353031 , bHClose = 0.283927, cHClose = 0.257332;
+    //y=-0.0756773x^{2}+0.53089x+0.0499127
+    public static final double aHClose = -0.0756773, bHClose = 0.53089, cHClose = 0.0499127 ;
     public static double p= 0.005,f = 0.74;
     public static void setCoefs() {
         motor1.setPFCoefficients(p,f);
@@ -64,13 +65,13 @@ public class Shooter {
         double virtualDistt = Turret.virtualDist;
 
         if (Test.shooterEnabled){
-            if(distt<3) {
-                velocity = aVClose * Math.pow(distt, 2) + bVClose * distt + cVClose;
-                hoodPos = Range.clip(aHClose * Math.pow(distt, 2) + bHClose * distt + cHClose, minHoodpos, maxHoodPos);
+            if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
+                velocity = aVClose * Math.pow(virtualDistt, 2) + bVClose * virtualDistt + cVClose;
+                hoodPos = Range.clip(aHClose * Math.pow(virtualDistt, 2) + bHClose * virtualDistt + cHClose, minHoodpos, maxHoodPos);
             }
             else{
-                velocity=2000;
-                hoodPos=maxHoodPos;
+                velocity=2100;
+                hoodPos=0.9072;
             }
         }
 
