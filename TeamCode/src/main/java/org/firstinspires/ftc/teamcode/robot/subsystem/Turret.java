@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.util.Range;
 
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 
+@Configurable
 public class Turret {
 
     static double NEUTRAL_POSITION= .5;
@@ -15,7 +17,7 @@ public class Turret {
     public static final double FIELD_LENGTH= 3.65, launchTime= .2,goalCircleRasius= .18;
     //y=-0.0239556x^{2}+0.242631x+0.322645
     public static final double at = -0.0239556, bt = 0.242631, ct = 0.322645;
-    public static final double turretTOFCoef = 0.9, shooterTOFCoef = 1.05;
+    public static double turretTOFCoef = 0.9, shooterTOFCoef = 1.05;
     public static BetterServoEx turret1, turret2;
     public static boolean reseted = false;
 
@@ -78,7 +80,10 @@ public class Turret {
             double Vx = Robot.odo.getVelX(DistanceUnit.METER);
             double Vy = Robot.odo.getVelY(DistanceUnit.METER);
 
-            if(Robot.playStyle == Robot.PlayStyle.CLOSE) TOF = at * Math.pow(dist, 2) + bt * dist + ct;
+            if(Robot.playStyle == Robot.PlayStyle.CLOSE){
+                TOF = at * Math.pow(dist, 2) + bt * dist + ct;
+                TOF *= turretTOFCoef;
+            }
             else TOF = 0.77;
             xCorner -= Vx * TOF;
             yCorner -= Vy * TOF;

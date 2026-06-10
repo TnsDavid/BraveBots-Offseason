@@ -95,9 +95,15 @@ public class Robot {
         playStyle = playStyle == PlayStyle.CLOSE ? PlayStyle.FAR : PlayStyle.CLOSE;
     }
     public void resetPinPoint() {
-        odo.setPosX(a == Alliance.RED ? dtwidth / 2 : 3.65 - (dtwidth / 2), DistanceUnit.METER);
-        odo.setPosY(dtlength / 2, DistanceUnit.METER);
-        odo.setHeading(Math.toRadians(90), AngleUnit.RADIANS);
+        odo.setPosX(playStyle == PlayStyle.FAR ?
+                ( a == Alliance.RED ? dtwidth / 2 : 3.65 - (dtwidth / 2) ) :
+                ( a == Alliance.RED ? 3.232 : 0.427 ), DistanceUnit.METER);
+        odo.setPosY(playStyle == PlayStyle.FAR ?
+                ( dtlength / 2 ) :
+                ( 1.94 ), DistanceUnit.METER);
+        odo.setHeading(playStyle == PlayStyle.FAR ?
+                ( Math.toRadians(90) ):
+                ( a == Alliance.RED ? Math.toRadians(180) : Math.toRadians(0) ), AngleUnit.RADIANS);
         robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
     }
     public void initializeControllers(){

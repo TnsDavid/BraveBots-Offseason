@@ -31,7 +31,7 @@ public class Intake {
     public static void toggle(){
         if(!intaking){
             start();
-            if(Storage.count < 2) Storage.start();
+            if(!Storage.bUp.isBeamBroken()) Storage.start();
         }
         else{
             stop();
