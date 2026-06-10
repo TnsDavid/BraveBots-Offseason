@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
@@ -17,6 +19,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootDynamic;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFarTest;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootTest;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterGamepad;
@@ -37,8 +41,12 @@ public class Test extends BetterOpMode {
         Turret.turret2.setPosition(0.5);
         Shooter.motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
+        gamepadEx2.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
                 .whenPressed(ShootTest::new, BetterGamepad.Type.MAIN);
+        gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
+                .whenPressed(ShootDynamic::new, BetterGamepad.Type.MAIN);
+       // gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
+         //       .whenPressed(ShootFarTest::new, BetterGamepad.Type.MAIN);
         Shooter.servo.setPosition(Shooter.minHoodpos);
         Storage.startedTimer = false;
         //Shooter.motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -69,6 +77,7 @@ public class Test extends BetterOpMode {
         Shooter.setVelocity(Shooter.velocity);
         telemetry.addData("velocity", Shooter.motor1.getVelocity());
         telemetry.addData("target velocity", Shooter.velocity);
+        telemetry.addData("d/(vp+vr)", Turret.dist/(Shooter.motor1.getVelocity()+Math.abs(Robot.odo.getVelX(DistanceUnit.METER)/Math.cos(Robot.robotPose.getHeading()))));
         telemetry.addData("hood pos", Shooter.servo.getPosition());
         telemetry.addData("shooter enabled", shooterEnabled);
         telemetry.addData("x", Robot.robotPose.getX());
@@ -82,12 +91,13 @@ public class Test extends BetterOpMode {
         telemetry.addData("count", Storage.count);
         telemetry.addData("bm status", Storage.bDown.getBeamState());
         telemetry.addData("bm up status", Storage.bUp.getBeamState());;
-        telemetry.addData("readyfsh", Shooter.readyForShoot);
-        telemetry.addData("startedtimer", Storage.startedTimer);
+       // telemetry.addData("readyfsh", Shooter.readyForShoot);
+       // telemetry.addData("startedtimer", Storage.startedTimer);
         telemetry.addData("play style", Robot.playStyle);
 
         robila.update();
         Storage.update();
+        Intake.update();
         if(shooterEnabled) Shooter.update();
         else{
             Shooter.motor1.setPower(0);

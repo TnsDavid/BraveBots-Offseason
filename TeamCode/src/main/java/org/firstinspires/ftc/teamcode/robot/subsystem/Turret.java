@@ -16,7 +16,7 @@ public class Turret {
     public static double x, y, heading, xCorner, yCorner, dist, fieldRelative, robotRelative, turretRelative, TOF, virtualDist;
     public static final double FIELD_LENGTH= 3.65, launchTime= .2,goalCircleRasius= .18;
     //y=-0.0239556x^{2}+0.242631x+0.322645
-    public static final double at = -0.0239556, bt = 0.242631, ct = 0.322645;
+    public static final double at = -0.0275109, bt = 0.253576, ct = 0.273474;
     public static double turretTOFCoef = 0.9, shooterTOFCoef = 1.05;
     public static BetterServoEx turret1, turret2;
     public static boolean reseted = false;
@@ -63,7 +63,7 @@ public class Turret {
     }
 
     //TODO: PUNETI SOTM;
-    public static double offset = 0;
+    public static double offset = 4;
     public static void update(){
         Pose robotPose= Robot.robotPose;
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {

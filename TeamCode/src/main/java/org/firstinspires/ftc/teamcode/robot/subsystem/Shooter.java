@@ -76,9 +76,9 @@ public class Shooter {
         }
 
         setVelocity(velocity);
-        if(!readyForShoot) {
+       // if(!readyForShoot)
             servo.setPosition(hoodPos);
-        }
+
         motor1.update();
     }
 }

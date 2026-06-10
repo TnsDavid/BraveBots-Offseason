@@ -24,6 +24,10 @@ public class Storage {
         transfer.setPower(1);
         activeStatus = ActiveStatus.TRANSFER;
     }
+    public static void lowerPower() {
+        transfer.setPower(0.65);
+        activeStatus = ActiveStatus.TRANSFER;
+    }
     public static void stop() {
         transfer.setPower(0);
         activeStatus = ActiveStatus.NOTRANSFER;

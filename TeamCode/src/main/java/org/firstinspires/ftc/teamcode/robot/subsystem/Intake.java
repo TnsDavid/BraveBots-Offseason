@@ -38,4 +38,8 @@ public class Intake {
             Storage.stop();
         }
     }
+    public static void update()
+    {
+        if(Storage.status.equals(Storage.Status.STORAGEFULL) && !Shooter.readyForShoot) stop();
+    }
 }
