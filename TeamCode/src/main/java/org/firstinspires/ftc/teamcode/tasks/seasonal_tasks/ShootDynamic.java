@@ -20,7 +20,7 @@ public class ShootDynamic implements Task {
                 .waitSeconds(0.3)
                 .addTask(Intake::start)
                 .addTask(Storage::start)
-                .waitSeconds(1)
+                .waitSeconds(1  )
                 .addTask(Storage::stop)
                 .addTask(Intake::stop)
                 .addTask(Blocker::block)

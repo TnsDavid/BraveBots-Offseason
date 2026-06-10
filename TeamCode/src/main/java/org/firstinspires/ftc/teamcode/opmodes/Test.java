@@ -43,7 +43,7 @@ public class Test extends BetterOpMode {
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         gamepadEx2.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
                 .whenPressed(ShootTest::new, BetterGamepad.Type.MAIN);
-        gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
+        gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
                 .whenPressed(ShootDynamic::new, BetterGamepad.Type.MAIN);
        // gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
          //       .whenPressed(ShootFarTest::new, BetterGamepad.Type.MAIN);
