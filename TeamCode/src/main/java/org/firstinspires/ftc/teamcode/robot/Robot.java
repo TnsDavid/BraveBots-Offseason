@@ -97,7 +97,8 @@ public class Robot {
     public void resetPinPoint() {
         odo.setPosX(playStyle == PlayStyle.FAR ?
                 ( a == Alliance.RED ? dtwidth / 2 : 3.65 - (dtwidth / 2) ) :
-                ( a == Alliance.RED ? 3.232 : 0.427 ), DistanceUnit.METER);
+               // ( a == Alliance.RED ? 3.232 : 0.427 ), DistanceUnit.METER);
+                ( a == Alliance.RED ? 3.232 : 0.362 ), DistanceUnit.METER);//field length 141,5
         odo.setPosY(playStyle == PlayStyle.FAR ?
                 ( dtlength / 2 ) :
                 ( 1.94 ), DistanceUnit.METER);
@@ -160,7 +161,6 @@ public class Robot {
         Drivetrain.leftFront=FrontLeft;
         Drivetrain.rightBack=BackRight;
         Drivetrain.rightFront=FrontRight;
-        Drivetrain.pinpoint = odo;
     }
 
     public void initializeServos(){

@@ -9,8 +9,6 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
 public class Drivetrain {
     public static BetterMotorEx leftFront,leftBack,rightBack,rightFront;
-    //public static boolean robotCentric = false;
-    public static GoBildaPinpointDriver pinpoint;
     public static void drive(double x, double y, double rx){
         x*= 1.1;
 
@@ -34,6 +32,9 @@ public class Drivetrain {
         rightBack.setPower(climbPower);
     }
     public static boolean robotCentric = true;
+    public static void toggleControlMethod() {
+        robotCentric = !robotCentric;
+    }
     public static void betterDrive(double rawX, double rawY, double rotation) {
         double finalX, finalY;
         if( !robotCentric ) {

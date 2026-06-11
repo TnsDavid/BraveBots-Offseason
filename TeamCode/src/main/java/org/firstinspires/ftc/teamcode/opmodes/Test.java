@@ -70,7 +70,7 @@ public class Test extends BetterOpMode {
         telemetry.addData("hz", 1e9 / dt);
         last = now;
 
-       // Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
+        Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
         if(gamepad1.crossWasPressed()) Intake.toggle();
         if(gamepad1.triangleWasPressed()) Blocker.toggle();
@@ -105,11 +105,12 @@ public class Test extends BetterOpMode {
         robila.update();
         Storage.update();
         Intake.update();
-        if(shooterEnabled) Shooter.update();
-        else{
-            Shooter.motor1.setPower(0);
-            Shooter.motor2.setPower(0);
-        }
+//        if(shooterEnabled) Shooter.update();
+//        else{
+//            Shooter.setVelocity(Shooter.velocity);
+//            //Shooter.setPower(0)
+
+        Shooter.motor1.update();
 
         Turret.update();
         telemetry.update();

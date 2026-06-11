@@ -15,10 +15,7 @@ public class ShootDynamic implements Task {
 
     public ShootDynamic(){
         s= new Command()
-                .addTask(() -> {
-                    Shooter.readyForShoot = true;
-                    Shooter.shootingOnTheMove = true;
-                })
+                .addTask(() -> Shooter.readyForShoot = true )
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.3)
                 .addTask(Intake::start)
@@ -31,7 +28,6 @@ public class ShootDynamic implements Task {
                     Storage.count = 0;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;
-                    Shooter.shootingOnTheMove = false;
                 });
     }
 

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.tasks.seasonal_tasks;
 
 import com.bylazar.configurables.annotations.Configurable;
 
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 public class ShootTest implements Task {
     private Command s;
 
-    public static double coef = 1.4, increment= 0.009, waitTime= 0.01, waitTime2= 0.05;
+    public static double coef = 1.4, coefFar = 1.4, increment= 0.009, waitTime= 0.01, waitTime2= 0.05, incrementFar = 0.009, inc;
 
 
     public double pos;
@@ -29,11 +30,13 @@ public class ShootTest implements Task {
                 .addTask(Storage::start)
                 .waitSeconds(waitTime)
                 .addTask(()->{
-                    if(!Turret.sotm) Shooter.servo.setPosition(pos-increment);
+                    inc = Robot.playStyle == Robot.PlayStyle.CLOSE ? increment : incrementFar;
+                    if(!Turret.sotm) Shooter.servo.setPosition(pos- inc);
                 })
                 .waitSeconds(waitTime2)
                 .addTask(()->{
-                    if(!Turret.sotm) Shooter.servo.setPosition(pos-coef* increment);
+                    double cf = Robot.playStyle == Robot.PlayStyle.CLOSE ? coef : coefFar;
+                    if(!Turret.sotm) Shooter.servo.setPosition(pos-cf* inc);
                 })
                 .waitSeconds(1)
                 .addTask(Storage::stop)

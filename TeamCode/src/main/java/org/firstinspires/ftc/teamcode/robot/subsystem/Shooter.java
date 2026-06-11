@@ -28,6 +28,10 @@ public class Shooter {
         motor1.setPFCoefficients(p,f);
         motor2.setPFCoefficients(p,f);
     }
+    public static void setPower(double power) {
+        motor1.setPower(power);
+        motor2.setPower(power);
+    }
     public static double voltageThreshold = 10.5;
     public static void setVelocity(double vel){
         double voltage = Robot.voltageSensor.getVoltage();
@@ -60,20 +64,22 @@ public class Shooter {
         motor1.update();
         servo.setPosition(hoodPos);
     }
+    public static boolean shooterEnabled = false;
     public static void update() {
         double distt = Turret.dist;
         double virtualDistt = Turret.virtualDist;
 
-        if (Test.shooterEnabled){
+        if (shooterEnabled){
             if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
                 velocity = aVClose * Math.pow(virtualDistt, 2) + bVClose * virtualDistt + cVClose;
                 hoodPos = Range.clip(aHClose * Math.pow(virtualDistt, 2) + bHClose * virtualDistt + cHClose, minHoodpos, maxHoodPos);
             }
-            else{
+            else {
                 velocity=2100;
                 hoodPos=0.9072;
             }
-        }
+        } else
+            velocity = 1200;
 
         setVelocity(velocity);
         if(!Shooter.readyForShoot || Turret.sotm)

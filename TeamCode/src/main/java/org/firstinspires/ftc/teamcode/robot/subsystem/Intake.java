@@ -7,30 +7,35 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 public class Intake {
     public static BetterMotorEx motor;
     static ElapsedTime timer = new ElapsedTime();
-    public static boolean intaking = false;
+
+    public static IntakeStatus status = IntakeStatus.NOTINTAKING;
+
+    public enum IntakeStatus{
+        INTAKING, NOTINTAKING
+    }
     public static void start(){
         motor.setPower(.94);
         timer= new ElapsedTime();
-        intaking= true;
+        status= IntakeStatus.INTAKING;
     }
     public static void relanti(){
         motor.setPower(0.5);
-        intaking = true;
+        status = IntakeStatus.INTAKING;
     }
     public static void stop(){
         motor.setPower(0);
-        intaking= false;
+        status= IntakeStatus.NOTINTAKING;
     }
     public static void reverse(){
         motor.setPower(-0.5);
-        intaking = false;
+        status = IntakeStatus.NOTINTAKING;
     }
     public static void setPower(double power){
         motor.setPower(power);
     }
     public static void toggle(){
-        if(!intaking){
-            start();
+        if(status == IntakeStatus.NOTINTAKING){
+            if(!(Storage.status == Storage.Status.STORAGEFULL && Storage.bUp.isBeamBroken())) Intake.start();
             if(!Storage.bUp.isBeamBroken()) Storage.start();
         }
         else{
@@ -38,8 +43,7 @@ public class Intake {
             Storage.stop();
         }
     }
-    public static void update()
-    {
+    public static void update() {
         if(Storage.status.equals(Storage.Status.STORAGEFULL) && !Shooter.readyForShoot) stop();
     }
 }
