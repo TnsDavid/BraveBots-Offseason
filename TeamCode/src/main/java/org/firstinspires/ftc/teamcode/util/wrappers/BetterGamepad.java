@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public class BetterGamepad {
     Gamepad gp;
-    int numberOfButtons= 14;
+    int numberOfButtons= 15;
     Button[] buttons= new Button[numberOfButtons];
     Command command;
     public void killScheduler(){
@@ -32,7 +32,7 @@ public class BetterGamepad {
     }
     public enum Buttons{
         CROSS, CIRCLE, TRIANGLE, SQUARE, RIGHT_BUMPER, LEFT_BUMPER, DPAD_UP, DPAD_LEFT
-        ,DPAD_DOWN, DPAD_RIGHT, LEFT_STICK, RIGHT_STICK, TOUCHPAD, OPTIONS
+        ,DPAD_DOWN, DPAD_RIGHT, LEFT_STICK, RIGHT_STICK, TOUCHPAD, OPTIONS, SHARE
 
 
     }
@@ -90,6 +90,9 @@ public class BetterGamepad {
                     break;
                 case OPTIONS:
                     pressed = ()->gp.optionsWasPressed();
+                    break;
+                case SHARE:
+                    pressed = () -> gp.shareWasPressed();
                     break;
             }
         }

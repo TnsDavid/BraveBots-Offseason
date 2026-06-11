@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 
@@ -21,7 +22,10 @@ public class ShootTest implements Task {
     public ShootTest(){
         s= new Command()
                 .addTask(() -> pos = Shooter.servo.getPosition())
-                .addTask(() -> Shooter.readyForShoot = true)
+                .addTask(() -> {
+                    Shooter.readyForShoot = true;
+                    Shooter.shootingOnTheMove = (Turret.Vx != 0 || Turret.Vy != 0);
+                })
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.3)
                 .addTask(Intake::start)
@@ -38,6 +42,7 @@ public class ShootTest implements Task {
                     Storage.count = 0;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;
+                    Shooter.shootingOnTheMove = false;
                 })
                 .addTask(()-> Shooter.servo.setPosition(pos));
     }

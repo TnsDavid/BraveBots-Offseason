@@ -17,7 +17,7 @@ public class Shooter {
     public static BetterMotorEx motor1, motor2;
     public static double velocity=0;
     public static BetterServo servo;
-    public static boolean readyForShoot = false;
+    public static boolean readyForShoot = false, shootingOnTheMove = false;
 
 
     public static final double aVClose = -56.69335, bVClose = 587.26292, cVClose = 748.70738;
@@ -76,7 +76,7 @@ public class Shooter {
         }
 
         setVelocity(velocity);
-       // if(!readyForShoot)
+        if( !readyForShoot || shootingOnTheMove )
             servo.setPosition(hoodPos);
 
         motor1.update();

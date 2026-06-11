@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 
-@TeleOp
+@TeleOp(name = "Localizer Test", group = "Teste")
 public class LocalizerTest extends LinearOpMode {
     Robot r;
     Follower f;

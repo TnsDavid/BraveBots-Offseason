@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.configuration.annotations.DeviceProperties;
 import com.qualcomm.robotcore.hardware.configuration.annotations.MotorType;
@@ -60,8 +61,8 @@ public class BetterMotorEx extends DcMotorImplEx implements DcMotorEx, HardwareD
 
 
     public double maxVelocity= 0;
-    public BetterMotorEx setMaxVelocity(double maxVelocity){
-        this.maxVelocity= maxVelocity;
+    public BetterMotorEx setMaxVelocity(double maxVelocity) {
+        this.maxVelocity = maxVelocity;
         return this;
     }
     PDSFController controller;

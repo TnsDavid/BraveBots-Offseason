@@ -64,6 +64,7 @@ public class Turret {
 
     //TODO: PUNETI SOTM;
     public static double offset = 4;
+    public static double Vx, Vy;
     public static void update(){
         Pose robotPose= Robot.robotPose;
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
@@ -77,8 +78,8 @@ public class Turret {
 
             dist = Math.hypot(xCorner, yCorner);
 
-            double Vx = Robot.odo.getVelX(DistanceUnit.METER);
-            double Vy = Robot.odo.getVelY(DistanceUnit.METER);
+            Vx = Robot.odo.getVelX(DistanceUnit.METER);
+            Vy = Robot.odo.getVelY(DistanceUnit.METER);
 
             if(Robot.playStyle == Robot.PlayStyle.CLOSE){
                 TOF = at * Math.pow(dist, 2) + bt * dist + ct;

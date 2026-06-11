@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
+import org.firstinspires.ftc.teamcode.util.wrappers.BetterCRServo;
+
 public class Hang {
-    //TODO PT PTO
+    //BetterCRServo[] hangServos; //6 servo-uri, nu e pto
 }

@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.wrappers.BreakBeam;
 
-@TeleOp
+@TeleOp(name = "Test BreakBeam", group = "Teste")
 @Configurable
 public class TestBreakBeam extends LinearOpMode {
     BreakBeam bm , bmup;

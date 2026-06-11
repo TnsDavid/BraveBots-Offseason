@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 
 import java.util.List;
 //0.673
-@TeleOp
+@TeleOp(name = "BlockerPositionTest", group = "Teste")
 public class BlockerPositionTest extends LinearOpMode {
     Robot r;
 

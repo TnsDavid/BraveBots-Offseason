@@ -5,7 +5,7 @@ import android.graphics.LinearGradient;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.tasks.core.Scheduler;
+import org.firstinspires.ftc.teamcode.tasks.command_based.core.Scheduler;
 
 public abstract class BetterOpMode extends LinearOpMode {
     public abstract void initialize();

@@ -106,7 +106,7 @@ public class Robot {
                 ( a == Alliance.RED ? Math.toRadians(180) : Math.toRadians(0) ), AngleUnit.RADIANS);
         robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
     }
-    public void initializeControllers(){
+    public void initializeControllers() {
         controlHubMotors= hm.get(DcMotorController.class, "Control Hub");
         expansionHubMotors= hm.get(DcMotorController.class, "Expansion Hub 2");
         controlHubServos= hm.get(ServoController.class, "Control Hub");
@@ -127,17 +127,19 @@ public class Robot {
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         intake= new BetterMotorEx(controlHubMotors,2);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         transfer = new BetterMotorEx(expansionHubMotors, 2);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         transfer.setDirection(DcMotorSimple.Direction.FORWARD);
+
         shooter= new BetterMotorEx(controlHubMotors, 3).setCachingTolerance(.01)
-                .setMaxVelocity(2100)
+                .setMaxVelocity(2600)
                 .setPFCoefficients(Shooter.p, Shooter.f);
         shooter2= new BetterMotorEx(expansionHubMotors, 3).setCachingTolerance(.01)
-                .setMaxVelocity(2100)
+                .setMaxVelocity(2600)
                 .setPFCoefficients(Shooter.p, Shooter.f);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

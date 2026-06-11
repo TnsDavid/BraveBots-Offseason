@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 
 import java.util.List;
 
-@TeleOp
+@Disabled
 public class Senzor_Digital extends LinearOpMode {
     DigitalChannel Laser1;
     DigitalChannel Laser2;
