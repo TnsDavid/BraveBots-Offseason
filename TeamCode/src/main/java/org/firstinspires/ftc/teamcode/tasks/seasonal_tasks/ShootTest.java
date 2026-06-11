@@ -22,18 +22,19 @@ public class ShootTest implements Task {
     public ShootTest(){
         s= new Command()
                 .addTask(() -> pos = Shooter.servo.getPosition())
-                .addTask(() -> {
-                    Shooter.readyForShoot = true;
-                    Shooter.shootingOnTheMove = (Turret.Vx != 0 || Turret.Vy != 0);
-                })
+                .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.3)
                 .addTask(Intake::start)
                 .addTask(Storage::start)
                 .waitSeconds(waitTime)
-                .addTask(()->Shooter.servo.setPosition(pos-increment))
+                .addTask(()->{
+                    if(!Turret.sotm) Shooter.servo.setPosition(pos-increment);
+                })
                 .waitSeconds(waitTime2)
-                .addTask(()->Shooter.servo.setPosition(pos-coef* increment))
+                .addTask(()->{
+                    if(!Turret.sotm) Shooter.servo.setPosition(pos-coef* increment);
+                })
                 .waitSeconds(1)
                 .addTask(Storage::stop)
                 .addTask(Intake::stop)
@@ -42,7 +43,6 @@ public class ShootTest implements Task {
                     Storage.count = 0;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;
-                    Shooter.shootingOnTheMove = false;
                 })
                 .addTask(()-> Shooter.servo.setPosition(pos));
     }

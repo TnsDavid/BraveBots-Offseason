@@ -19,7 +19,7 @@ public class Turret {
     public static final double at = -0.0275109, bt = 0.253576, ct = 0.273474;
     public static double turretTOFCoef = 0.9, shooterTOFCoef = 1.05;
     public static BetterServoEx turret1, turret2;
-    public static boolean reseted = false;
+    public static boolean reseted = false, sotm = false;
 
     public static void setNeutralPosition(double pos){
         turret1.setPosition(pos);
@@ -64,7 +64,6 @@ public class Turret {
 
     //TODO: PUNETI SOTM;
     public static double offset = 4;
-    public static double Vx, Vy;
     public static void update(){
         Pose robotPose= Robot.robotPose;
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
@@ -78,14 +77,18 @@ public class Turret {
 
             dist = Math.hypot(xCorner, yCorner);
 
-            Vx = Robot.odo.getVelX(DistanceUnit.METER);
-            Vy = Robot.odo.getVelY(DistanceUnit.METER);
+            double Vx = Robot.odo.getVelX(DistanceUnit.METER);
+            double Vy = Robot.odo.getVelY(DistanceUnit.METER);
+            double V = Math.hypot(Vx, Vy);
+
+            sotm = Shooter.readyForShoot && V > 1;
 
             if(Robot.playStyle == Robot.PlayStyle.CLOSE){
                 TOF = at * Math.pow(dist, 2) + bt * dist + ct;
                 TOF *= turretTOFCoef;
             }
             else TOF = 0.77;
+
             xCorner -= Vx * TOF;
             yCorner -= Vy * TOF;
 
@@ -115,9 +118,6 @@ public class Turret {
                     turret2.setPosition(0.5);
                 }
             }
-
-
-
         }
     }
     public static double normalize(double h){
