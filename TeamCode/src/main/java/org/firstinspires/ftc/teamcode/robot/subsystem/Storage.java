@@ -35,7 +35,7 @@ public class Storage {
     public static int count = 0;
     public static ElapsedTime ballUp;
     public static boolean startedTimer = false;
-    public static double storageStopTime = 80;
+    public static double storageStopTime = 60;
 
     public static void update(){
         if(!Shooter.readyForShoot){

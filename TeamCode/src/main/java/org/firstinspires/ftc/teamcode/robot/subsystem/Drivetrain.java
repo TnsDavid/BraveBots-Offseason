@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.subsystem;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.tests.TestFCDrivetrain;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
@@ -36,7 +37,7 @@ public class Drivetrain {
     public static void betterDrive(double rawX, double rawY, double rotation) {
         double finalX, finalY;
         if( !robotCentric ) {
-            double robotHeading = pinpoint.getHeading(AngleUnit.RADIANS);
+            double robotHeading = Robot.odo.getHeading(AngleUnit.RADIANS);
             finalX = rawX * Math.cos(-robotHeading) - rawY * Math.sin(-robotHeading);
             finalY = rawX * Math.sin(-robotHeading) + rawY * Math.cos(-robotHeading);
         } else {
