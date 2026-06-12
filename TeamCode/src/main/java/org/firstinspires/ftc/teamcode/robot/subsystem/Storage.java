@@ -60,7 +60,8 @@ public class Storage {
                 status = Status.TWOBALL;
                 break;
             case 3:
-                status = Status.STORAGEFULL;
+                if(bDown.isBeamBroken()) status = Status.STORAGEFULL;
+                else status = Status.TWOBALL;
                 break;
         }
     }
