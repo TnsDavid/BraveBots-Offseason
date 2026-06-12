@@ -63,7 +63,5 @@ public class Storage {
                 status = Status.STORAGEFULL;
                 break;
         }
-//        if(activeStatus.equals(ActiveStatus.TRANSFER)) start();
-//        else stop();
     }
 }

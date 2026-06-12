@@ -46,6 +46,7 @@ public class Shoot implements Task {
                     Storage.count = 0;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;
+                    Turret.checkedStatus = false;
                 })
                 .addTask(()-> Shooter.servo.setPosition(pos));
     }

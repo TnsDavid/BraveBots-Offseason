@@ -35,7 +35,7 @@ public class Intake {
     }
     public static void toggle(){
         if(status == IntakeStatus.NOTINTAKING){
-            if(!(Storage.status == Storage.Status.STORAGEFULL && Storage.bUp.isBeamBroken())) Intake.start();
+            if(!((Storage.status.equals(Storage.Status.STORAGEFULL) && Storage.bDown.isBeamBroken()) && Storage.bUp.isBeamBroken())) Intake.start();
             if(!Storage.bUp.isBeamBroken()) Storage.start();
         }
         else{
