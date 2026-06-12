@@ -18,7 +18,7 @@ public class Constants {
     public static double dtLength =0.435;
     public static double dtWidth = 0.432;
     /// TO DO: LUAT PINPOINT DE LA CAPAT MAINE
-    public static double xOffset = -3.963, yOffset = -1.029;//0.98
+    public static double xOffset = -4.02, yOffset = 0.944;//0.98
 
     public static final double odometryResolution = 34.310551 * 25.4; //ticks per mm *
     public static FollowerConstants followerConstants = new FollowerConstants()
@@ -31,7 +31,7 @@ public class Constants {
             .strafePodX(xOffset)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
-            .customEncoderResolution(odometryResolution)
+            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
     public static MecanumConstants driveConstants = new MecanumConstants()

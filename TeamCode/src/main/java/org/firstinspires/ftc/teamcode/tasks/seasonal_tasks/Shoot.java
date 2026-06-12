@@ -12,15 +12,15 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 
 @Configurable
-public class ShootTest implements Task {
+public class Shoot implements Task {
     private Command s;
 
-    public static double coef = 1.4, coefFar = 1.4, increment= 0.009, waitTime= 0.01, waitTime2= 0.05, incrementFar = 0.009, inc;
+    public static double coef = 1.4, coefFar = 1.25, increment= 0.009, waitTime= 0.01, waitTime2= 0.05, incrementFar = 0.024, inc;
 
 
     public double pos;
 
-    public ShootTest(){
+    public Shoot(){
         s= new Command()
                 .addTask(() -> pos = Shooter.servo.getPosition())
                 .addTask(() -> Shooter.readyForShoot = true)

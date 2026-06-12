@@ -19,7 +19,19 @@ public class Turret {
     public static final double at = -0.0275109, bt = 0.253576, ct = 0.273474;
     public static double turretTOFCoef = 0.9, shooterTOFCoef = 1.05;
     public static BetterServoEx turret1, turret2;
-    public static boolean reseted = false, sotm = false;
+    public static boolean reseted = false;
+    public static boolean sotm = false;
+    public static boolean checkedStatus = false;
+
+    public enum TurretStatus {
+        NOTACTIVE, ACTIVE
+    }
+
+    public static TurretStatus turrStatus = TurretStatus.NOTACTIVE;
+
+    public static void toggleStatus(){
+        turrStatus = turrStatus.equals(TurretStatus.ACTIVE) ? TurretStatus.NOTACTIVE : TurretStatus.ACTIVE;
+    }
 
     public static void setNeutralPosition(double pos){
         turret1.setPosition(pos);
@@ -66,6 +78,10 @@ public class Turret {
     public static double offset = 4;
     public static void update(){
         Pose robotPose= Robot.robotPose;
+        if(Storage.status.equals(Storage.Status.STORAGEFULL) && !checkedStatus){
+            turrStatus = TurretStatus.ACTIVE;
+            checkedStatus = true;
+        }
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
 
             x= robotPose.getX();
@@ -94,30 +110,26 @@ public class Turret {
 
             virtualDist = Math.hypot(xCorner, yCorner);
 
-            heading= Math.toDegrees(heading);
-            xCorner -= goalCircleRasius;
-            yCorner -= goalCircleRasius;
-            fieldRelative = Math.atan(yCorner / xCorner);
-            fieldRelative = Math.toDegrees(fieldRelative);
-            if (Robot.a == Alliance.BLUE)
-                fieldRelative = 180 - fieldRelative;
-            robotRelative = normalize(fieldRelative - heading);
-            turretRelative = normalize(robotRelative - 180);
-            robotRelative = Robot.a == Alliance.RED ? robotRelative : -robotRelative;
-            turretRelative+= 180;
-            turretRelative+=offset;
-            turretRelative = Range.clip(turretRelative,0,360);
-            double finalPos= turretRelative/360;
-            if(finalPos>= 0.1425 && finalPos<=0.91) {
-                if(reseted) {
+            if(turrStatus.equals(TurretStatus.ACTIVE)) {
+                heading = Math.toDegrees(heading);
+                xCorner -= goalCircleRasius;
+                yCorner -= goalCircleRasius;
+                fieldRelative = Math.atan(yCorner / xCorner);
+                fieldRelative = Math.toDegrees(fieldRelative);
+                if (Robot.a == Alliance.BLUE)
+                    fieldRelative = 180 - fieldRelative;
+                robotRelative = normalize(fieldRelative - heading);
+                turretRelative = normalize(robotRelative - 180);
+                robotRelative = Robot.a == Alliance.RED ? robotRelative : -robotRelative;
+                turretRelative += 180;
+                turretRelative += offset;
+                turretRelative = Range.clip(turretRelative, 0, 360);
+                double finalPos = turretRelative / 360;
+                if (finalPos >= 0.1425 && finalPos <= 0.91) {
                     turret1.setPosition(finalPos);
                     turret2.setPosition(finalPos);
                 }
-                else{
-                    turret1.setPosition(0.5);
-                    turret2.setPosition(0.5);
-                }
-            }
+            }else setNeutralPosition(0.5);
         }
     }
     public static double normalize(double h){

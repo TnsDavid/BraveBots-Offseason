@@ -23,10 +23,14 @@ public class Shooter {
     public static final double aVClose = -56.69335, bVClose = 587.26292, cVClose = 748.70738;
     //y=-0.0756773x^{2}+0.53089x+0.0499127
     public static final double aHClose = -0.0756773, bHClose = 0.53089, cHClose = 0.0499127 ;
-    public static double p= 0.005,f = 0.74;
+    public static double pClose= 0.005,fClose = 0.74 , p = 0.005;
+    public static double pFar = 0.004 , fFar = 0.9 , f = 0.74;
     public static void setCoefs() {
-        motor1.setPFCoefficients(p,f);
-        motor2.setPFCoefficients(p,f);
+        double pFinal , fFinal ;
+        pFinal = Robot.playStyle == Robot.PlayStyle.CLOSE ? pClose : pFar;
+        fFinal = Robot.playStyle == Robot.PlayStyle.CLOSE ? fClose : fFar;
+        motor1.setPFCoefficients(pFinal,fFinal);
+        motor2.setPFCoefficients(pFinal,fFinal);
     }
     public static void setPower(double power) {
         motor1.setPower(power);
@@ -40,24 +44,6 @@ public class Shooter {
         motor1.setVelocity(vel);
         motor2.setPower(motor1.getPower());
     }
-    public static boolean wereCoeffsSet = false;
-    public static void setReady() {
-        readyForShoot = !readyForShoot;
-    }
-    public static void setVelocity2(double vel){
-        if(!wereCoeffsSet)
-        {
-            wereCoeffsSet = true;
-            setCoefs();
-        }
-        try {
-            motor1.setVelocity(vel);
-            motor2.setVelocity(vel);
-        }
-        catch (TargetPositionNotSetException ignored){
-
-        }
-    }
     public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96;
     public static double offset=0;
     public static void updateTest(){
@@ -66,10 +52,8 @@ public class Shooter {
     }
     public static boolean shooterEnabled = false;
     public static void update() {
-        double distt = Turret.dist;
-        double virtualDistt = Turret.virtualDist;
-
         if (shooterEnabled){
+            double virtualDistt = Turret.virtualDist;
             if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
                 velocity = aVClose * Math.pow(virtualDistt, 2) + bVClose * virtualDistt + cVClose;
                 hoodPos = Range.clip(aHClose * Math.pow(virtualDistt, 2) + bHClose * virtualDistt + cHClose, minHoodpos, maxHoodPos);
@@ -78,13 +62,10 @@ public class Shooter {
                 velocity=2100;
                 hoodPos=0.9072;
             }
-        } else
-            velocity = 1200;
-
-        setVelocity(velocity);
-        if(!Shooter.readyForShoot || Turret.sotm)
-            servo.setPosition(hoodPos);
-
-        motor1.update();
+            if(!Shooter.readyForShoot || Turret.sotm)
+                servo.setPosition(hoodPos);
+            setVelocity(velocity);
+            motor1.update();
+        } else setPower(0);
     }
 }

@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootDynamic;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootTest;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Spit;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
 import org.firstinspires.ftc.teamcode.util.MultipleTelemetry;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterGamepad;
@@ -26,7 +26,6 @@ public abstract class TeleOp extends BetterOpMode {
     Robot robot;
     MultipleTelemetry telemetry;
     private boolean readyForRaise=false;
-    public boolean shooterEnabled;
     volatile boolean shooterThreadRunning, turretThreadRunning, driveThreadRunning;
     Thread shooterThread, turretThread, driveThread;
 
@@ -43,23 +42,24 @@ public abstract class TeleOp extends BetterOpMode {
 
         gamepadEx1.getButton(BetterGamepad.Buttons.CROSS)
                 .whenPressed(Intake::toggle, BetterGamepad.Type.MAIN);
-        gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
-                .whenPressed(ShootTest::new, BetterGamepad.Type.MAIN);
+        gamepadEx1.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
+                .whenPressed(Shoot::new, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> robot.resetPinPoint(), BetterGamepad.Type.MAIN);
-        gamepadEx1.getButton(BetterGamepad.Buttons.SHARE)
-                .whenPressed(Robot::switchPlayStyle, BetterGamepad.Type.MAIN);
-        gamepadEx1.getButton(BetterGamepad.Buttons.TRIANGLE)
-                        .whenPressed(Blocker::unblock, BetterGamepad.Type.MAIN);
-
-        gamepadEx2.getButton(BetterGamepad.Buttons.CROSS)
-                .whenPressed(() -> shooterEnabled = !shooterEnabled, BetterGamepad.Type.MAIN);
-        gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
-                .whenPressed(() -> {
-                    updateTurret = !updateTurret;
-                    Turret.reseted = true;
-                }, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
+                .whenPressed(() -> {
+                    Robot.switchPlayStyle();
+                    Shooter.setCoefs();
+                }, BetterGamepad.Type.MAIN);
+        gamepadEx1.getButton(BetterGamepad.Buttons.TRIANGLE)
+                .whenPressed(Blocker::toggle, BetterGamepad.Type.MAIN);
+        gamepadEx1.getButton(BetterGamepad.Buttons.CIRCLE)
+                .whenPressed(Spit::new, BetterGamepad.Type.MAIN);
+        gamepadEx2.getButton(BetterGamepad.Buttons.CROSS)
+                .whenPressed(() -> Shooter.shooterEnabled = !Shooter.shooterEnabled, BetterGamepad.Type.MAIN);
+        gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
+                .whenPressed(Turret::toggleStatus,  BetterGamepad.Type.PARALLEL);
+        gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_UP)
                 .whenPressed(Drivetrain::toggleControlMethod, BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_RIGHT)
                 .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.MAIN);
@@ -79,10 +79,7 @@ public abstract class TeleOp extends BetterOpMode {
         turretThread = new Thread(() -> {
             while( turretThreadRunning && !Thread.currentThread().isInterrupted() ) {
                 try {
-                    if(updateTurret)
-                        Turret.update();
-                    else
-                        Turret.setNeutralPosition(.5);
+                    Turret.update();
                     Thread.sleep(3);
                 } catch( InterruptedException e ) {
                     Thread.currentThread().interrupt();
@@ -109,7 +106,7 @@ public abstract class TeleOp extends BetterOpMode {
     @Override
     public void on_start() {
         turretThreadRunning = shooterThreadRunning = driveThreadRunning = true;
-        updateTurret = shooterEnabled = false;
+        updateTurret = Shooter.shooterEnabled = false;
 
         turretThread.start();
         shooterThread.start();
@@ -143,6 +140,8 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addLine("-------------------");
         telemetry.addData("moving", Turret.sotm);
         telemetry.addData("velocity", Shooter.velocity);
+        telemetry.addData("curr vel", Shooter.motor1.getVelocity());
+        telemetry.addData("shooter enb", Shooter.shooterEnabled);
 
         Intake.update();
         Storage.update();

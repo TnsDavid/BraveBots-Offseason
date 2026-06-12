@@ -91,6 +91,9 @@ public class Robot {
     }
     public double dtlength=.356;//metri
     public double dtwidth=.38; //metri
+
+    //4.01
+    //
     public static void switchPlayStyle(){
         playStyle = playStyle == PlayStyle.CLOSE ? PlayStyle.FAR : PlayStyle.CLOSE;
     }
@@ -179,7 +182,7 @@ public class Robot {
             odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
             odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.INCH);
             odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-            odo.setEncoderResolution(odometryResolution, DistanceUnit.MM);
+            odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
             resetPinPoint();
         }
         voltageSensor= hm.voltageSensor.iterator().next();
