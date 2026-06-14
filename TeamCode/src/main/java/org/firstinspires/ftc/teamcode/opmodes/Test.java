@@ -75,7 +75,6 @@ public class Test extends BetterOpMode {
         if(gamepad1.optionsWasPressed()) robila.resetPinPoint();
         if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
         if(gamepad1.shareWasPressed()) Robot.switchPlayStyle();
-
         Drivetrain.betterDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         //Storage.checkUpLaser();
         Shooter.setVelocity(Shooter.velocity);

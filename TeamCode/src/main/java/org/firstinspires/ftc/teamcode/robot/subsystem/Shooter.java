@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.opmodes.Test;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.math.PIDController;
+import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
 
@@ -20,17 +21,22 @@ public class Shooter {
     public static boolean readyForShoot = false;
 
 
-    public static final double aVClose = -56.69335, bVClose = 587.26292, cVClose = 748.70738;
-    //y=-0.0756773x^{2}+0.53089x+0.0499127
-    public static final double aHClose = -0.0756773, bHClose = 0.53089, cHClose = 0.0499127 ;
-    public static double pClose= 0.005,fClose = 0.74 , p = 0.005;
-    public static double pFar = 0.004 , fFar = 0.9 , f = 0.74;
+    //public static final double aVClose = -56.69335, bVClose = 587.26292, cVClose = 748.70738;
+
+    //public static final double aHClose = -0.0756773, bHClose = 0.53089, cHClose = 0.0499127 ;
+
+    public static final double aVClose = -143.80411, bVClose = 909.21466, cVClose = 456.30415;
+    public static final double aHClose = -0.0841684, bHClose = 0.490682, cHClose = 0.139603;
+    public static double pClose= -0.005,fClose = 0.74 , p = -0.005;
+    public static double pFar = -0.004 , fFar = 0.9 , f = 0.74 , s = 0.09;
+
     public static void setCoefs() {
         double pFinal , fFinal ;
         pFinal = Robot.playStyle == Robot.PlayStyle.CLOSE ? pClose : pFar;
         fFinal = Robot.playStyle == Robot.PlayStyle.CLOSE ? fClose : fFar;
-        motor1.setPFCoefficients(pFinal,fFinal);
-        motor2.setPFCoefficients(pFinal,fFinal);
+        s = Robot.playStyle == Robot.PlayStyle.CLOSE ? 0 : s;
+        motor1.setPSFCoefficients(pFinal,fFinal , s);
+        motor2.setPSFCoefficients(pFinal,fFinal, s);
     }
     public static void setPower(double power) {
         motor1.setPower(power);
@@ -47,20 +53,20 @@ public class Shooter {
     public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96;
     public static double offset=0;
     public static void updateTest(){
+        setVelocity(velocity);
         motor1.update();
-        servo.setPosition(hoodPos);
     }
     public static boolean shooterEnabled = false;
     public static void update() {
         if (shooterEnabled){
             double virtualDistt = Turret.virtualDist;
             if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
-                velocity = aVClose * Math.pow(virtualDistt, 2) + bVClose * virtualDistt + cVClose;
-                hoodPos = Range.clip(aHClose * Math.pow(virtualDistt, 2) + bHClose * virtualDistt + cHClose, minHoodpos, maxHoodPos);
+                velocity = ShooterMath.calculateVelocity(virtualDistt);
+                hoodPos = ShooterMath.calculateHoodAngle(virtualDistt);
             }
             else {
-                velocity=2100;
-                hoodPos=0.9072;
+                velocity=2090;
+                hoodPos=0.93;
             }
             if(!Shooter.readyForShoot || Turret.sotm)
                 servo.setPosition(hoodPos);

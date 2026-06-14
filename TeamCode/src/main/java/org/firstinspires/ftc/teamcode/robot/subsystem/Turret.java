@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 
 @Configurable
@@ -17,7 +18,7 @@ public class Turret {
     public static final double FIELD_LENGTH= 3.65, launchTime= .2,goalCircleRasius= .18;
     //y=-0.0239556x^{2}+0.242631x+0.322645
     public static final double at = -0.0275109, bt = 0.253576, ct = 0.273474;
-    public static double turretTOFCoef = 0.9, shooterTOFCoef = 1.05;
+    public static double turretTOFCoef = 0.6, shooterTOFCoef = 1.05;
     public static BetterServoEx turret1, turret2;
     public static boolean reseted = false;
     public static boolean sotm = false;
@@ -32,7 +33,6 @@ public class Turret {
     public static void toggleStatus(){
         turrStatus = turrStatus.equals(TurretStatus.ACTIVE) ? TurretStatus.NOTACTIVE : TurretStatus.ACTIVE;
     }
-
     public static void setNeutralPosition(double pos){
         turret1.setPosition(pos);
         turret2.setPosition(pos);
@@ -74,6 +74,8 @@ public class Turret {
         }
     }
 
+
+
     //TODO: PUNETI SOTM;
     public static double offset = 4;
     public static void update(){
@@ -99,11 +101,13 @@ public class Turret {
 
             sotm = Shooter.readyForShoot && V > 1;
 
-            if(Robot.playStyle == Robot.PlayStyle.CLOSE){
-                TOF = at * Math.pow(dist, 2) + bt * dist + ct;
-                TOF *= turretTOFCoef;
-            }
-            else TOF = 0.77;
+//            if(Robot.playStyle == Robot.PlayStyle.CLOSE){
+//                TOF = at * Math.pow(dist, 2) + bt * dist + ct;
+//                TOF *= turretTOFCoef;
+//            }
+//            else TOF = 0.77;
+
+            TOF = ShooterMath.calculateTOF(ShooterMath.transforminMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(Turret.dist));
 
             xCorner -= Vx * TOF;
             yCorner -= Vy * TOF;

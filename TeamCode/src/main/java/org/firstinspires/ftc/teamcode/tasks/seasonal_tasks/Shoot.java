@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 public class Shoot implements Task {
     private Command s;
 
-    public static double coef = 1.4, coefFar = 1.25, increment= 0.009, waitTime= 0.01, waitTime2= 0.05, incrementFar = 0.024, inc;
+    public static double coef = 1.4, coefFar = 1.4, increment= 0.009, waitTime= 0.01, waitTime2= 0.05, incrementFar = 0.08, inc;
 
 
     public double pos;
@@ -25,7 +25,7 @@ public class Shoot implements Task {
                 .addTask(() -> pos = Shooter.servo.getPosition())
                 .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
-                .waitSeconds(0.3)
+                .waitSeconds(0.1)
                 .addTask(Intake::start)
                 .addTask(Storage::start)
                 .waitSeconds(waitTime)
@@ -43,6 +43,7 @@ public class Shoot implements Task {
                 .addTask(Intake::stop)
                 .addTask(Blocker::block)
                 .addTask(() -> {
+                    Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
                     Storage.count = 0;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;

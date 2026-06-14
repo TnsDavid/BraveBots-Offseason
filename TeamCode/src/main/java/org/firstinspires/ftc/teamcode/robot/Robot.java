@@ -125,6 +125,7 @@ public class Robot {
         BackLeft=new BetterMotorEx(controlHubMotors,1);
         FrontRight=new BetterMotorEx(expansionHubMotors,0);
         BackRight=new BetterMotorEx(expansionHubMotors,1);
+
         FrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -132,17 +133,17 @@ public class Robot {
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        intake= new BetterMotorEx(controlHubMotors,2);
+        intake= new BetterMotorEx(expansionHubMotors,2);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
-        transfer = new BetterMotorEx(expansionHubMotors, 2);
+        transfer = new BetterMotorEx(controlHubMotors, 2);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         transfer.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        shooter= new BetterMotorEx(controlHubMotors, 3).setCachingTolerance(.01)
+        shooter2= new BetterMotorEx(expansionHubMotors, 3).setCachingTolerance(.01)
                 .setMaxVelocity(2600)
                 .setPFCoefficients(Shooter.p, Shooter.f);
-        shooter2= new BetterMotorEx(expansionHubMotors, 3).setCachingTolerance(.01)
+        shooter= new BetterMotorEx(controlHubMotors, 3).setCachingTolerance(.01)
                 .setMaxVelocity(2600)
                 .setPFCoefficients(Shooter.p, Shooter.f);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -167,12 +168,12 @@ public class Robot {
     }
 
     public void initializeServos(){
-        turret1= new BetterServoEx(expansionHubServos, 0);
-        turret2= new BetterServoEx(controlHubServos, 0);
+        turret1= new BetterServoEx(controlHubServos, 0);
+        turret2= new BetterServoEx(expansionHubServos, 0);
         turret1.setPwmRange(new PwmControl.PwmRange(500, 2500));
         turret2.setPwmRange(new PwmControl.PwmRange(500, 2500));
-        hood= new BetterServo(expansionHubServos, 1);
-        blocker = new BetterServo(controlHubServos, 1);
+        hood= new BetterServo(controlHubServos, 1);
+        blocker = new BetterServo(expansionHubServos, 1);
     }
 
     public void initializeRest(){
@@ -186,12 +187,12 @@ public class Robot {
             resetPinPoint();
         }
         voltageSensor= hm.voltageSensor.iterator().next();
-        downLaser = new BreakBeam(controller, 3);
-        upLaser = new BreakBeam(controller, 5);
+        downLaser = new BreakBeam(controller, 7);
+        upLaser = new BreakBeam(controller, 1);
         Storage.count=0;
         Storage.startedTimer = false;
         playStyle = PlayStyle.CLOSE;
-        //LLMath.init(hm);
+        LLMath.init(hm);
     }
     ElapsedTime timer;
     public void update(){

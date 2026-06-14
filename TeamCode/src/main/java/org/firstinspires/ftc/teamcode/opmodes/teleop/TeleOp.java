@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
+import com.pedropathing.follower.Follower;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -24,6 +26,7 @@ public abstract class TeleOp extends BetterOpMode {
     public Alliance a;
     boolean updateTurret;
     Robot robot;
+    Follower f;
     MultipleTelemetry telemetry;
     private boolean readyForRaise=false;
     volatile boolean shooterThreadRunning, turretThreadRunning, driveThreadRunning;
@@ -89,7 +92,7 @@ public abstract class TeleOp extends BetterOpMode {
         driveThread = new Thread(() -> {
             while( driveThreadRunning && !Thread.currentThread().isInterrupted() ) {
                 try {
-                    Drivetrain.betterDrive(gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_X), gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_Y), gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_X));
+                    Drivetrain.betterDrive(gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_X) , -gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_Y) , gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_X));
                     Thread.sleep(3);
                 } catch ( InterruptedException e ) {
                     Thread.currentThread().interrupt();
@@ -111,9 +114,11 @@ public abstract class TeleOp extends BetterOpMode {
         turretThread.start();
         shooterThread.start();
         driveThread.start();
+
     }
 
     long now, last, dt;
+    double pos;
     //volatile double slow;
     @Override
     public void active_loop() {
@@ -123,12 +128,7 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("hz", 1e9 / dt);
         last = now;
 
-        /*
-        if( gamepadEx2.getButton(BetterGamepad.Buttons.TOUCHPAD).wasPressed() )
-            readyForRaise = true;
-        if( gamepadEx1.getButton(BetterGamepad.Buttons.TOUCHPAD).wasPressed() && readyForRaise )
-            Scheduler.now(new Raise());
-        */
+        //Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
 
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("robot centric", Drivetrain.robotCentric);
@@ -137,12 +137,15 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("y", Robot.robotPose.getY());
         telemetry.addData("heading", Robot.robotPose.getHeading());
         telemetry.addData("dist", Turret.dist);
+        telemetry.addData("bm up" , Storage.bUp.getBeamState());
+        telemetry.addData("bm down" , Storage.bDown.getBeamState());
         telemetry.addLine("-------------------");
         telemetry.addData("moving", Turret.sotm);
         telemetry.addData("velocity", Shooter.velocity);
         telemetry.addData("curr vel", Shooter.motor1.getVelocity());
         telemetry.addData("shooter enb", Shooter.shooterEnabled);
-
+        telemetry.addData("hood pos", Shooter.servo.getPosition());
+        telemetry.addData("count" , Storage.count);
         Intake.update();
         Storage.update();
         robot.update();

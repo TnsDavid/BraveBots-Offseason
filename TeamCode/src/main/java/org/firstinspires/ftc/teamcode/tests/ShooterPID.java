@@ -17,7 +17,7 @@ public class ShooterPID extends LinearOpMode {
     public static double velocity = 0;
     public BetterMotorEx m1, m2;
     public DcMotorController ch, eh;
-    public static double p, i, d, f;
+    public static double p, i, d, f, s;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,15 +26,15 @@ public class ShooterPID extends LinearOpMode {
         robot= new Robot(hardwareMap, telemetry, Alliance.BLUE).setOpModeType(Robot.OpModeType.TELEOP).initialize();
         m1=robot.shooter;
         m2=robot.shooter2;
-        m1.setPFCoefficients(p, f);
-        m2.setPFCoefficients(p, f);
+        m1.setPSFCoefficients(p, f, s);
+        m2.setPSFCoefficients(p, f, s);
        // m1 = new BetterMotorEx(ch, 3);
         //m2 = new BetterMotorEx(eh, 3);
         waitForStart();
         while( opModeIsActive() ) {
             if( gamepad1.triangleWasPressed() ) {
-                m1.setPFCoefficients(p, f);
-                m2.setPFCoefficients(p, f);
+                m1.setPSFCoefficients(p, f, s);
+                m2.setPSFCoefficients(p, f, s);
                 m1.setVelocity(velocity);
                 m2.setVelocity(velocity);
             }

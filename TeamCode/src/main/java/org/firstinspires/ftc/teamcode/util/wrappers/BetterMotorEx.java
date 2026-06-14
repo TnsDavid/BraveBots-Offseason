@@ -66,11 +66,18 @@ public class BetterMotorEx extends DcMotorImplEx implements DcMotorEx, HardwareD
         return this;
     }
     PDSFController controller;
-    public double f;
+    public double f , s;
     public double targetVelocity= 0;
     public BetterMotorEx setPFCoefficients(double p, double f){
         controller= new PDSFController(p, 0, 0, 0);
         this.f= f;
+        return this;
+    }
+
+    public  BetterMotorEx setPSFCoefficients( double p , double f , double s){
+        controller= new PDSFController(p, 0, 0, 0);
+        this.f= f;
+        this.s = s;
         return this;
     }
     public void setVelocity(double targetVelocity){
@@ -98,7 +105,7 @@ public class BetterMotorEx extends DcMotorImplEx implements DcMotorEx, HardwareD
     public void update(){
         double velocity= super.getVelocity();
         //output= targetVelocity/ maxVelocity * f + controller.calculate(0,Math.abs(velocity)- targetVelocity);
-        output= targetVelocity/ maxVelocity * f + controller.calculate(velocity,targetVelocity);
+        output= targetVelocity/ maxVelocity * f + controller.calculate(velocity,-targetVelocity) + s;
         setPower(output);
     }
 
