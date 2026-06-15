@@ -43,6 +43,16 @@ public class Intake {
             Storage.stop();
         }
     }
+    public static void toggleFortat(){
+        if(status == IntakeStatus.NOTINTAKING){
+            start();
+            Storage.start();
+        }
+        else{
+            stop();
+            Storage.stop();
+        }
+    }
     public static void update() {
         if(Storage.status.equals(Storage.Status.STORAGEFULL) && !Shooter.readyForShoot) stop();
     }

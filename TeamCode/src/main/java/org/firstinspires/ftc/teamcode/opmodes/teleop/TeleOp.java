@@ -50,7 +50,7 @@ public abstract class TeleOp extends BetterOpMode {
         gamepadEx1.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> robot.resetPinPoint(), BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_DOWN)
-                        .whenPressed(Intake::start,BetterGamepad.Type.PARALLEL);//intake fortat
+                        .whenPressed(Intake::toggleFortat,BetterGamepad.Type.PARALLEL);//intake fortat
         gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> {
                     Robot.switchPlayStyle();
@@ -129,8 +129,7 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-
-        //Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
+        Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
 
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("robot centric", Drivetrain.robotCentric);

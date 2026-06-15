@@ -32,11 +32,10 @@ public class Constants {
             .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad))
             .centripetalScaling(0)
             .headingPIDFCoefficients(new PIDFCoefficients(1.2, 0, 0.06, 0.01))
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.075,0,0.01,0.028 ))
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.08,0,0.01,0.028 ))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15 , 0 , 0.02 ,0.028 ) )
             .useSecondaryHeadingPIDF(false)
             .useSecondaryTranslationalPIDF(true);
-            ;
 
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);

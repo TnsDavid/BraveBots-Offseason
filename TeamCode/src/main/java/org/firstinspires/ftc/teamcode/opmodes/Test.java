@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.yCorner;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
@@ -39,16 +40,13 @@ public class Test extends BetterOpMode {
         Turret.turret2.setPosition(0.5);
         Shooter.motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        gamepadEx2.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
+        gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Shoot::new, BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
                 .whenPressed(ShootDynamic::new, BetterGamepad.Type.MAIN);
        // gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
          //       .whenPressed(ShootFarTest::new, BetterGamepad.Type.MAIN);
-        Shooter.servo.setPosition(Shooter.minHoodpos);
         Storage.startedTimer = false;
-        //Shooter.motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //Shooter.motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     @Override
     public void initialize_loop() {
@@ -67,7 +65,7 @@ public class Test extends BetterOpMode {
         telemetry.addData("hz", 1e9 / dt);
         last = now;
 
-       // Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
+        Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
         if(gamepad1.crossWasPressed()) Intake.toggle();
         if(gamepad1.triangleWasPressed()) Blocker.toggle();
@@ -76,11 +74,9 @@ public class Test extends BetterOpMode {
         if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
         if(gamepad1.shareWasPressed()) Robot.switchPlayStyle();
         Drivetrain.betterDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-        //Storage.checkUpLaser();
         Shooter.setVelocity(Shooter.velocity);
         telemetry.addData("velocity", Shooter.motor1.getVelocity());
         telemetry.addData("target velocity", Shooter.velocity);
-        telemetry.addData("d/(vp+vr)", Turret.dist/(Shooter.motor1.getVelocity()+Math.abs(Robot.odo.getVelX(DistanceUnit.METER)/Math.cos(Robot.robotPose.getHeading()))));
         telemetry.addData("hood pos", Shooter.servo.getPosition());
         telemetry.addData("shooter enabled", shooterEnabled);
         telemetry.addData("x", Robot.robotPose.getX());
@@ -90,18 +86,12 @@ public class Test extends BetterOpMode {
         telemetry.addData("xCorner", xCorner);
         telemetry.addData("yCorner", yCorner);
         telemetry.addData("distance to goal", dist);
-        telemetry.addData("robot centric", Drivetrain.robotCentric);
-        telemetry.addData("count", Storage.count);
-        telemetry.addData("bm status", Storage.bDown.getBeamState());
-        telemetry.addData("bm up status", Storage.bUp.getBeamState());;
-       // telemetry.addData("readyfsh", Shooter.readyForShoot);
-       // telemetry.addData("startedtimer", Storage.startedTimer);
         telemetry.addData("play style", Robot.playStyle);
 
         robila.update();
         Storage.update();
         Intake.update();
-        if(shooterEnabled) Shooter.update();
+        if(shooterEnabled) Shooter.motor1.update();
         else Shooter.setPower(0);
         Turret.update();
         telemetry.update();

@@ -13,7 +13,7 @@ public class ShooterMath {
 
     public static final double aVClose = -143.80411, bVClose = 909.21466, cVClose = 456.30415;
     public static final double aHClose = -0.0841684, bHClose = 0.490682, cHClose = 0.139603;
-    public static final double TOFCoef = 1.2;
+    public static final double TOFCoef = 1;
 
     public static double maxdegrees = Math.toRadians(60);
     public static double goalPosition = 0.98 ;

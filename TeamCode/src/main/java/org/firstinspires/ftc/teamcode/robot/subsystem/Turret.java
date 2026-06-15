@@ -18,7 +18,7 @@ public class Turret {
     public static final double FIELD_LENGTH= 3.65, launchTime= .2,goalCircleRasius= .18;
     //y=-0.0239556x^{2}+0.242631x+0.322645
     public static final double at = -0.0275109, bt = 0.253576, ct = 0.273474;
-    public static double turretTOFCoef = 0.6, shooterTOFCoef = 1.05;
+    public static double turretTOFCoef = 1.2, shooterTOFCoef = 1.05;
     public static BetterServoEx turret1, turret2;
     public static boolean reseted = false;
     public static boolean sotm = false;
@@ -104,10 +104,10 @@ public class Turret {
 //            }
 //            else TOF = 0.77;
 
-            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
+ //           TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
 
-            xCorner -= Vx * TOF;
-            yCorner -= Vy * TOF;
+            xCorner -= Vx * TOF * turretTOFCoef;
+            yCorner -= Vy * TOF * turretTOFCoef;
 
             virtualDist = Math.hypot(xCorner, yCorner);
 

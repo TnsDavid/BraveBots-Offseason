@@ -25,9 +25,6 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.Wait;
 import java.util.LinkedList;
 
 public class Command {
-
-
-
     Follower f;
     LinkedList<TaskFactory> factory;
 
@@ -58,10 +55,6 @@ factory= new LinkedList<>();
         this.f= chassis;
         return this;
     }
-
-
-
-
     public Command addTask(Task t){
         factory.addLast(()-> t);
         list.addLast(t);
