@@ -74,9 +74,6 @@ public class Turret {
         }
     }
 
-
-
-    //TODO: PUNETI SOTM;
     public static double offset = 4;
     public static void update(){
         Pose robotPose= Robot.robotPose;
@@ -107,7 +104,7 @@ public class Turret {
 //            }
 //            else TOF = 0.77;
 
-            TOF = ShooterMath.calculateTOF(ShooterMath.transforminMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(Turret.dist));
+            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
 
             xCorner -= Vx * TOF;
             yCorner -= Vy * TOF;

@@ -814,7 +814,8 @@ class PredictiveBrakingTuner extends OpMode {
     private final List<BrakeRecord> brakeData = new ArrayList<>();
 
     @Override
-    public void init() {}
+    public void init() {
+    }
 
     @Override
     public void init_loop() {
@@ -829,7 +830,7 @@ class PredictiveBrakingTuner extends OpMode {
     }
 
     @Override
-    public void start() {
+    public void start(){
         timer.reset();
         follower.update();
         follower.startTeleOpDrive(true);
@@ -976,6 +977,7 @@ class TranslationalTuner extends OpMode {
     @Override
     public void start() {
         follower.deactivateAllPIDFs();
+        follower.activateHeading();
         follower.activateTranslational();
         forwards = new Path(new BezierLine(new Pose(72,72), new Pose(DISTANCE + 72,72)));
         forwards.setConstantHeadingInterpolation(0);

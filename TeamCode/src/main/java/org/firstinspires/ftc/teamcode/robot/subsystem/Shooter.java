@@ -52,10 +52,6 @@ public class Shooter {
     }
     public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96;
     public static double offset=0;
-    public static void updateTest(){
-        setVelocity(velocity);
-        motor1.update();
-    }
     public static boolean shooterEnabled = false;
     public static void update() {
         if (shooterEnabled){

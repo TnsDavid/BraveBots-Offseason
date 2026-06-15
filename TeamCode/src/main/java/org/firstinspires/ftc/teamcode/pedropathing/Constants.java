@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedropathing;
 
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PredictiveBrakingCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -21,14 +23,27 @@ public class Constants {
     public static double xOffset = -4.02, yOffset = 0.944;//0.98
 
     public static final double odometryResolution = 34.310551 * 25.4; //ticks per mm *
+    public static double kp = 0.06, kquad = 0.0018583773298043212, klinear = 0.06142244021388717;
+    public static double p = 0, i = 0, d = 0, f= 0;
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(7);
+            .mass(12.48)
+            .forwardZeroPowerAcceleration(-45.17)
+            .lateralZeroPowerAcceleration(-65.64)
+            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad))
+            .centripetalScaling(0)
+            .headingPIDFCoefficients(new PIDFCoefficients(1.2, 0, 0.06, 0.01))
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.075,0,0.01,0.028 ))
+            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15 , 0 , 0.02 ,0.028 ) )
+            .useSecondaryHeadingPIDF(false)
+            .useSecondaryTranslationalPIDF(true);
+            ;
+
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(yOffset)
-            .strafePodX(xOffset)
+            .forwardPodY(xOffset)
+            .strafePodX(yOffset)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
@@ -36,14 +51,17 @@ public class Constants {
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
-            .rightFrontMotorName("frontLeft")
-            .rightRearMotorName("backLeft")
-            .leftRearMotorName("backRight")
-            .leftFrontMotorName("frontRight")
+            .rightFrontMotorName("FR")//FL
+            .rightRearMotorName("BR")//BL
+            .leftRearMotorName("BL")//BR
+            .leftFrontMotorName("FL")//FR
             .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .xVelocity(83.75)
+            .yVelocity(64.85)
+            ;
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .pathConstraints(pathConstraints)

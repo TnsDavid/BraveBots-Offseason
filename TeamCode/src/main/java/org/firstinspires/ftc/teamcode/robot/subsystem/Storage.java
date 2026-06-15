@@ -57,27 +57,17 @@ public class Storage {
                 status = Status.ONEBALL;
                 break;
             case 2:
-                if(bDown.isBeamBroken()){
-                    status=Status.STORAGEFULL;
-                    count=3;
-                }
-                else status = Status.TWOBALL;
+                status = Status.TWOBALL;
                 break;
 
             case 3:
                 if(bDown.isBeamBroken()&& bUp.isBeamBroken()) status = Status.STORAGEFULL;
-                else if(bDown.isBeamBroken()) {
+                else if(!bUp.isBeamBroken()) {
+                    status = Status.ONEBALL;
+                    count = 1;
+                } else {
                     status = Status.TWOBALL;
-                    count=2;
-                }
-                else if(bUp.isBeamBroken())
-                {
-                    status = Status.TWOBALL;
-                    count=2;
-                }
-                else {
-                    status=Status.ONEBALL;
-                    count=1;
+                    count = 2;
                 }
                 break;
         }

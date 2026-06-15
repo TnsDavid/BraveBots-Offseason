@@ -49,6 +49,8 @@ public abstract class TeleOp extends BetterOpMode {
                 .whenPressed(Shoot::new, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> robot.resetPinPoint(), BetterGamepad.Type.MAIN);
+        gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_DOWN)
+                        .whenPressed(Intake::start,BetterGamepad.Type.PARALLEL);//intake fortat
         gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> {
                     Robot.switchPlayStyle();
@@ -146,6 +148,7 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("shooter enb", Shooter.shooterEnabled);
         telemetry.addData("hood pos", Shooter.servo.getPosition());
         telemetry.addData("count" , Storage.count);
+        telemetry.addData("TOF", Turret.TOF);
         Intake.update();
         Storage.update();
         robot.update();
