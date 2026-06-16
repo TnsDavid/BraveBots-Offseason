@@ -22,11 +22,11 @@ import java.util.List;
 @Configurable
 public class LLMath {
     public static final double ballHeight = 2.5,
-            cameraMountAngle = 5,
+            cameraMountAngle = 15,
             xOffset = 0,
-            yOffset = 8,
-            zOffset = 0,
-            intakeWidth = 0; //inch
+            yOffset = 4.92,
+            zOffset = 8.85,
+            intakeWidth = 17; //inch
 
     public static Limelight3A ll;
 
@@ -57,7 +57,7 @@ public class LLMath {
     }
 
     public static double getBallY(double ty){
-        double angleGoal = Math.toRadians(90 + cameraMountAngle + ty);
+        double angleGoal = Math.toRadians(90 - cameraMountAngle - ty);
         return (zOffset - ballHeight) * Math.tan(angleGoal) + yOffset;
     }
 
@@ -83,8 +83,8 @@ public class LLMath {
         v.rotateVector(Robot.robotPose.getHeading());
 
         return new Pose(
-                Robot.robotPose.getX() + v.getXComponent(),
-                Robot.robotPose.getY() + v.getYComponent()
+                MathStuff.metersToInches(Robot.robotPose.getX()) + v.getXComponent(),
+                MathStuff.metersToInches(Robot.robotPose.getY()) + v.getYComponent()
         );
     }
     public static Pose getBestRobotRelativePose(){
@@ -94,7 +94,7 @@ public class LLMath {
         for(Pose ballPose : ballPoses){
             double seenInArea = 0;
             for(Pose ballPose2 : ballPoses)
-                if(Math.abs(ballPose.getX() - ballPose2.getX()) > intakeWidth / 2) seenInArea++;
+                if(Math.abs(ballPose.getX() - ballPose2.getX()) < intakeWidth / 2) seenInArea++;
             if(seenInArea > maxSeenInArea){
                 maxSeenInArea = seenInArea;
                 bestPose = ballPose;

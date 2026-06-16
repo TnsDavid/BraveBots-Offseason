@@ -13,7 +13,7 @@ public class ShooterMath {
 
     public static final double aVClose = -116.65867, bVClose = 800.80404, cVClose = 386.81867;
     public static final double aHClose = -0.101926, bHClose = 0.585852, cHClose = -0.0537098;
-    public static final double TOFCoef = 1;
+    public static double TOFCoef = 1;
 
     public static double maxdegrees = Math.toRadians(60);
     public static double goalPosition = 0.98 ;
@@ -35,7 +35,8 @@ public class ShooterMath {
         double velocityTransformed = transformInMeters(vel);
         double positionTransformed = pos * maxdegrees;
         double verticalSpeed = velocityTransformed * Math.sin(positionTransformed);
-        return (verticalSpeed +
-                Math.sqrt(Math.pow(verticalSpeed, 2) + 2 * g * (goalPosition - robotPosition)) ) / g;
+        return ((verticalSpeed +
+                Math.sqrt(Math.pow(verticalSpeed, 2) + 2 * g * (goalPosition - robotPosition)) ) / g ) * TOFCoef;
+
     }
 }

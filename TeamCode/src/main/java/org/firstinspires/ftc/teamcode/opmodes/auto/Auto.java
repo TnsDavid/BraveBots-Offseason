@@ -40,7 +40,6 @@ public abstract class Auto extends BetterOpMode {
     public void initialize_loop() {
         follower.update();
         Pose robotPose= follower.getPose();
-        //  Turret.updateAuto(new Pose(robotPose.getX()*0.0254,robotPose.getY()*0.0254,robotPose.getHeading()));
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
@@ -59,6 +58,7 @@ public abstract class Auto extends BetterOpMode {
         follower.update();
         auto.update();
         Pose robotPose= follower.getPose();
+        Turret.updateAuto(new Pose(robotPose.getX()*0.0254,robotPose.getY()*0.0254,robotPose.getHeading()));
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());

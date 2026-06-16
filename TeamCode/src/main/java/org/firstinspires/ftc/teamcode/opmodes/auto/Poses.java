@@ -4,11 +4,12 @@ import com.pedropathing.geometry.Pose;
 
 public class Poses {
     static class ClosePoses{
-        public static Pose testStartingPose = new Pose(72, 72 );
-        public static Pose bottomRight = new Pose(92, 72);
-        public static Pose topRight = new Pose(92, 92);
-        public static Pose topLeft = new Pose(72, 92);
-        public static Pose pozitieNoua = new Pose(120, 72);
+        public static Pose startingPose = new Pose(123.13673805601317 , 122.10873146622737 , Math.toRadians(270));
+        public static Pose shootPose = new Pose(83.75617792421748 , 83.6836902800659 , 0);
+
+        public static Pose ControlPointSecondSpike = new Pose(104.6194398682043 , 59.30807248764417,  0);
+        public static Pose CollectSecondSpike = new Pose( 128.59308072487644 , 59.331136738056);
+        public static Pose collectFirstSpike = new Pose(124.54695222405272, 83.2685337726524, 0);
     }
 
     static class FarPoses{
