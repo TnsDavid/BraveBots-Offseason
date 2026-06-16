@@ -4,6 +4,7 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 public class ShooterPID extends LinearOpMode {
     public Robot robot;
     public static double velocity = 0;
-    public BetterMotorEx m1, m2;
+    public DcMotorEx m1, m2;
     public DcMotorController ch, eh;
     public static double p, i, d, f, s;
 
@@ -23,18 +24,19 @@ public class ShooterPID extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         ch = hardwareMap.get(DcMotorController.class, "Control Hub");
         eh = hardwareMap.get(DcMotorController.class, "Expansion Hub 2");
-        robot= new Robot(hardwareMap, telemetry, Alliance.BLUE).setOpModeType(Robot.OpModeType.TELEOP).initialize();
-        m1=robot.shooter;
-        m2=robot.shooter2;
-        m1.setPSFCoefficients(p, f, s);
-        m2.setPSFCoefficients(p, f, s);
+        //robot= new Robot(hardwareMap, telemetry, Alliance.BLUE).setOpModeType(Robot.OpModeType.TELEOP).initialize();
+        m1= hardwareMap.get(DcMotorEx.class, "Shooter");
+        m2 = hardwareMap.get(DcMotorEx.class, "Shooter2");
+        //m2=robot.shooter2;
+        //m1.setPSFCoefficients(p, f, s);
+        //m2.setPSFCoefficients(p, f, s);
        // m1 = new BetterMotorEx(ch, 3);
         //m2 = new BetterMotorEx(eh, 3);
         waitForStart();
         while( opModeIsActive() ) {
             if( gamepad1.triangleWasPressed() ) {
-                m1.setPSFCoefficients(p, f, s);
-                m2.setPSFCoefficients(p, f, s);
+                //m1.setPSFCoefficients(p, f, s);
+                //m2.setPSFCoefficients(p, f, s);
                 m1.setVelocity(velocity);
                 m2.setVelocity(velocity);
             }
@@ -48,8 +50,9 @@ public class ShooterPID extends LinearOpMode {
             telemetry.addData("p", p);
             telemetry.addData("f", f);
             telemetry.addData("target velo", velocity);
+            telemetry.addData("tpr", m1.getMotorType().getTicksPerRev());
             telemetry.update();
-            m1.update();
+           // m1.update();
             //robot.update();
         }
     }

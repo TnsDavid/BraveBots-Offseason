@@ -51,25 +51,26 @@ public abstract class TeleOp extends BetterOpMode {
                 .whenPressed(() -> robot.resetPinPoint(), BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_DOWN)
                         .whenPressed(Intake::toggleFortat,BetterGamepad.Type.PARALLEL);//intake fortat
+        gamepadEx1.getButton(BetterGamepad.Buttons.TRIANGLE)
+                .whenPressed(Blocker::toggle, BetterGamepad.Type.MAIN);
+        gamepadEx1.getButton(BetterGamepad.Buttons.CIRCLE)
+                .whenPressed(Spit::new, BetterGamepad.Type.MAIN);
+        gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_UP)
+                .whenPressed(Drivetrain::toggleControlMethod, BetterGamepad.Type.MAIN);
+
+        gamepadEx2.getButton(BetterGamepad.Buttons.CROSS)
+                .whenPressed(() -> Shooter.shooterEnabled = !Shooter.shooterEnabled, BetterGamepad.Type.MAIN);
+        gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
+                .whenPressed(Turret::toggleStatus,  BetterGamepad.Type.PARALLEL);
+        gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_RIGHT)
+                .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.MAIN);
+        gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
+                .whenPressed(() -> Turret.offset += .5, BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> {
                     Robot.switchPlayStyle();
                     Shooter.setCoefs();
                 }, BetterGamepad.Type.MAIN);
-        gamepadEx1.getButton(BetterGamepad.Buttons.TRIANGLE)
-                .whenPressed(Blocker::toggle, BetterGamepad.Type.MAIN);
-        gamepadEx1.getButton(BetterGamepad.Buttons.CIRCLE)
-                .whenPressed(Spit::new, BetterGamepad.Type.MAIN);
-        gamepadEx2.getButton(BetterGamepad.Buttons.CROSS)
-                .whenPressed(() -> Shooter.shooterEnabled = !Shooter.shooterEnabled, BetterGamepad.Type.MAIN);
-        gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
-                .whenPressed(Turret::toggleStatus,  BetterGamepad.Type.PARALLEL);
-        gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_UP)
-                .whenPressed(Drivetrain::toggleControlMethod, BetterGamepad.Type.MAIN);
-        gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_RIGHT)
-                .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.MAIN);
-        gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
-                .whenPressed(() -> Turret.offset += .5, BetterGamepad.Type.MAIN);
 
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
@@ -129,7 +130,7 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-        Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
+       // Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
 
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("robot centric", Drivetrain.robotCentric);
