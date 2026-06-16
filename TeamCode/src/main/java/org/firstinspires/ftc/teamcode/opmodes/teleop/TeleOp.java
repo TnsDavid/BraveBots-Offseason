@@ -50,7 +50,7 @@ public abstract class TeleOp extends BetterOpMode {
         gamepadEx1.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> robot.resetPinPoint(), BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_DOWN)
-                        .whenPressed(Intake::toggleFortat,BetterGamepad.Type.PARALLEL);//intake fortat
+                        .whenPressed(Intake::start,BetterGamepad.Type.PARALLEL);//intake fortat
         gamepadEx1.getButton(BetterGamepad.Buttons.TRIANGLE)
                 .whenPressed(Blocker::toggle, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.CIRCLE)

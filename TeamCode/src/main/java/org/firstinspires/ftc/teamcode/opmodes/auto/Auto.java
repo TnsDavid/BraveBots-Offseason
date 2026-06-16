@@ -7,7 +7,9 @@ import com.pedropathing.geometry.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
@@ -67,6 +69,8 @@ public abstract class Auto extends BetterOpMode {
         Shooter.setVelocity(velocity);
         Shooter.servo.setPosition(pos);
         Shooter.motor1.update();
+        Storage.update();
+        Intake.update();
     }
 
     @Override

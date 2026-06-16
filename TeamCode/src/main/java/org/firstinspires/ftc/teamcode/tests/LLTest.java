@@ -47,8 +47,20 @@ public class LLTest extends LinearOpMode {
                     telemetry.addLine("----------------------");
                 }
             }
+            telemetry.addLine("TEURI");
+            if(LLMath.results!=null)
+            {
+                for(Pose teuri: LLMath.results)
+                {
+                    telemetry.addData("tx", teuri.getX());
+                    telemetry.addData("ty", teuri.getY());
+                    telemetry.addLine("----------------------");
+                }
+            }
             Drivetrain.betterDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             telemetry.addData("playstyle", Robot.playStyle);
+            telemetry.addData("robot x", Robot.robotPose.getX());
+            telemetry.addData("robot y", Robot.robotPose.getY());
             telemetry.update();
             r.update();
         }
