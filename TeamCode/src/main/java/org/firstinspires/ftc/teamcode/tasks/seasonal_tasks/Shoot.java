@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 public class Shoot implements Task {
     private Command s;
 
-    public static double coef = 1.4, coefFar = 1.4, increment= 0.0075, waitTime= 0.01, waitTime2= 0.05, incrementFar = 0.08, inc;
+    public static double coef = 1.35, coefFar = 1.4, increment= 0.0082, waitTime= 0.01, waitTime2= 0.02, incrementFar = 0.08, inc;
 
 
     public double pos;

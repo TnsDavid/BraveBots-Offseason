@@ -25,16 +25,14 @@ public class Shooter {
 
     //public static final double aHClose = -0.0756773, bHClose = 0.53089, cHClose = 0.0499127 ;
 
-    public static final double aVClose = -143.80411, bVClose = 909.21466, cVClose = 456.30415;
-    public static final double aHClose = -0.0841684, bHClose = 0.490682, cHClose = 0.139603;
-    public static double pClose= -0.005,fClose = 0.74 , p = -0.005;
-    public static double pFar = -0.004 , fFar = 0.9 , f = 0.74 , s = 0.09;
+    public static double pClose= -0.0075,fClose = 0.77;
+    //public static double pFar = -0.004 , fFar = 0.9, s = 0.1;
+    public static double pFar = -0.0075 , fFar = 0.77, s = 0.1;
 
     public static void setCoefs() {
         double pFinal , fFinal ;
         pFinal = Robot.playStyle == Robot.PlayStyle.CLOSE ? pClose : pFar;
         fFinal = Robot.playStyle == Robot.PlayStyle.CLOSE ? fClose : fFar;
-        s = Robot.playStyle == Robot.PlayStyle.CLOSE ? 0 : s;
         motor1.setPSFCoefficients(pFinal,fFinal , s);
         motor2.setPSFCoefficients(pFinal,fFinal, s);
     }
@@ -50,7 +48,7 @@ public class Shooter {
         motor1.setVelocity(vel);
         motor2.setPower(motor1.getPower());
     }
-    public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96;
+    public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=2000,hoodFAR=0.93;
     public static double offset=0;
     public static boolean shooterEnabled = false;
     public static void update() {
@@ -61,8 +59,8 @@ public class Shooter {
                 hoodPos = ShooterMath.calculateHoodAngle(virtualDistt);
             }
             else {
-                velocity=2090;
-                hoodPos=0.93;
+                velocity=velocityFAR;
+                hoodPos=hoodFAR;
             }
             if(!Shooter.readyForShoot || Turret.sotm)
                 servo.setPosition(hoodPos);

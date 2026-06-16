@@ -104,7 +104,7 @@ public class Turret {
 //            }
 //            else TOF = 0.77;
 
- //           TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
+            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
 
             xCorner -= Vx * TOF * turretTOFCoef;
             yCorner -= Vy * TOF * turretTOFCoef;

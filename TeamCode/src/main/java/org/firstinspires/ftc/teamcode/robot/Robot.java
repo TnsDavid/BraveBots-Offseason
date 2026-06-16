@@ -142,10 +142,10 @@ public class Robot {
 
         shooter2= new BetterMotorEx(expansionHubMotors, 3).setCachingTolerance(.01)
                 .setMaxVelocity(2600)
-                .setPFCoefficients(Shooter.p, Shooter.f);
+                .setPFCoefficients(Shooter.pClose, Shooter.fClose);
         shooter= new BetterMotorEx(controlHubMotors, 3).setCachingTolerance(.01)
                 .setMaxVelocity(2600)
-                .setPFCoefficients(Shooter.p, Shooter.f);
+                .setPFCoefficients(Shooter.pClose, Shooter.fClose);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setDirection(DcMotorSimple.Direction.REVERSE);

@@ -148,6 +148,8 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("hood pos", Shooter.servo.getPosition());
         telemetry.addData("count" , Storage.count);
         telemetry.addData("TOF", Turret.TOF);
+        telemetry.addData("blocker blocked?", Blocker.blocked);
+
         Intake.update();
         Storage.update();
         robot.update();

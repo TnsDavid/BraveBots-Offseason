@@ -42,8 +42,7 @@ public class Test extends BetterOpMode {
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Shoot::new, BetterGamepad.Type.MAIN);
-        gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
-                .whenPressed(ShootDynamic::new, BetterGamepad.Type.MAIN);
+
        // gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
          //       .whenPressed(ShootFarTest::new, BetterGamepad.Type.MAIN);
         Storage.startedTimer = false;
@@ -66,6 +65,7 @@ public class Test extends BetterOpMode {
         last = now;
 
         Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
+        Shooter.setCoefs();
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
         if(gamepad1.crossWasPressed()) Intake.toggle();
         if(gamepad1.triangleWasPressed()) Blocker.toggle();
