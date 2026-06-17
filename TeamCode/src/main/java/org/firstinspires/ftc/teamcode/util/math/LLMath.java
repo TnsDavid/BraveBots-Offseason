@@ -13,6 +13,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.opmodes.auto.Poses;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
@@ -42,8 +43,8 @@ public class LLMath {
 
     public static void update(){
         results = new LinkedList<>();
-        RobotRelative= new LinkedList<>();
-        FieldRelative= new LinkedList<>();
+       // RobotRelative= new LinkedList<>();
+       // FieldRelative= new LinkedList<>();
         LLResult result = ll.getLatestResult();
         if(result != null && result.isValid()){
             List<LLResultTypes.DetectorResult> dtcRes = result.getDetectorResults();
@@ -55,8 +56,8 @@ public class LLMath {
                     double yRR = getBallY(tx, ty);
                     if(!Double.isNaN(tx) && !Double.isNaN(ty)){
                         results.add(new Pose(tx, ty));
-                        RobotRelative.add(new Pose(xRR,yRR));
-                        FieldRelative.add(getFieldRelativePose(new Pose(xRR,yRR)));
+                        //RobotRelative.add(new Pose(xRR,yRR));
+                       // FieldRelative.add(getFieldRelativePose(new Pose(xRR,yRR)));
                     }
                 }
             }
@@ -141,14 +142,14 @@ public class LLMath {
         return ballPosesRobotRelative;
     }
     */
-    public static Pose getFieldRelativePose(Pose p){
+    public static Pose getFieldRelativePose(Pose p, Pose robotPose){
         Vector v = new Vector();
         v.setOrthogonalComponents(p.getY(), -p.getX());//sunt invers axele RL fata de FL pt bila <3
-        v.rotateVector(Robot.robotPose.getHeading());
+        v.rotateVector(robotPose.getHeading());
 
         return new Pose(
-                MathStuff.metersToInches(Robot.robotPose.getX()) + v.getXComponent() ,
-                MathStuff.metersToInches(Robot.robotPose.getY()) + v.getYComponent()
+                MathStuff.metersToInches(robotPose.getX()) + v.getXComponent() ,
+                MathStuff.metersToInches(robotPose.getY()) + v.getYComponent()
         );
     }
     public static Pose getBestRobotRelativePose(){
@@ -158,7 +159,7 @@ public class LLMath {
         for(Pose ballPose : ballPoses){
             double seenInArea = 0;
             for(Pose ballPose2 : ballPoses)
-                if(Math.abs(ballPose.getX() - ballPose2.getX()) < intakeWidth / 2) seenInArea++;
+                if(ballPose!=ballPose2 && Math.abs(ballPose.getX() - ballPose2.getX()) < intakeWidth / 2) seenInArea++;
             if(seenInArea > maxSeenInArea){
                 maxSeenInArea = seenInArea;
                 bestPose = ballPose;
@@ -170,17 +171,25 @@ public class LLMath {
     public static void scan(Follower flw){
         update();
         Pose robotRelPose = getBestRobotRelativePose();
-        Pose fieldRelPose = getFieldRelativePose(robotRelPose);
-        Pose optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 : fieldRelPose.getX() + robotLength, fieldRelPose.getY());
-
+        Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
+        //Pose optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 : fieldRelPose.getX() + robotLength, fieldRelPose.getY());
+        Pose optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 : fieldRelPose.getX() + robotLength/2, fieldRelPose.getY());
         Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
         path.setConstantHeadingInterpolation(Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
         flw.followPath(path);
     }
-
-    public static Pose test(){
+    public static Pose optimalPose=new Pose();
+    public static void scanPose (Follower flw){
         update();
-        return getFieldRelativePose(getBestRobotRelativePose());
+        optimalPose=new Pose(Poses.FarPoses.HPCollectPose.getX(),Poses.FarPoses.HPCollectPose.getY(),Poses.FarPoses.HPCollectPose.getHeading());
+        Pose robotRelPose = getBestRobotRelativePose();
+        Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
+        optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 : fieldRelPose.getX() + robotLength/2, fieldRelPose.getY(),Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
+    }
+
+    public static Pose test(Pose robotPose){
+        update();
+        return getFieldRelativePose(getBestRobotRelativePose(),robotPose);
     }
 }
 /*

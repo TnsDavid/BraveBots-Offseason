@@ -35,7 +35,7 @@ public abstract class Auto extends BetterOpMode {
                 .setOpModeType(Robot.OpModeType.AUTO)
                 .setPlayStyle(Robot.PlayStyle.CLOSE)
                 .initialize();
-        Turret.setNeutralPosition(0.5);
+        //Turret.setNeutralPosition(0.5);
         follower= Constants.createFollower(hardwareMap);
         auto= new Command(follower);
         buildAuto();
@@ -76,6 +76,7 @@ public abstract class Auto extends BetterOpMode {
         Shooter.setVelocity(velocity);
         Shooter.servo.setPosition(pos);
         Shooter.motor1.update();
+        Turret.updateAuto(follower);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class LLTest extends LinearOpMode {
                 Robot.switchPlayStyle();
             if( unTereaWindFuseVaRog != null ) {
                 for (Pose results : unTereaWindFuseVaRog) {
-                    Pose fieldRel = LLMath.getFieldRelativePose(results);
+                    Pose fieldRel = LLMath.getFieldRelativePose(results, Robot.robotPose);
                     telemetry.addData(" x", results.getX());
                     telemetry.addData(" y", results.getY());
                     telemetry.addData("field x", fieldRel.getX());

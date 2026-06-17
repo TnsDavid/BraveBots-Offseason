@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
@@ -24,8 +25,9 @@ public class AutoFarLL extends AutoFar{
                     .lineToConstantAsync(Poses.FarPoses.HPCollectRewindPose, Poses.FarPoses.HPCollectRewindPose.getHeading())
                     .lineToConstantAsync(Poses.FarPoses.HPCollectPose, Poses.FarPoses.HPCollectPose.getHeading())
                     .waitSeconds(0.3)
-                    .addTask(Intake::stop)
                     .lineToConstantSync(Poses.FarPoses.shootPose, Poses.FarPoses.shootPose.getHeading())
+                    .waitSeconds(0.2)
+                    .addTask(Intake::stop)
                     .addTask(() -> follower.getCurrentTValue() > 0.8)
                     .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(new ShootFar())
@@ -52,7 +54,10 @@ public class AutoFarLL extends AutoFar{
                     .addTask(() -> follower.getCurrentTValue() > 0.8)
                     .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(new ShootFar())
-                    .waitSeconds(0.1);
+                    .waitSeconds(0.1)
+                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPose.getHeading())
+                    .waitSeconds(0.3)
+                    ;
         }
 
         @Override
@@ -64,19 +69,25 @@ public class AutoFarLL extends AutoFar{
 
     public class CycleCollect implements Task {
         Command s;
-
+       // Pose collectPose=Poses.FarPoses.shootPoseScan;
         public CycleCollect() {
             s = new Command(follower)
                     .addTask(Intake::start)
-                    .addTask(() -> LLMath.scan(follower))
+                    .addTask(() -> LLMath.scanPose(follower))
+                    .lineToConstantSync(LLMath.optimalPose,LLMath.optimalPose.getHeading())
+                    .addTask(()->follower.getCurrentTValue()>0.8)
+                    .addTask(()->follower.setMaxPower(0.7))
                     .addTask(() -> !follower.isBusy())
                     .waitSeconds(0.3)
+                    .addTask(()->follower.setMaxPower(1))
                     .addTask(Intake::stop)
                     .lineToConstantSync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPose.getHeading())
                     .addTask(() -> follower.getCurrentTValue() > 0.8)
                     .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(new ShootFar())
-                    .waitSeconds(0.1);
+                    .addTask(()->!follower.isBusy())
+                    //.waitSeconds(0.1)
+            ;
         }
 
         @Override
@@ -89,7 +100,8 @@ public class AutoFarLL extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
-        auto.addTask(new ShootFar())
+        auto
+                .addTask(new ShootFar())
                 .addTask(new HPCollect())
                 .addTask(new SpikeCollect())
                 .addTask(new CycleCollect())

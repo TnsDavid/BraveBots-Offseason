@@ -36,7 +36,7 @@ public abstract class AutoFar extends BetterOpMode {
                 .setOpModeType(Robot.OpModeType.AUTO)
                 .initialize();
         LLMath.init(hardwareMap);
-        Turret.setNeutralPosition(0.5);
+        Turret.setNeutralPosition(0.4);
         follower= Constants.createFollower(hardwareMap);
         auto= new Command(follower);
         pos = Shooter.hoodFAR;
@@ -74,6 +74,7 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.addData("targetVel", Shooter.velocityFAR);
         telemetry.addData("cond", Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - ShootFar.treshhold);
         telemetry.addData("alliance", alliance);
+        telemetry.addData("optimal pose", LLMath.optimalPose);
         telemetry.update();
 
         Shooter.shooterEnabled = true;
