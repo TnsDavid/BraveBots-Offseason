@@ -26,7 +26,8 @@ public class LLMath {
             xOffset = 0,
             yOffset = 6.7,
             zOffset = 9.8,//8.85
-            intakeWidth = 17; //inch
+            intakeWidth = 17,//inch
+            robotLength = 17.36;
 
     public static Limelight3A ll;
 
@@ -170,8 +171,9 @@ public class LLMath {
         update();
         Pose robotRelPose = getBestRobotRelativePose();
         Pose fieldRelPose = getFieldRelativePose(robotRelPose);
+        Pose optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 : fieldRelPose.getX() + robotLength, fieldRelPose.getY());
 
-        Path path = new Path(new BezierLine(flw.getPose(), fieldRelPose));
+        Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
         path.setConstantHeadingInterpolation(Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
         flw.followPath(path);
     }

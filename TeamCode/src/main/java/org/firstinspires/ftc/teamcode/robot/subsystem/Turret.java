@@ -39,7 +39,8 @@ public class Turret {
         turret2.setPosition(pos);
     }
 
-    public static void updateAuto(Pose robotPose , Follower f){
+    public static void updateAuto(Follower f){
+        Pose robotPose = new Pose(f.getPose().getX() * 0.025, f.getPose().getY() * 0.025, f.getHeading());
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
 
             x= robotPose.getX();
