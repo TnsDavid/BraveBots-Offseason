@@ -40,7 +40,7 @@ public class Turret {
     }
 
     public static void updateAuto(Follower f){
-        Pose robotPose = new Pose(f.getPose().getX() * 0.025, f.getPose().getY() * 0.025, f.getHeading());
+        Pose robotPose = new Pose(f.getPose().getX() * 0.0254, f.getPose().getY() * 0.0254, f.getHeading());
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
 
             x= robotPose.getX();
@@ -74,7 +74,7 @@ public class Turret {
             robotRelative = normalize(fieldRelative - heading);
             turretRelative = normalize(robotRelative - 180);
             robotRelative = Robot.a == Alliance.RED ? robotRelative : -robotRelative;
-            turretRelative+= 180 + offset;
+            turretRelative+= 180;
             double finalPos= turretRelative/360;
             if(finalPos>= 0.05 && finalPos<=0.95) {
 

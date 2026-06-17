@@ -12,11 +12,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
+import org.firstinspires.ftc.teamcode.tasks.auto_task.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
+import org.firstinspires.ftc.teamcode.util.NUMAISUPORT;
 
-@Autonomous
+@Autonomous(name = "Close Red", group = "Auto")
+@NUMAISUPORT
 public class CloseRed extends Auto {
 
 
@@ -25,9 +28,9 @@ public class CloseRed extends Auto {
 
         public ShootPreload(){
             command = new Command(follower);
-            command.lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
+            command.lineToConstantAsync(Poses.ClosePoses.shootPose, Math.toRadians(270))
                     //.addTask(()->follower)
-                    .addTask(new Shoot());
+                    .addTask(new ShootAutoClose());
 
         }
         @Override
@@ -36,81 +39,19 @@ public class CloseRed extends Auto {
             return command.done();
         }
     }
-
-   /* public class ShootSecondSpike implements Task{
-
-        Command command;
-
-        public ShootSecondSpike(){
-            command = new Command(follower);
-            command.addTask(Intake::start)
-                    .addTask(Storage::start)
-                    .curveToTangentialAsync(Poses.ClosePoses.ControlPointSecondSpike , Poses.ClosePoses.CollectSecondSpike)
-                   // .lineToConstantAsync(Poses.ClosePoses.shootPose,0)
-                    .curveToConstantAsync(Poses.ClosePoses.ControlPointSecondSpike, Poses.ClosePoses.shootPose,0)
-                    .addTask(new Shoot());
-        }
-        @Override
-        public boolean Run() {
-            command.update();
-            return command.done();
-        }
-    }
-
-    public class ShootFirstSpike implements Task {
-        Command command;
-        public ShootFirstSpike() {
-            command = new Command(follower)
-                    .addTask(Intake::start)
-                    .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
-                    .addTask(Intake::stop)
-                    .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
-                    .addTask(new Shoot());
-        }
-        @Override
-        public boolean Run() {
-            command.update();
-            return command.done();
-        }
-    }
-
-
-    public class Cycle implements Task{
-        Command command ;
-        ElapsedTime timer = new ElapsedTime();
-        public Cycle(){
-            command = new Command(follower)
-                    .addTask(()->{
-                        timer=new ElapsedTime();
-                    })
-                    .addTask(Intake::start)
-                    .addTask(Storage::start)
-                    .curveToLinearAsync(Poses.ClosePoses.cycleCP , Poses.ClosePoses.cycle)
-                    .addTask(()-> Storage.status == Storage.Status.STORAGEFULL || timer.milliseconds() >=200)
-                    .lineToConstantAsync(Poses.ClosePoses.shootPose , 0)
-                    .addTask(new Shoot());
-        }
-
-        @Override
-        public boolean Run() {
-            command.update();
-            return command.done();
-        }
-    }*/
 
     public class ShootSecondSpike implements Task {
         Command command;
         public ShootSecondSpike() {
             command = new Command(follower);
-            command.addTask(Storage::isEmpty)
-                    .addTask(Intake::start)
+            command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToLinearAsync(Poses.ClosePoses.collectSecondSpikesCP, Poses.ClosePoses.collectSecondSpikes)
+                    .curveToLinearAsync(Poses.ClosePoses.collectSecondSpikeCP, Poses.ClosePoses.collectSecondSpike)
                     .waitSeconds(0.15)
                     .addTask(Intake::stop)
                     .addTask(Storage::stop)
-                    .curveToLinearAsync(Poses.ClosePoses.collectSecondSpikesCP, Poses.ClosePoses.shootPose)
-                    .addTask(new Shoot());
+                    .lineToLinearAsync(Poses.ClosePoses.shootPose)
+                    .addTask(new ShootAutoClose());
         }
         @Override
         public boolean Run() {
@@ -118,13 +59,41 @@ public class CloseRed extends Auto {
             return command.done();
         }
     }
+
+    public class GateCycle implements Task {
+        Command command;
+        ElapsedTime time;
+        public GateCycle() {
+            command = new Command(follower);
+            command.addTask(Intake::start)
+                    .addTask(Storage::start)
+                    .lineToLinearAsync(Poses.ClosePoses.gateCollect)
+                    .addTask(() -> time = new ElapsedTime())
+                    //.addTask(Intake::stop)
+                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1100))
+                    .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
+                    .addTask(new ShootAutoClose());
+        }
+
+        @Override
+        public boolean Run() {
+            command.update();
+            return command.done();
+        }
+    }
+
+
     @Override
     public void buildAuto() {
         pos = 0.8128;
         velocity = 1680;
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
-                .addTask(new ShootSecondSpike());
+                .addTask(new ShootSecondSpike())
+                .addTask(new GateCycle())
+                .addTask(new GateCycle())
+                .addTask(new GateCycle())
+                .addTask(new GateCycle());
 
 
     }

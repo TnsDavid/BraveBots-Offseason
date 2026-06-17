@@ -17,9 +17,12 @@ public class Blocker {
         blocker.setPosition(locked);
         blocked = true;
     }
-
     public static void toggle(){
         if(blocked) unblock();
         else block();
+    }
+    public static boolean atPosition() {
+        double targetPosition = blocked ? locked : unlocked;
+        return Math.abs(targetPosition - blocker.getPosition()) < 0.01;
     }
 }
