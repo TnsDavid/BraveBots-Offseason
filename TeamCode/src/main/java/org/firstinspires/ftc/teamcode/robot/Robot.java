@@ -94,7 +94,8 @@ public class Robot {
         this.a= a;
     }
     public double dtlength=.356;//metri
-    public double dtwidth=.38; //metri
+    public double dtwidth=.432;//metri
+   // public double dtwidth=.38; //metri
 
     //4.01
     //
@@ -185,7 +186,7 @@ public class Robot {
             throw new IllegalArgumentException("OpMode type nesetat");
         if(opModeType== OpModeType.TELEOP) {
             odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
-            odo.setOffsets(Constants.xOffset, Constants.yOffset, DistanceUnit.INCH);
+            odo.setOffsets(Constants.yOffset, Constants.xOffset, DistanceUnit.INCH);
             odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
             odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
             resetPinPoint();

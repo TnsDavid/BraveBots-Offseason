@@ -22,10 +22,10 @@ import java.util.List;
 @Configurable
 public class LLMath {
     public static final double ballHeight = 2.5,
-            cameraMountAngle = 15,
+            cameraMountAngle = 10,
             xOffset = 0,
-            yOffset = 4.92,
-            zOffset = 8.85,
+            yOffset = 6.7,
+            zOffset = 9.8,//8.85
             intakeWidth = 17; //inch
 
     public static Limelight3A ll;
@@ -142,7 +142,7 @@ public class LLMath {
     */
     public static Pose getFieldRelativePose(Pose p){
         Vector v = new Vector();
-        v.setOrthogonalComponents(p.getX(), p.getY());
+        v.setOrthogonalComponents(p.getY(), -p.getX());//sunt invers axele RL fata de FL pt bila <3
         v.rotateVector(Robot.robotPose.getHeading());
 
         return new Pose(

@@ -37,7 +37,7 @@ public class CloseRed extends Auto {
         }
     }
 
-    public class ShootSecondSpike implements Task{
+   /* public class ShootSecondSpike implements Task{
 
         Command command;
 
@@ -96,7 +96,7 @@ public class CloseRed extends Auto {
             command.update();
             return command.done();
         }
-    }
+    }*/
 
     public class ShootSecondSpike implements Task {
         Command command;

@@ -53,17 +53,17 @@ public class Shooter {
     public static boolean shooterEnabled = false;
     public static void update() {
         if (shooterEnabled){
-//            double virtualDistt = Turret.virtualDist;
-//            if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
-//                velocity = ShooterMath.calculateVelocity(virtualDistt);
-//                hoodPos = ShooterMath.calculateHoodAngle(virtualDistt);
-//            }
-//            else {
-//                velocity=velocityFAR;
-//                hoodPos=hoodFAR;
-//            }
-//            if(!Shooter.readyForShoot || Turret.sotm)
-//                servo.setPosition(hoodPos);
+            double virtualDistt = Turret.virtualDist;
+            if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
+                velocity = ShooterMath.calculateVelocity(virtualDistt);
+                hoodPos = ShooterMath.calculateHoodAngle(virtualDistt);
+            }
+            else {
+                velocity=velocityFAR;
+                hoodPos=hoodFAR;
+            }
+            if(!Shooter.readyForShoot || Turret.sotm)
+                servo.setPosition(hoodPos);
             setVelocity(velocity);
             motor1.update();
         } else setPower(0);

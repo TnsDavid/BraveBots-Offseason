@@ -22,7 +22,6 @@ public class Shoot implements Task {
 
     public Shoot(){
         s= new Command()
-                .addTask(() -> Math.abs(Shooter.motor1.getVelocity() - Shooter.velocity) < 100)
                 .addTask(() -> pos = Shooter.servo.getPosition())
                 .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)

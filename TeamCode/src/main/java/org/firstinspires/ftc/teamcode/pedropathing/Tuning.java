@@ -6,7 +6,14 @@ import static org.firstinspires.ftc.teamcode.pedropathing.Tuning.drawCurrentAndH
 import static org.firstinspires.ftc.teamcode.pedropathing.Tuning.follower;
 import static org.firstinspires.ftc.teamcode.pedropathing.Tuning.stopRobot;
 import static org.firstinspires.ftc.teamcode.pedropathing.Tuning.telemetryM;
-
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.configurables.annotations.IgnoreConfigurable;
+import com.bylazar.configurables.PanelsConfigurables;
+import com.bylazar.field.FieldManager;
+import com.bylazar.field.PanelsField;
+import com.bylazar.field.Style;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;

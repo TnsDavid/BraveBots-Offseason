@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedropathing;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PredictiveBrakingCoefficients;
@@ -16,7 +17,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.math.MathStuff;
-
+@Configurable
 public class Constants {
     public static double dtLength =0.435;
     public static double dtWidth = 0.432;
@@ -42,8 +43,8 @@ public class Constants {
     public static PathConstraints pathConstraints = new PathConstraints(0.97, 0, 1, 1);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(xOffset)
-            .strafePodX(yOffset)
+            .forwardPodY(yOffset)
+            .strafePodX(xOffset)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)

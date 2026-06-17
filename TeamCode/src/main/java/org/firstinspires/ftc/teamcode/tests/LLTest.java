@@ -24,6 +24,7 @@ public class LLTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException{
         r = new Robot(hardwareMap, telemetry, Alliance.RED)
                 .setOpModeType(Robot.OpModeType.TELEOP)
+                .setPlayStyle(Robot.PlayStyle.FAR)
                 .initialize();
         p = new Pose();
         //setez cv in odometrie plm
