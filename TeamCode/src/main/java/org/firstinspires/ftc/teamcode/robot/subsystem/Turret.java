@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.util.Range;
 
@@ -38,7 +39,7 @@ public class Turret {
         turret2.setPosition(pos);
     }
 
-    public static void updateAuto(Pose robotPose){
+    public static void updateAuto(Pose robotPose , Follower f){
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
 
             x= robotPose.getX();
@@ -48,6 +49,19 @@ public class Turret {
             yCorner= FIELD_LENGTH- y;
             xCorner= Robot.a== Alliance.RED ? FIELD_LENGTH- x : x;
             dist = Math.hypot(xCorner, yCorner);
+
+            double Vx = (f.getVelocity().getMagnitude() * Math.cos(heading)) / 39.37;
+            double Vy = (f.getVelocity().getMagnitude() * Math.sin(heading)) / 39.37;
+            double V = Math.hypot(Vx, Vy);
+
+            sotm = Shooter.readyForShoot && V > 1;
+
+            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
+
+            xCorner -= Vx * TOF;
+            yCorner -= Vy * TOF;
+
+            virtualDist = Math.hypot(xCorner, yCorner);
 
             heading= Math.toDegrees(heading);
             xCorner -= goalCircleRasius;
@@ -59,7 +73,7 @@ public class Turret {
             robotRelative = normalize(fieldRelative - heading);
             turretRelative = normalize(robotRelative - 180);
             robotRelative = Robot.a == Alliance.RED ? robotRelative : -robotRelative;
-            turretRelative+= 180;
+            turretRelative+= 180 + offset;
             double finalPos= turretRelative/360;
             if(finalPos>= 0.05 && finalPos<=0.95) {
 

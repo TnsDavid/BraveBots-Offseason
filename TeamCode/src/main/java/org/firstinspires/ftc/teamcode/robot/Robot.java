@@ -80,6 +80,10 @@ public class Robot {
         opModeType= type;
         return this;
     }
+    public Robot setPlayStyle(PlayStyle style){
+        playStyle = style;
+        return this;
+    }
     public Robot(HardwareMap hm, Telemetry t, Alliance a){
         this.hm= hm;
         this.t= t;
@@ -191,7 +195,7 @@ public class Robot {
         upLaser = new BreakBeam(controller, 1);
         Storage.count=0;
         Storage.startedTimer = false;
-        playStyle = PlayStyle.CLOSE;
+        setPlayStyle(PlayStyle.CLOSE);
         LLMath.init(hm);
     }
     ElapsedTime timer;

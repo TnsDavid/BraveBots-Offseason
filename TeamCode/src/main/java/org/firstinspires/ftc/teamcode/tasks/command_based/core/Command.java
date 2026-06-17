@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantAsyncTValue;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantSync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToLinearAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToLinearSync;
+import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialASyncTValue;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialAsyncReversed;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialSync;
@@ -222,6 +223,12 @@ factory= new LinkedList<>();
         if(f== null)
             throw new IllegalArgumentException("Follower not set");
         list.addLast(new CurveToConstantSync(f, controlPoint, p, heading));
+        return this;
+    }
+    public Command lineToTangentialASyncTValue(Pose p, double tValue) {
+        if( f == null )
+            throw new IllegalArgumentException("Follower not set");
+        list.addLast(new LineToTangentialASyncTValue(f, p, tValue));
         return this;
     }
 

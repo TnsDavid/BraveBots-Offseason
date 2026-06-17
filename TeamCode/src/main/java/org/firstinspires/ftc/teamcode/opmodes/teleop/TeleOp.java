@@ -130,7 +130,7 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-       // Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
+        Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
 
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("robot centric", Drivetrain.robotCentric);
