@@ -61,6 +61,7 @@ public abstract class Auto extends BetterOpMode {
         robot.update();
         follower.update();
         auto.update();
+
         Pose robotPose= follower.getPose();
         Turret.updateAuto(new Pose(robotPose.getX()*0.0254, robotPose.getY()*0.0254, robotPose.getHeading()) , follower);
         telemetry.addData("x", robotPose.getX());

@@ -25,7 +25,8 @@ public class CloseRed extends Auto {
 
         public ShootPreload(){
             command = new Command(follower);
-            command.lineToTangentialASync(Poses.ClosePoses.shootPose)
+            command.lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
+                    //.addTask(()->follower)
                     .addTask(new Shoot());
 
         }
@@ -86,10 +87,31 @@ public class CloseRed extends Auto {
                     .addTask(Storage::start)
                     .curveToLinearAsync(Poses.ClosePoses.cycleCP , Poses.ClosePoses.cycle)
                     .addTask(()-> Storage.status == Storage.Status.STORAGEFULL || timer.milliseconds() >=200)
-                    .lineToConstantAsync(Poses.ClosePoses.shootPose0 , 0)
+                    .lineToConstantAsync(Poses.ClosePoses.shootPose , 0)
                     .addTask(new Shoot());
         }
 
+        @Override
+        public boolean Run() {
+            command.update();
+            return command.done();
+        }
+    }
+
+    public class ShootSecondSpike implements Task {
+        Command command;
+        public ShootSecondSpike() {
+            command = new Command(follower);
+            command.addTask(Storage::isEmpty)
+                    .addTask(Intake::start)
+                    .addTask(Storage::start)
+                    .curveToLinearAsync(Poses.ClosePoses.collectSecondSpikesCP, Poses.ClosePoses.collectSecondSpikes)
+                    .waitSeconds(0.15)
+                    .addTask(Intake::stop)
+                    .addTask(Storage::stop)
+                    .curveToLinearAsync(Poses.ClosePoses.collectSecondSpikesCP, Poses.ClosePoses.shootPose)
+                    .addTask(new Shoot());
+        }
         @Override
         public boolean Run() {
             command.update();
@@ -102,11 +124,9 @@ public class CloseRed extends Auto {
         velocity = 1680;
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
-                .addTask(new ShootSecondSpike())
-                .addTask(new Cycle())
-                .addTask(new Cycle())
-                .addTask(new Cycle())
-                .addTask(new ShootFirstSpike());
+                .addTask(new ShootSecondSpike());
+
+
     }
 
     @Override

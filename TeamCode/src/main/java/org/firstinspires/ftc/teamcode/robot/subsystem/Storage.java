@@ -15,6 +15,10 @@ public class Storage {
         EMPTY, ONEBALL, TWOBALL, STORAGEFULL
 
     }
+    public static boolean isEmpty()
+    {
+        return status==Status.EMPTY;
+    }
     public enum ActiveStatus{
         TRANSFER, NOTRANSFER
     }
