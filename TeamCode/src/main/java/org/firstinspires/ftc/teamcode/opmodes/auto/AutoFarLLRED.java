@@ -75,10 +75,9 @@ public class AutoFarLLRED extends AutoFar{
             s = new Command(follower)
                     .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .addTask(() ->{
-                     LLMath.scan(follower);
-                     SmartCollectTimer = new ElapsedTime();
-                    })
+                    //.addTask(()->!LLMath.results.isEmpty())
+                    .addTask(() -> LLMath.scan(follower))
+                    .addTask(() -> SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.setMaxPower(0.7))
                     .addTask(() ->(!follower.isBusy()||SmartCollectTimer.seconds()>1.5))
                     .waitSeconds(0.3)//cat da intake

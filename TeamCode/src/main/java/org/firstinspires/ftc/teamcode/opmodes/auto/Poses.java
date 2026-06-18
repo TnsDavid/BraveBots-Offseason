@@ -20,7 +20,7 @@ public class Poses {
     public static class FarPoses{
         public static Pose startingPose = new Pose(99.25118483412321, 8.71800947867298, 0);
         public static Pose HPCollectRewindPose = new Pose(120.42904423085072, 8.71800947867298, 0);
-        public static Pose HPCollectPose = new Pose(126.1893076902935, 8.71800947867298, 0);
+        public static Pose HPCollectPose = new Pose(127.5893076902935, 8.71800947867298, 0);
         public static Pose shootPose = new Pose(88.85663507109003, 11.06516587677723, 0);
         public static Pose shootPoseScan = new Pose(82.3601186579735, 12.220527523936694, Math.toRadians(10));
         public static Pose spikeCollectPose = new Pose(131.5, 35.8);

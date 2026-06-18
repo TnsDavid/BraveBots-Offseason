@@ -6,6 +6,7 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -67,6 +68,9 @@ public class LLTest extends LinearOpMode {
             telemetry.addData("bestPose y" , LLMath.getBestRobotRelativePose().getY());
             telemetry.addData("FR bestPose X" , LLMath.getFieldRelativePose(LLMath.getBestRobotRelativePose(),Robot.robotPose).getX());
             telemetry.addData("FR bestPose Y" , LLMath.getFieldRelativePose(LLMath.getBestRobotRelativePose(),Robot.robotPose).getY());
+            LLMath.test(Robot.robotPose);
+            telemetry.addLine("----------------------");
+            telemetry.addData("pula!", LLMath.optimalPose);
             telemetry.update();
             r.update();
         }

@@ -95,52 +95,53 @@ public class LLMath {
         v.rotateVector(robotPose.getHeading());
 
         return new Pose(
-                MathStuff.metersToInches(robotPose.getX()) + v.getXComponent() ,
-                MathStuff.metersToInches(robotPose.getY()) + v.getYComponent()
+                robotPose.getX() + v.getXComponent() ,
+                robotPose.getY() + v.getYComponent()
         );
     }
     public static Pose getBestRobotRelativePose(){
         LinkedList<Pose> ballPoses = getRobotRelativePoses();
         Pose bestPose = new Pose();
         double maxSeenInArea = 0;
-        //double FurthestY=0;
-        for(Pose ballPose : ballPoses){
+       // double FurthestY=0;
+        for(Pose ballPose : ballPoses) {
             double seenInArea = 0;
-            //double BestYinArea=ballPose.getY();
-            for(Pose ballPose2 : ballPoses)
-                if(ballPose!=ballPose2 )
-                {
-                   // BestYinArea=Math.max(BestYinArea,ballPose2.getY());
-                    boolean conditie=Math.abs(ballPose.getX() - ballPose2.getX()) < intakeWidth/2;
-                    if(conditie) seenInArea++;
-                }
-            if(seenInArea > maxSeenInArea){
+            double BestYinArea=ballPose.getY();
+            for (Pose ballPose2 : ballPoses) {
+                // BestYinArea=Math.max(BestYinArea,ballPose2.getY());
+                boolean conditie = Math.abs(ballPose.getX() - ballPose2.getX()) < intakeWidth / 2;
+                if (conditie) seenInArea++;
 
-                maxSeenInArea = seenInArea;
-                bestPose = ballPose;
-                //FurthestY=BestYinArea;
-                //bestPose=new Pose(bestPose.getX(),FurthestY);
+                if (seenInArea > maxSeenInArea) {
+
+                    maxSeenInArea = seenInArea;
+                    bestPose = ballPose;
+                    //FurthestY=BestYinArea;
+                    //bestPose=new Pose(bestPose.getX(),FurthestY);
+                }
             }
         }
         return bestPose;
     }
 
-    public static void scan(Follower flw){
-        optimalPose=new Pose();
+    public static boolean scan(Follower flw){
         optimalPose=Poses.FarPoses.HPCollectPose;
-        for(int i=0;i<2;i++) {
-            update();
-            Pose robotRelPose = getBestRobotRelativePose();
-            Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
-            optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 - 2: fieldRelPose.getX() + robotLength/2 + 2, fieldRelPose.getY());
-        }
+        update();
+        if(!results.isEmpty())
+            for(int i=0;i<2;i++) {
+                update();
+                Pose robotRelPose = getBestRobotRelativePose();
+                Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
+                optimalPose = new Pose((Robot.a == Alliance.RED ? (fieldRelPose.getX() - robotLength / 2 - 2) : (fieldRelPose.getX() + robotLength/2 + 2)), fieldRelPose.getY());
+            }
         Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
         path.setConstantHeadingInterpolation(Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
         flw.followPath(path);
+        return true;
     }
 
-    public static Pose test(Pose robotPose){
+    public static void test(Pose robotPose){
         update();
-        return getFieldRelativePose(getBestRobotRelativePose(),robotPose);
+        optimalPose = getFieldRelativePose(getBestRobotRelativePose(),robotPose);
     }
 }
