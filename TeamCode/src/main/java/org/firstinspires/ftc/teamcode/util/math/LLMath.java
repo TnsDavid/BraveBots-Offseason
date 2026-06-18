@@ -103,23 +103,30 @@ public class LLMath {
         LinkedList<Pose> ballPoses = getRobotRelativePoses();
         Pose bestPose = new Pose();
         double maxSeenInArea = 0;
-       // double FurthestY=0;
+        double FurthestY=0;
         for(Pose ballPose : ballPoses) {
             double seenInArea = 0;
             double BestYinArea=ballPose.getY();
             for (Pose ballPose2 : ballPoses) {
-                // BestYinArea=Math.max(BestYinArea,ballPose2.getY());
+                BestYinArea = Math.max(BestYinArea, ballPose2.getY());
                 boolean conditie = Math.abs(ballPose.getX() - ballPose2.getX()) < intakeWidth / 2;
                 if (conditie) seenInArea++;
-
+            }
                 if (seenInArea > maxSeenInArea) {
 
                     maxSeenInArea = seenInArea;
                     bestPose = ballPose;
-                    //FurthestY=BestYinArea;
-                    //bestPose=new Pose(bestPose.getX(),FurthestY);
+                    FurthestY=BestYinArea;
+                    bestPose=new Pose(bestPose.getX(),FurthestY);
                 }
-            }
+                else if(seenInArea==maxSeenInArea){
+                    if(ballPose.getX()>bestPose.getX()){
+                        bestPose = ballPose;
+                        FurthestY=BestYinArea;
+                        bestPose=new Pose(bestPose.getX(),FurthestY);
+
+                    }
+                }
         }
         return bestPose;
     }

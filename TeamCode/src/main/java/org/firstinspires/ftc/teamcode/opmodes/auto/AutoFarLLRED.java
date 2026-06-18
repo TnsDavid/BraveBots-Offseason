@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
@@ -17,6 +18,7 @@ public class AutoFarLLRED extends AutoFar{
         Command s;
 
         public HPCollect() {
+            double turretpos=0.2;
             s = new Command(follower)
                     .addTask(Intake::start)
                     .addTask(Storage::start)
@@ -24,13 +26,14 @@ public class AutoFarLLRED extends AutoFar{
                     .addTask(()->follower.getCurrentTValue()>0.65)
                     .addTask(()->follower.setMaxPower(0.7))
                     .addTask(() -> !follower.isBusy())
-                    .waitSeconds(0.5)//cat da intake
+                    .waitSeconds(0.6)//cat da intake
                     .addTask(()->follower.setMaxPower(1))
-                    .lineToConstantSync(Poses.FarPoses.shootPose, Poses.FarPoses.shootPose.getHeading())
-                    .addTask(() -> follower.getCurrentTValue() > 0.8)
-                    .addTask(() -> follower.setMaxPower(0.8))
-                    .addTask(new ShootFar())
-                    .waitSeconds(0.1);
+                    .addTask(()->Turret.setNeutralPosition(turretpos))
+                    .lineToConstantAsync(Poses.FarPoses.shootPose, Poses.FarPoses.shootPose.getHeading())
+                    //.addTask(() -> follower.getCurrentTValue() > 0.8)
+                    //.addTask(() -> follower.setMaxPower(0.8))
+                    .waitSeconds(0.1)
+                    .addTask(new ShootFar());
         }
 
         @Override
@@ -42,7 +45,7 @@ public class AutoFarLLRED extends AutoFar{
 
     public class SpikeCollect implements Task {
         Command s;
-
+        double turretpos=0.179;
         public SpikeCollect() {
             s = new Command(follower)
                     .addTask(Intake::start)
@@ -51,13 +54,12 @@ public class AutoFarLLRED extends AutoFar{
                     .addTask(() -> follower.getCurrentTValue() > 0.7)
                     .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(() -> !follower.isBusy())
-                    .waitSeconds(0.2)//cat da intake maybe
                     .addTask(() -> follower.setMaxPower(1))
-                    .lineToConstantSync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPoseScan.getHeading())
-                    .addTask(()->follower.getCurrentTValue()>0.8)
-                    .addTask(() -> follower.setMaxPower(0.8))
-                    .addTask(new ShootFar())
-                    .waitSeconds(0.1);
+                    .addTask(()-> Turret.setNeutralPosition(turretpos))
+                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPoseScan.getHeading())
+                    //.addTask(()->follower.getCurrentTValue()>0.8)
+                    .waitSeconds(0.1)
+                    .addTask(new ShootFar());
         }
 
         @Override
@@ -69,24 +71,26 @@ public class AutoFarLLRED extends AutoFar{
 
     public class CycleCollect implements Task {
         Command s;
+        double turretpos=0.179;
         ElapsedTime SmartCollectTimer;
        // Pose collectPose=Poses.FarPoses.shootPoseScan;
         public CycleCollect() {
             s = new Command(follower)
                     .addTask(Intake::start)
                     .addTask(Storage::start)
-                    //.addTask(()->!LLMath.results.isEmpty())
                     .addTask(() -> LLMath.scan(follower))
                     .addTask(() -> SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.setMaxPower(0.7))
-                    .addTask(() ->(!follower.isBusy()||SmartCollectTimer.seconds()>1.5))
-                    .waitSeconds(0.3)//cat da intake
+                    .addTask(() ->(!follower.isBusy()||SmartCollectTimer.seconds()>1.3))
+                    .waitSeconds(0.25)//cat da intake
                     .addTask(()->follower.setMaxPower(1))
-                    .lineToConstantSync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPose.getHeading())
-                    .addTask(()->follower.getCurrentTValue()>0.8)
-                    .addTask(() -> follower.setMaxPower(0.8))
+                    .addTask(()->Turret.setNeutralPosition(turretpos))
+                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPose.getHeading())
+                    //.addTask(()->follower.getCurrentTValue()>0.8)
+                    //.addTask(() -> follower.setMaxPower(0.8))
+                    .waitSeconds(0.1)
                     .addTask(new ShootFar())
-                    .addTask(()->!follower.isBusy())
+                    //.addTask(()->!follower.isBusy())
             ;
         }
 

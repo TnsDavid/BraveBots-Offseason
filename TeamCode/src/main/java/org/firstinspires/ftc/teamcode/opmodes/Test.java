@@ -28,7 +28,6 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterGamepad;
 public class Test extends BetterOpMode {
     Robot robila;
     public static double pos,velocity;
-    //MecanumDrive drive;
     public static boolean shooterEnabled = true;
     public static boolean readyForShoot = false;
     long last, now, dt;
@@ -66,6 +65,7 @@ public class Test extends BetterOpMode {
 
         Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
         Shooter.setCoefs();
+        Turret.setNeutralPosition(Turret.getPositon() + 0.0025 * gamepad2.left_stick_x);
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
         if(gamepad1.crossWasPressed()) Intake.toggle();
         if(gamepad1.triangleWasPressed()) Blocker.toggle();
@@ -87,13 +87,13 @@ public class Test extends BetterOpMode {
         telemetry.addData("yCorner", yCorner);
         telemetry.addData("distance to goal", dist);
         telemetry.addData("play style", Robot.playStyle);
+        telemetry.addData("turret pos" , Turret.getPositon());
 
         robila.update();
         Storage.update();
         Intake.update();
         if(shooterEnabled) Shooter.motor1.update();
         else Shooter.setPower(0);
-        Turret.update();
         telemetry.update();
 
     }

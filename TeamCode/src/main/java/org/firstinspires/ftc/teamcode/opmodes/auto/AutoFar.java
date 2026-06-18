@@ -60,7 +60,9 @@ public abstract class AutoFar extends BetterOpMode {
     }
 
     @Override
-    public void on_start() {}
+    public void on_start() {
+        Turret.setNeutralPosition(0.2);
+    }
 
     @Override
     public void active_loop() {
@@ -69,7 +71,7 @@ public abstract class AutoFar extends BetterOpMode {
         auto.update();
         LLMath.update();
         Pose robotPose= follower.getPose();
-        Turret.updateAuto(follower, offsetAuto);
+        //Turret.updateAuto(follower, offsetAuto);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
@@ -85,7 +87,7 @@ public abstract class AutoFar extends BetterOpMode {
         Shooter.setVelocity(Shooter.velocityFAR);
         Shooter.motor1.update();
         Storage.update();
-        //Intake.update();
+        Intake.update();
     }
 
     @Override
