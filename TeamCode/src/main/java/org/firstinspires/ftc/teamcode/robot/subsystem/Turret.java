@@ -51,18 +51,18 @@ public class Turret {
             xCorner= Robot.a== Alliance.RED ? FIELD_LENGTH- x : x;
             dist = Math.hypot(xCorner, yCorner);
 
-            double Vx = (f.getVelocity().getMagnitude() * Math.cos(heading)) / 39.37;
-            double Vy = (f.getVelocity().getMagnitude() * Math.sin(heading)) / 39.37;
-            double V = Math.hypot(Vx, Vy);
+//            double Vx = (f.getVelocity().getMagnitude() * Math.cos(heading)) / 39.37;
+//            double Vy = (f.getVelocity().getMagnitude() * Math.sin(heading)) / 39.37;
+//            double V = Math.hypot(Vx, Vy);
 
-            sotm = Shooter.readyForShoot && V > 1;
-
-            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
-
-            xCorner -= Vx * TOF;
-            yCorner -= Vy * TOF;
-
-            virtualDist = Math.hypot(xCorner, yCorner);
+//            sotm = Shooter.readyForShoot && V > 1;
+//
+//            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
+//
+//            xCorner -= Vx * TOF;
+//            yCorner -= Vy * TOF;
+//
+//            virtualDist = Math.hypot(xCorner, yCorner);
 
             heading= Math.toDegrees(heading);
             xCorner -= goalCircleRasius;

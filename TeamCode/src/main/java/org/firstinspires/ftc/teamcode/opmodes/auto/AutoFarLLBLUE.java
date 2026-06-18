@@ -19,21 +19,23 @@ public class AutoFarLLBLUE extends AutoFar{
     public class HPCollect implements Task {
         Command s;
 
+        ElapsedTime SmartCollectTimer;
+
         public HPCollect() {
             s = new Command(follower)
                     .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .lineToConstantSync(Poses.FarPoses.HPCollectPose.mirror(), Poses.FarPoses.HPCollectPose.mirror().getHeading())
-                    .addTask(()->follower.getCurrentTValue()>0.65)
-                    .addTask(()->follower.setMaxPower(0.7))
-                    .addTask(() -> !follower.isBusy())
-                    .waitSeconds(0.5)//cat da intake
-                    .addTask(()->follower.setMaxPower(1))
-                    .lineToConstantSync(Poses.FarPoses.shootPose.mirror(), Poses.FarPoses.shootPose.mirror().getHeading())
-                    .addTask(() -> follower.getCurrentTValue() > 0.8)
+                    .curveToConstantSync(Poses.FarPoses.HpCollectPoseCP.mirror(), Poses.FarPoses.HPCollectPose.mirror(), Poses.FarPoses.HPCollectPose.mirror().getHeading())
+                    .addTask(()->follower.getCurrentTValue()>0.75)
+                    .addTask(()->SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.setMaxPower(0.8))
-                    .addTask(new ShootFar())
-                    .waitSeconds(0.1);
+                    .addTask(() -> !follower.isBusy() || SmartCollectTimer.seconds() > 1)
+                    .waitSeconds(0.4)
+                    .addTask(()->follower.setMaxPower(1))
+                    .addTask(() -> !follower.isBusy())
+                    .lineToConstantAsync(Poses.FarPoses.shootPose.mirror(), Poses.FarPoses.shootPose.mirror().getHeading())
+                    .waitSeconds(0.1)
+                    .addTask(new ShootFar());
         }
 
         @Override
@@ -54,13 +56,10 @@ public class AutoFarLLBLUE extends AutoFar{
                     .addTask(() -> follower.getCurrentTValue() > 0.7)
                     .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(() -> !follower.isBusy())
-                    .waitSeconds(0.2)//cat da intake maybe
                     .addTask(() -> follower.setMaxPower(1))
-                    .lineToConstantSync(Poses.FarPoses.shootPoseScan.mirror(), Poses.FarPoses.shootPoseScan.mirror().getHeading())
-                    .addTask(()->follower.getCurrentTValue()>0.8)
-                    .addTask(() -> follower.setMaxPower(0.8))
-                    .addTask(new ShootFar())
-                    .waitSeconds(0.1);
+                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(), Poses.FarPoses.shootPoseScan.mirror().getHeading())
+                    .waitSeconds(0.1)
+                    .addTask(new ShootFar());
         }
 
         @Override
@@ -77,20 +76,32 @@ public class AutoFarLLBLUE extends AutoFar{
             s = new Command(follower)
                     .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .addTask(() ->{
-                        LLMath.scan(follower);
-                        SmartCollectTimer = new ElapsedTime();
-                    })
+                    .addTask(() -> LLMath.scan(follower))
+                    .addTask(() -> SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.setMaxPower(0.7))
-                    .addTask(() ->(!follower.isBusy()||SmartCollectTimer.seconds()>1.5))
-                    .waitSeconds(0.3)//cat da intake
+                    .addTask(() ->(!follower.isBusy()||SmartCollectTimer.seconds()>1.3))
+                    .waitSeconds(0.25)
                     .addTask(()->follower.setMaxPower(1))
-                    .lineToConstantSync(Poses.FarPoses.shootPoseScan.mirror(), Poses.FarPoses.shootPose.mirror().getHeading())
-                    .addTask(()->follower.getCurrentTValue()>0.8)
-                    .addTask(() -> follower.setMaxPower(0.8))
-                    .addTask(new ShootFar())
-                    .addTask(()->!follower.isBusy())
-            ;
+                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(), Poses.FarPoses.shootPose.mirror().getHeading())
+                    .waitSeconds(0.1)
+                    .addTask(new ShootFar());
+        }
+
+        @Override
+        public boolean Run(){
+            s.update();
+            return s.done();
+        }
+    }
+    public class Leave implements Task{
+        Command s;
+
+        public Leave() {
+            s = new Command(follower)
+                    .addTask(() -> follower.setMaxPower(1))
+                    .addTask(Intake::stop)
+                    .addTask(Storage::stop)
+                    .lineToConstantSync(Poses.FarPoses.leave.mirror(), Poses.FarPoses.leave.mirror().getHeading());
         }
 
         @Override
@@ -109,7 +120,8 @@ public class AutoFarLLBLUE extends AutoFar{
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
-                .addTask(new CycleCollect());
+                .addTask(new CycleCollect())
+                .addTask(new Leave());
     }
 
     @Override

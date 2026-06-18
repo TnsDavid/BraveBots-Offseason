@@ -19,13 +19,13 @@ public class Poses {
 
     public static class FarPoses{
         public static Pose startingPose = new Pose(99.25118483412321, 8.71800947867298, 0);
-        public static Pose HPCollectRewindPose = new Pose(120.42904423085072, 8.71800947867298, 0);
-        public static Pose HPCollectPose = new Pose(124.5893076902935, 8.71800947867298, 0);
-        public static Pose shootPose = new Pose(88.85663507109003, 11.06516587677723, 0);
+        public static Pose HPCollectPose = new Pose(125.5893076902935, 8.71800947867298, 0);
+        public static Pose HpCollectPoseCP = new Pose(127.67676284988609, 14.921208530805671);
+        public static Pose shootPose = new Pose(88.85663507109003, 11.735781990521298, 0);
         public static Pose shootPoseScan = new Pose(82.3601186579735, 12.220527523936694, Math.toRadians(10));
-        public static Pose spikeCollectPose = new Pose(133.1546961325967, 36.060589318600364);
-        public static Pose spikeCollectCP = new Pose(83.0865955692395, 38.99228855247814);
+        public static Pose spikeCollectPose = new Pose(133.1546961325967, 37.060589318600364);
+        public static Pose spikeCollectCP = new Pose(83.0865955692395, 39.99228855247814);
         public static Pose cycleCP = new Pose(103.70663257621327, 29.710299122158613);
-        public static Pose leave = new Pose(101.40626780013348, 25.104043218301673);
+        public static Pose leave = new Pose(101.40626780013348, 25.104043218301673, Math.toRadians(0));
     }
 }

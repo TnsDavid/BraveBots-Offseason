@@ -33,7 +33,7 @@ public class Constants {
            // .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad))
             .centripetalScaling(0.00097)
             .headingPIDFCoefficients(new PIDFCoefficients(1.2, 0, 0.06, 0.01))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0072 , 0 , 0.00058 , 0 , 0.14))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0087 , 0 , 0.0005 , 0 , 0.03))
             .translationalPIDFCoefficients(new PIDFCoefficients(0.08,0,0.01,0.028 ))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15 , 0 , 0.02 ,0.028 ) )
             .useSecondaryHeadingPIDF(false)

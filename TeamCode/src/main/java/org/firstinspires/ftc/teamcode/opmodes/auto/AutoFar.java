@@ -71,7 +71,7 @@ public abstract class AutoFar extends BetterOpMode {
         auto.update();
         LLMath.update();
         Pose robotPose= follower.getPose();
-        //Turret.updateAuto(follower, offsetAuto);
+        Turret.updateAuto(follower, offsetAuto);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
