@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
@@ -21,6 +22,7 @@ public class CloseRed extends Auto {
         public ShootPreload(){
             command = new Command(follower);
             command.lineToConstantAsync(Poses.ClosePoses.shootPose, Math.toRadians(270))
+                    .waitSeconds(0.1)
                     //.addTask(()->follower)
                     .addTask(new ShootAutoClose());
 
@@ -38,8 +40,7 @@ public class CloseRed extends Auto {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToLinearAsync(Poses.ClosePoses.collectSecondSpikeCP, Poses.ClosePoses.collectSecondSpike)
-                    .waitSeconds(0.15)
+                    .curveToConstantAsync(Poses.ClosePoses.collectSecondSpikeCP, Poses.ClosePoses.collectSecondSpike, 0)
                     .addTask(Intake::stop)
                     .addTask(Storage::stop)
                     .lineToLinearAsync(Poses.ClosePoses.shootPose)
@@ -59,10 +60,12 @@ public class CloseRed extends Auto {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .lineToLinearAsync(Poses.ClosePoses.gateCollect)
+                    .lineToLinearSync(Poses.ClosePoses.gateCollect)
+                    .addTask(() -> follower.getCurrentTValue() >= 0.8)
+                    .addTask(() -> follower.setMaxPower(0.7))
                     .addTask(() -> time = new ElapsedTime())
-                    //.addTask(Intake::stop)
                     .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1100))
+                    .addTask(() -> follower.setMaxPower(1))
                     .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
                     .addTask(new ShootAutoClose());
         }
@@ -81,8 +84,6 @@ public class CloseRed extends Auto {
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
-                    .addTask(Intake::stop)
-                    .addTask(Storage::stop)
                     .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
                     .addTask(new ShootAutoClose());
         }
@@ -94,6 +95,18 @@ public class CloseRed extends Auto {
         }
     }
 
+    public class Park implements Task {
+        Command command;
+        public Park() {
+            command = new Command(follower);
+            command.lineToConstantAsync(Poses.ClosePoses.parkingSpot, Math.toRadians(180));
+        }
+        @Override
+        public boolean Run() {
+            command.update();
+            return command.done();
+        }
+    }
 
     @Override
     public void buildAuto() {
@@ -106,7 +119,8 @@ public class CloseRed extends Auto {
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
-                .addTask(new ShootFirstSpike());
+                .addTask(new ShootFirstSpike())
+                .addTask(new Park());
 
 
     }

@@ -87,6 +87,7 @@ public class Test extends BetterOpMode {
         telemetry.addData("yCorner", yCorner);
         telemetry.addData("distance to goal", dist);
         telemetry.addData("play style", Robot.playStyle);
+        telemetry.addData("turret pos" , Turret.getPositon());
 
         robila.update();
         Storage.update();

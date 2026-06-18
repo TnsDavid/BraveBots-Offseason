@@ -30,14 +30,15 @@ public class Constants {
             .mass(12.48)
             .forwardZeroPowerAcceleration(-45.17)
             .lateralZeroPowerAcceleration(-65.64)
-           // .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad))
-            .centripetalScaling(0.00097)
+            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad))
+            .centripetalScaling(0)
             .headingPIDFCoefficients(new PIDFCoefficients(1.2, 0, 0.06, 0.01))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0072 , 0 , 0.00058 , 0 , 0.14))
+            //.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0072 , 0 , 0.00058 , 0 , 0.14))
             .translationalPIDFCoefficients(new PIDFCoefficients(0.08,0,0.01,0.028 ))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15 , 0 , 0.02 ,0.028 ) )
             .useSecondaryHeadingPIDF(false)
             .useSecondaryTranslationalPIDF(true);
+            //.useSecondaryHeadingPIDF(false);
 
 
     public static PathConstraints pathConstraints = new PathConstraints(0.97, 0, 1, 1);

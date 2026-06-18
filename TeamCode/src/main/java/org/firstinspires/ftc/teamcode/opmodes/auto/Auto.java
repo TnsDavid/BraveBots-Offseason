@@ -63,6 +63,7 @@ public abstract class Auto extends BetterOpMode {
         auto.update();
 
         Pose robotPose= follower.getPose();
+        //if( Math.toRadians(267) < follower.getPose().getHeading() < Math.toRadians())
         Turret.updateAuto(follower);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
