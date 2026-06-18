@@ -93,7 +93,7 @@ public class Test extends BetterOpMode {
         Intake.update();
         if(shooterEnabled) Shooter.motor1.update();
         else Shooter.setPower(0);
-        Turret.update();
+        Turret.setNeutralPosition(Turret.getPositon() + 0.01 * gamepad2.right_stick_x);
         telemetry.update();
 
     }

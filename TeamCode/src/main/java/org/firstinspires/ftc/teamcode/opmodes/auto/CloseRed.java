@@ -1,11 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import android.app.usage.StorageStats;
-
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -15,11 +9,9 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
-import org.firstinspires.ftc.teamcode.util.NUMAISUPORT;
 
 @Autonomous(name = "Close Red", group = "Auto")
-@NUMAISUPORT
+
 public class CloseRed extends Auto {
 
 
@@ -81,19 +73,40 @@ public class CloseRed extends Auto {
             return command.done();
         }
     }
+    public class ShootFirstSpike implements Task {
+        Command command;
+        public ShootFirstSpike() {
+            command = new Command(follower);
+            command.lineToLinearAsync(Poses.ClosePoses.breakPoint)
+                    .addTask(Intake::start)
+                    .addTask(Storage::start)
+                    .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
+                    .addTask(Intake::stop)
+                    .addTask(Storage::stop)
+                    .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
+                    .addTask(new ShootAutoClose());
+        }
+
+        @Override
+        public boolean Run() {
+            command.update();
+            return command.done();
+        }
+    }
 
 
     @Override
     public void buildAuto() {
-        pos = 0.8128;
-        velocity = 1680;
+        pos = 0.823;
+        velocity = 1600;
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
-                .addTask(new GateCycle());
+                .addTask(new GateCycle())
+                .addTask(new ShootFirstSpike());
 
 
     }

@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
 public class Intake {
     public static BetterMotorEx motor;
+
     static ElapsedTime timer = new ElapsedTime();
 
     public static IntakeStatus status = IntakeStatus.NOTINTAKING;
@@ -35,7 +36,7 @@ public class Intake {
     }
     public static void toggle(){
         if(status == IntakeStatus.NOTINTAKING){
-            if(!(Storage.status.equals(Storage.Status.STORAGEFULL) && Storage.bUp.isBeamBroken())) Intake.start();
+            if(!(Storage.status.equals(Storage.Status.STORAGEFULL) && Storage.bUp.isBeamBroken())) start();
             if(!Storage.bUp.isBeamBroken()) Storage.start();
         }
         else{

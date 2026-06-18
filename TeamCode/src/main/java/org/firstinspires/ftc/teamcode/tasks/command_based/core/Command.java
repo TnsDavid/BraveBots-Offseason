@@ -41,8 +41,10 @@ public class Command {
         this.f= f;
         return this;
     }
-    public Command(Follower f){this.f =f; list = new LinkedList<>();
-factory= new LinkedList<>();
+    public Command(Follower f) {
+        this.f =f;
+        list = new LinkedList<>();
+        factory= new LinkedList<>();
     }
     public boolean done(){
         return list.isEmpty();
