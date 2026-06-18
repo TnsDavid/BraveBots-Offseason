@@ -11,6 +11,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.opmodes.auto.Poses;
@@ -31,6 +32,8 @@ public class LLMath {
             robotLength = 17.36;
 
     public static Limelight3A ll;
+
+    public static Pose optimalPose = new Pose();
 
     public static void init(HardwareMap hm){
         ll = hm.get(Limelight3A.class, "ll");
@@ -73,8 +76,6 @@ public class LLMath {
     public static double getBallX(double tx, double ty){
         double yp = (getBallY(tx, ty) - yOffset) / Math.cos(Math.toRadians(tx));
         return yp * Math.sin(Math.toRadians(tx)) + xOffset;
-//        double hyp = Math.hypot(y, zOffset - ballHeight);
-//        return Math.tan(Math.toRadians(tx)) * hyp + xOffset;
     }
     public static LinkedList<Pose> getRobotRelativePoses(){
         LinkedList<Pose> ballPosesRobotRelative = new LinkedList<>();
@@ -87,61 +88,7 @@ public class LLMath {
         return ballPosesRobotRelative;
     }
 
-    /*
-    public static double getBallY(double tx, double ty) {
-        // dz = cât de sus e camera față de centrul mingii
-        double dz = zOffset - ballHeight;
 
-        // Dacă cameraMountAngle = 15 înseamnă camera înclinată ÎN JOS cu 15 grade:
-        // ty pozitiv = ținta apare mai sus în imagine => unghiul în jos scade
-        double downAngle = cameraMountAngle - ty;
-
-        // protecție contra tan(0), valori negative sau target imposibil
-        if (downAngle <= 1.0) {
-            return Double.NaN;
-        }
-
-        double forwardFromCamera = dz / Math.tan(Math.toRadians(downAngle));
-
-        return forwardFromCamera + yOffset;
-    }
-
-    public static double getBallX(double tx, double ty) {
-        double dz = zOffset - ballHeight;
-
-        double downAngle = cameraMountAngle - ty;
-
-        if (downAngle <= 1.0) {
-            return Double.NaN;
-        }
-
-        double forwardFromCamera = dz / Math.tan(Math.toRadians(downAngle));
-        double sidewaysFromCamera = forwardFromCamera * Math.tan(Math.toRadians(tx));
-
-        return sidewaysFromCamera + xOffset;
-    }
-
-    public static LinkedList<Pose> getRobotRelativePoses() {
-        LinkedList<Pose> ballPosesRobotRelative = new LinkedList<>();
-
-        if (results == null) {
-            return ballPosesRobotRelative;
-        }
-
-        for (Pose ballParams : results) {
-            double xComp = getBallX(ballParams.getX(), ballParams.getY());
-            double yComp = getBallY(ballParams.getX(), ballParams.getY());
-
-            if (!Double.isNaN(xComp) && !Double.isNaN(yComp)
-                    && Double.isFinite(xComp) && Double.isFinite(yComp)) {
-                Pose pose = new Pose(xComp, yComp);
-                ballPosesRobotRelative.add(pose);
-            }
-        }
-
-        return ballPosesRobotRelative;
-    }
-    */
     public static Pose getFieldRelativePose(Pose p, Pose robotPose){
         Vector v = new Vector();
         v.setOrthogonalComponents(p.getY(), -p.getX());//sunt invers axele RL fata de FL pt bila <3
@@ -156,35 +103,40 @@ public class LLMath {
         LinkedList<Pose> ballPoses = getRobotRelativePoses();
         Pose bestPose = new Pose();
         double maxSeenInArea = 0;
+        //double FurthestY=0;
         for(Pose ballPose : ballPoses){
             double seenInArea = 0;
+            //double BestYinArea=ballPose.getY();
             for(Pose ballPose2 : ballPoses)
-                if(ballPose!=ballPose2 && Math.abs(ballPose.getX() - ballPose2.getX()) < intakeWidth / 2) seenInArea++;
+                if(ballPose!=ballPose2 )
+                {
+                   // BestYinArea=Math.max(BestYinArea,ballPose2.getY());
+                    boolean conditie=Math.abs(ballPose.getX() - ballPose2.getX()) < intakeWidth/2;
+                    if(conditie) seenInArea++;
+                }
             if(seenInArea > maxSeenInArea){
+
                 maxSeenInArea = seenInArea;
                 bestPose = ballPose;
+                //FurthestY=BestYinArea;
+                //bestPose=new Pose(bestPose.getX(),FurthestY);
             }
         }
         return bestPose;
     }
 
     public static void scan(Follower flw){
-        update();
-        Pose robotRelPose = getBestRobotRelativePose();
-        Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
-        //Pose optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 : fieldRelPose.getX() + robotLength, fieldRelPose.getY());
-        Pose optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 : fieldRelPose.getX() + robotLength/2, fieldRelPose.getY());
+        optimalPose=new Pose();
+        optimalPose=Poses.FarPoses.HPCollectPose;
+        for(int i=0;i<2;i++) {
+            update();
+            Pose robotRelPose = getBestRobotRelativePose();
+            Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
+            optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 - 2: fieldRelPose.getX() + robotLength/2 + 2, fieldRelPose.getY());
+        }
         Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
         path.setConstantHeadingInterpolation(Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
         flw.followPath(path);
-    }
-    public static Pose optimalPose=new Pose();
-    public static void scanPose (Follower flw){
-        update();
-        optimalPose=new Pose(Poses.FarPoses.HPCollectPose.getX(),Poses.FarPoses.HPCollectPose.getY(),Poses.FarPoses.HPCollectPose.getHeading());
-        Pose robotRelPose = getBestRobotRelativePose();
-        Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
-        optimalPose = new Pose(Robot.a == Alliance.RED ? fieldRelPose.getX() - robotLength / 2 : fieldRelPose.getX() + robotLength/2, fieldRelPose.getY(),Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
     }
 
     public static Pose test(Pose robotPose){
@@ -192,49 +144,3 @@ public class LLMath {
         return getFieldRelativePose(getBestRobotRelativePose(),robotPose);
     }
 }
-/*
-public static Pose getBallRobotRelative(double txDeg, double tyDeg) {
-    double dz = zOffset - ballHeight;
-
-    // Camera înclinată în jos față de orizontală.
-    double downAngleDeg = cameraMountAngle - tyDeg;
-
-    if (downAngleDeg <= 1.0) return null;
-
-    double forward = dz / Math.tan(Math.toRadians(downAngleDeg));
-    if (!Double.isFinite(forward) || forward < 0) return null;
-
-    double right = forward * Math.tan(Math.toRadians(txDeg));
-
-    return new Pose(right + xOffset, forward + yOffset);
-}
-
-public static LinkedList<Pose> getRobotRelativePoses() {
-    LinkedList<Pose> ballPosesRobotRelative = new LinkedList<>();
-
-    if (results == null) return ballPosesRobotRelative;
-
-    for (Pose ballParams : results) {
-        Pose pose = getBallRobotRelative(ballParams.getX(), ballParams.getY());
-        if (pose != null) {
-            ballPosesRobotRelative.add(pose);
-        }
-    }
-
-    return ballPosesRobotRelative;
-}
-
-public static Pose getFieldRelativePose(Pose robotRel, Pose robotFieldPose) {
-    double right = robotRel.getX();
-    double forward = robotRel.getY();
-    double h = robotFieldPose.getHeading();
-
-    double fieldDx = forward * Math.cos(h) + right * Math.sin(h);
-    double fieldDy = forward * Math.sin(h) - right * Math.cos(h);
-
-    return new Pose(
-            robotFieldPose.getX() + fieldDx,
-            robotFieldPose.getY() + fieldDy
-    );
-}
- */

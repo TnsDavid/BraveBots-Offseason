@@ -35,7 +35,6 @@ public abstract class Auto extends BetterOpMode {
                 .setOpModeType(Robot.OpModeType.AUTO)
                 .setPlayStyle(Robot.PlayStyle.CLOSE)
                 .initialize();
-        //Turret.setNeutralPosition(0.5);
         follower= Constants.createFollower(hardwareMap);
         auto= new Command(follower);
         buildAuto();
@@ -63,7 +62,7 @@ public abstract class Auto extends BetterOpMode {
         auto.update();
 
         Pose robotPose= follower.getPose();
-        Turret.updateAuto(follower);
+        Turret.updateAuto(follower, 0);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
@@ -71,12 +70,12 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("virtual dist" , Turret.virtualDist);
         telemetry.addData("velocity" , Shooter.motor1.getVelocity());
         telemetry.update();
-        Intake.update();
+        //Intake.update();
         Storage.update();
         Shooter.setVelocity(velocity);
         Shooter.servo.setPosition(pos);
         Shooter.motor1.update();
-        Turret.updateAuto(follower);
+        Turret.updateAuto(follower, 0);
     }
 
     @Override

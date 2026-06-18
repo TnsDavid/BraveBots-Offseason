@@ -48,7 +48,7 @@ public class Shooter {
         motor1.setVelocity(vel);
         motor2.setPower(motor1.getPower());
     }
-    public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=2000,hoodFAR=0.93;
+    public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=2000,hoodFAR=0.95;
     public static double offset=0;
     public static boolean shooterEnabled = false;
     public static void update() {

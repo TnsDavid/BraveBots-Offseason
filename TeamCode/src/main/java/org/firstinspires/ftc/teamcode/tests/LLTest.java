@@ -62,6 +62,11 @@ public class LLTest extends LinearOpMode {
             telemetry.addData("playstyle", Robot.playStyle);
             telemetry.addData("robot x", Robot.robotPose.getX());
             telemetry.addData("robot y", Robot.robotPose.getY());
+            LLMath.update();
+            telemetry.addData("bestPose x" , LLMath.getBestRobotRelativePose().getX());
+            telemetry.addData("bestPose y" , LLMath.getBestRobotRelativePose().getY());
+            telemetry.addData("FR bestPose X" , LLMath.getFieldRelativePose(LLMath.getBestRobotRelativePose(),Robot.robotPose).getX());
+            telemetry.addData("FR bestPose Y" , LLMath.getFieldRelativePose(LLMath.getBestRobotRelativePose(),Robot.robotPose).getY());
             telemetry.update();
             r.update();
         }
