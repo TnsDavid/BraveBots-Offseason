@@ -69,23 +69,20 @@ public class Shooter {
         } else setPower(0);
     }
     public static void updateAuto() {
-        if(readyForShoot) {
+        if (shooterEnabled){
             double virtualDistt = Turret.virtualDist;
-            if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
+            if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
                 velocity = ShooterMath.calculateVelocity(virtualDistt);
                 hoodPos = ShooterMath.calculateHoodAngle(virtualDistt);
-            } else {
-                velocity = velocityFAR;
-                hoodPos = hoodFAR;
             }
-            if (!Shooter.readyForShoot || Turret.sotm)
+            else {
+                velocity=velocityFAR;
+                hoodPos=hoodFAR;
+            }
+            if(!Shooter.readyForShoot || Turret.sotm)
                 servo.setPosition(hoodPos);
             setVelocity(velocity);
             motor1.update();
-        } else {
-            servo.setPosition(0.7418);
-            setVelocity(1583);
-            motor1.update();
-        }
+        } else setPower(0);
     }
 }

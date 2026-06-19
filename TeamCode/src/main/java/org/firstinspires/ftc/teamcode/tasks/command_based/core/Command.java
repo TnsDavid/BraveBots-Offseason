@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.tasks.auto_task.CurveToTangentialAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.CurveToTangentialAsyncReversed;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.CurveToTangentialSync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.CurveToTangentialSyncReversed;
+import org.firstinspires.ftc.teamcode.tasks.auto_task.CurveToTangentialToConstantSync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantAsyncTValue;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantSync;
@@ -21,6 +22,9 @@ import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialASyncTValu
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialAsyncReversed;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialSync;
+import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialSyncReversed;
+import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialToConstantAsync;
+import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialToConstantSync;
 import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.Wait;
 
 import java.util.LinkedList;
@@ -160,6 +164,12 @@ public class Command {
         list.addLast(new LineToTangentialAsync(f, p));
         return this;
     }
+    public Command lineToTangentialSyncReversed(Pose p){
+        if(f== null)
+            throw new IllegalArgumentException("Follower not set");
+        list.addLast(new LineToTangentialSyncReversed(f ,  p));
+        return this;
+    }
     public Command lineToTangentialSync(Pose p){
         if(f== null)
             throw new IllegalArgumentException("Follower not set");
@@ -231,6 +241,24 @@ public class Command {
         if( f == null )
             throw new IllegalArgumentException("Follower not set");
         list.addLast(new LineToTangentialASyncTValue(f, p, tValue));
+        return this;
+    }
+    public Command lineToTangentialToConstantAsync(Pose p, double tValue) {
+        if( f == null )
+            throw new IllegalArgumentException("Follower not set");
+        list.addLast(new LineToTangentialToConstantAsync(f, p, tValue));
+        return this;
+    }
+    public Command lineToTangentialToConstantSync(Pose p, double tValue) {
+        if( f == null )
+            throw new IllegalArgumentException("Follower not set");
+        list.addLast(new LineToTangentialToConstantSync(f, p, tValue));
+        return this;
+    }
+    public Command curveToTangentialToConstantSync(Pose cp, Pose p, double tValue) {
+        if( f == null )
+            throw new IllegalArgumentException("Follower not set");
+        list.addLast(new CurveToTangentialToConstantSync(f ,cp , p  , tValue));
         return this;
     }
 

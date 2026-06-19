@@ -99,7 +99,7 @@ public class CloseRed extends Auto {
         Command command;
         public Park() {
             command = new Command(follower);
-            command.lineToConstantAsync(Poses.ClosePoses.parkingSpot, Math.toRadians(180));
+            command.lineToConstantAsync(Poses.ClosePoses.parkingSpotdeHandicapati, Math.toRadians(180));
         }
         @Override
         public boolean Run() {
