@@ -87,14 +87,13 @@ public class Test extends BetterOpMode {
         telemetry.addData("yCorner", yCorner);
         telemetry.addData("distance to goal", dist);
         telemetry.addData("play style", Robot.playStyle);
-        telemetry.addData("turret pos" , Turret.getPositon());
 
         robila.update();
         Storage.update();
         Intake.update();
         if(shooterEnabled) Shooter.motor1.update();
         else Shooter.setPower(0);
-        Turret.setNeutralPosition(Turret.getPositon() + 0.01 * gamepad2.right_stick_x);
+        Turret.update();
         telemetry.update();
 
     }

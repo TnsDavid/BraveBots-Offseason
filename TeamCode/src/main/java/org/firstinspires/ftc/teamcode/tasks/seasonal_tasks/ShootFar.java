@@ -13,13 +13,11 @@ public class ShootFar implements Task {
     Command command ;
 
     public static double treshhold = 100;
-    public static double coef = 1.35, coefFar = 1.4, increment= 0.0082, waitTime= 0.01, waitTime2= 0.02, incrementFar = 0.08, inc;
-    public double pos;
+    public static double coefFar = 1.4, waitTime= 0.01, waitTime2= 0.02, incrementFar = 0.08;
 
     public ShootFar(){
         command = new Command()
                 .addTask(()-> Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - treshhold )
-                .addTask(() -> pos = Shooter.servo.getPosition())
                 .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.1)
@@ -27,17 +25,13 @@ public class ShootFar implements Task {
                 .addTask(Storage::start)
                 .waitSeconds(waitTime)
                 .addTask(()->{
-                    inc = Robot.playStyle == Robot.PlayStyle.CLOSE ? increment : incrementFar;
-                    if(!Turret.sotm) Shooter.servo.setPosition(pos- inc);
+                    Shooter.servo.setPosition(Shooter.hoodFAR- incrementFar);
                 })
                 .waitSeconds(waitTime2)
                 .addTask(()->{
-                    double cf = Robot.playStyle == Robot.PlayStyle.CLOSE ? coef : coefFar;
-                    if(!Turret.sotm) Shooter.servo.setPosition(pos-cf* inc);
+                    Shooter.servo.setPosition(Shooter.hoodFAR-coefFar* incrementFar);
                 })
                 .waitSeconds(1)
-                .addTask(Storage::stop)
-                .addTask(Intake::stop)
                 .addTask(Blocker::block)
                 .addTask(() -> {
                     Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
@@ -46,7 +40,7 @@ public class ShootFar implements Task {
                     Shooter.readyForShoot = false;
                     Turret.checkedStatus = false;
                 })
-                .addTask(()-> Shooter.servo.setPosition(pos));    }
+                .addTask(()-> Shooter.servo.setPosition(Shooter.hoodFAR));    }
     @Override
     public boolean Run() {
         command.update();

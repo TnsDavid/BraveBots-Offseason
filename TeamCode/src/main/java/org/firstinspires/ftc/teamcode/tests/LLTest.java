@@ -6,6 +6,7 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -40,7 +41,7 @@ public class LLTest extends LinearOpMode {
                 Robot.switchPlayStyle();
             if( unTereaWindFuseVaRog != null ) {
                 for (Pose results : unTereaWindFuseVaRog) {
-                    Pose fieldRel = LLMath.getFieldRelativePose(results);
+                    Pose fieldRel = LLMath.getFieldRelativePose(results, Robot.robotPose);
                     telemetry.addData(" x", results.getX());
                     telemetry.addData(" y", results.getY());
                     telemetry.addData("field x", fieldRel.getX());
@@ -62,6 +63,14 @@ public class LLTest extends LinearOpMode {
             telemetry.addData("playstyle", Robot.playStyle);
             telemetry.addData("robot x", Robot.robotPose.getX());
             telemetry.addData("robot y", Robot.robotPose.getY());
+            LLMath.update();
+            telemetry.addData("bestPose x" , LLMath.getBestRobotRelativePose().getX());
+            telemetry.addData("bestPose y" , LLMath.getBestRobotRelativePose().getY());
+            telemetry.addData("FR bestPose X" , LLMath.getFieldRelativePose(LLMath.getBestRobotRelativePose(),Robot.robotPose).getX());
+            telemetry.addData("FR bestPose Y" , LLMath.getFieldRelativePose(LLMath.getBestRobotRelativePose(),Robot.robotPose).getY());
+            LLMath.test(Robot.robotPose);
+            telemetry.addLine("----------------------");
+            telemetry.addData("pula!", LLMath.optimalPose);
             telemetry.update();
             r.update();
         }
