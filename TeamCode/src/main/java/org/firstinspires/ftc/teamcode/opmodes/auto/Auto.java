@@ -24,9 +24,11 @@ public abstract class Auto extends BetterOpMode {
     protected Alliance alliance;
     protected Follower follower;
     protected double velocity, pos;
+    long now, last, dt;
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
+    public double offset = 0;
 
     @Override
     public void initialize() {
@@ -49,7 +51,7 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
         telemetry.update();
-
+        Shooter.servo.setPosition(pos);
     }
 
     @Override
@@ -61,21 +63,21 @@ public abstract class Auto extends BetterOpMode {
         robot.update();
         follower.update();
         auto.update();
-
         Pose robotPose= follower.getPose();
-        Turret.updateAuto(follower);
+        Turret.updateAuto(follower , offset);
+        now = System.nanoTime();
+        dt = now - last;
+        telemetry.addData("hz", 1e9 / dt);
+        last = now;
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
-        telemetry.addData("alliance", alliance);
-        telemetry.addData("virtual dist" , Turret.virtualDist);
-        telemetry.addData("velocity" , Shooter.motor1.getVelocity());
         telemetry.update();
         Intake.update();
         Storage.update();
         Shooter.setVelocity(velocity);
-        Shooter.servo.setPosition(pos);
         Shooter.motor1.update();
+        Shooter.servo.setPosition(pos);
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.tasks.auto_task.CurveToTangentialToConstan
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantAsyncTValue;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantSync;
+import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToConstantToTangentialAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToLinearAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToLinearSync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialASyncTValue;
@@ -136,6 +137,12 @@ public class Command {
         if(f== null)
             throw new IllegalArgumentException("Follower not set");
         list.addLast(new LineToConstantAsyncTValue(f, p, heading,tValue));
+        return this;
+    }
+    public Command lineToConstantToTangentialAsync(Pose p,double tValue){
+        if(f== null)
+            throw new IllegalArgumentException("Follower not set");
+        list.addLast(new LineToConstantToTangentialAsync(f, p,tValue));
         return this;
     }
 

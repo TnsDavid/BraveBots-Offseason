@@ -75,7 +75,7 @@ public abstract class TeleOp extends BetterOpMode {
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
                 try {
-                    Shooter.update();
+                    Shooter.tuningUpdate();
                     Thread.sleep(3);
                 } catch (InterruptedException e ) {
                     Thread.currentThread().interrupt();

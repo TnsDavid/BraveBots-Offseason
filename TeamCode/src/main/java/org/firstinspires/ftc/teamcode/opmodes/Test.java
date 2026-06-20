@@ -40,7 +40,7 @@ public class Test extends BetterOpMode {
         Turret.turret2.setPosition(0.5);
         Shooter.motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Shooter.motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
+        gamepadEx1.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Shoot::new, BetterGamepad.Type.MAIN);
 
        // gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
@@ -74,7 +74,7 @@ public class Test extends BetterOpMode {
         if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
         if(gamepad1.shareWasPressed()) Robot.switchPlayStyle();
         Drivetrain.betterDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-        Shooter.setVelocity(Shooter.velocity);
+         Shooter.setVelocity(Shooter.velocity);
         telemetry.addData("velocity", Shooter.motor1.getVelocity());
         telemetry.addData("target velocity", Shooter.velocity);
         telemetry.addData("hood pos", Shooter.servo.getPosition());

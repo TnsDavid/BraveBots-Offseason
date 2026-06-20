@@ -27,6 +27,7 @@ public abstract class AutoFar extends BetterOpMode {
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
+    public double offset = 0;
 
     @Override
     public void initialize() {
@@ -50,7 +51,7 @@ public abstract class AutoFar extends BetterOpMode {
     public void initialize_loop() {
         follower.update();
         Pose robotPose= follower.getPose();
-        Turret.updateAuto(follower);
+        Turret.updateAuto(follower , offset);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
@@ -66,7 +67,7 @@ public abstract class AutoFar extends BetterOpMode {
         follower.update();
         auto.update();
         Pose robotPose= follower.getPose();
-        Turret.updateAuto(follower);
+        Turret.updateAuto(follower , offset);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());

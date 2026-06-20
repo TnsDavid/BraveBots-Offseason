@@ -19,12 +19,6 @@ public class Shooter {
     public static double velocity=0;
     public static BetterServo servo;
     public static boolean readyForShoot = false;
-
-
-    //public static final double aVClose = -56.69335, bVClose = 587.26292, cVClose = 748.70738;
-
-    //public static final double aHClose = -0.0756773, bHClose = 0.53089, cHClose = 0.0499127 ;
-
     public static double pClose= -0.0075,fClose = 0.77;
     //public static double pFar = -0.004 , fFar = 0.9, s = 0.1;
     public static double pFar = -0.0075 , fFar = 0.77, s = 0.1;
@@ -84,5 +78,9 @@ public class Shooter {
             setVelocity(velocity);
             motor1.update();
         } else setPower(0);
+    }
+    public static void tuningUpdate() {
+        setVelocity(velocity);
+        motor1.update();
     }
 }

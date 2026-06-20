@@ -204,22 +204,11 @@ public class Robot {
         if(timer== null)
             timer= new ElapsedTime();
         hubs.forEach(LynxModule::clearBulkCache);
-        //hubs.forEach(LynxModule::close);
-
 
         if(opModeType== OpModeType.TELEOP){
             odo.update();
             robotPose= new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
         }
-//        robotHeading = odo.getHeading(AngleUnit.DEGREES);
-
-        // odo.update();
-
-//        if(opModeType.equals(OpModeType.TELEOP)) {
-//            pinpoint.update();
-//            robotPose= new Pose(pinpoint.getPosX(DistanceUnit.METER), pinpoint.getPosY(DistanceUnit.METER), pinpoint.getHeading(AngleUnit.RADIANS));
-//        }
-
 
     }
     public Robot initialize()
