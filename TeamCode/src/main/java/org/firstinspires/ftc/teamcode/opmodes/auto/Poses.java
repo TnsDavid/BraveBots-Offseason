@@ -9,8 +9,11 @@ public class Poses {
         public static Pose collectSecondSpike = new Pose(124.7858319604613, 59.20922570016476, 0);
         public static Pose collectSecondSpikeCP = new Pose(83.26853377265239, 64.05271828665568);
         public static Pose gateCollect = new Pose(130.84056783759362 , 59.15440638784079, Math.toRadians(31));
+        public static Pose gateCollect2 = new Pose(131.78949699739593, 59.86610325769252, Math.toRadians(31));
+        public static Pose gateCollectCP = new Pose(105.56836902800659, 67.44678747940692, 64.6);
         public static Pose collectFirstSpike = new Pose(122.93574958813838, 83.2504118616145, 0);
         public static Pose parkingSpotdeHandicapati = new Pose(127.244, 80.37, Math.toRadians(0));
+        public static Pose shootPoseLeave = new Pose(86.35255354200987, 104.61943986820428, Math.toRadians(310));
     }
 
     public static class FarPoses {

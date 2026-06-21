@@ -12,7 +12,7 @@ public class Intake {
     public static IntakeStatus status = IntakeStatus.NOTINTAKING;
 
     public enum IntakeStatus{
-        INTAKING, NOTINTAKING
+        INTAKING, NOTINTAKING, FORCEDINTAKE
     }
     public static void start(){
         motor.setPower(.94);
@@ -35,7 +35,7 @@ public class Intake {
         motor.setPower(power);
     }
     public static void toggle(){
-        if(status == IntakeStatus.NOTINTAKING){
+        if(status == IntakeStatus.NOTINTAKING|| status==IntakeStatus.FORCEDINTAKE){
             if(!(Storage.status.equals(Storage.Status.STORAGEFULL) && Storage.bUp.isBeamBroken())) start();
             if(!Storage.bUp.isBeamBroken()) Storage.start();
         }
@@ -47,14 +47,11 @@ public class Intake {
     public static void toggleFortat(){
         if(status == IntakeStatus.NOTINTAKING){
             start();
-            Storage.start();
+            status = IntakeStatus.FORCEDINTAKE;
         }
-        else{
-            stop();
-            Storage.stop();
-        }
+        else stop();
     }
     public static void update() {
-        if(Storage.status.equals(Storage.Status.STORAGEFULL) && !Shooter.readyForShoot) stop();
+        if(Storage.status.equals(Storage.Status.STORAGEFULL) && !status.equals(IntakeStatus.FORCEDINTAKE) && !Shooter.readyForShoot) stop();
     }
 }

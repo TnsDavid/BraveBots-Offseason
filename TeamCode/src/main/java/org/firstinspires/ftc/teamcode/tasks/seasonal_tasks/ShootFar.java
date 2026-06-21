@@ -35,7 +35,7 @@ public class ShootFar implements Task {
                 .addTask(Blocker::block)
                 .addTask(() -> {
                     Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
-                    Storage.count = 0;
+                    Storage.status= Storage.Status.EMPTY;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;
                     Turret.checkedStatus = false;

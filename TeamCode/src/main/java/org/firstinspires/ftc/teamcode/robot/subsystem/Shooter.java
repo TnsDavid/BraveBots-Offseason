@@ -34,16 +34,9 @@ public class Shooter {
         motor1.setPower(power);
         motor2.setPower(power);
     }
-    public static double voltageThreshold = 10.5;
-    public static void setVelocity(double vel){
-        double voltage = Robot.voltageSensor.getVoltage();
-        double coeff = (voltage < voltageThreshold) ? voltageThreshold / voltage : 1;
-        vel *= coeff;
-        motor1.setVelocity(vel);
-        motor2.setPower(motor1.getPower());
-    }
-    public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=2000,hoodFAR=0.95;
-    public static double offset=0;
+    public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=2000,hoodFAR=0.92;
+          //  public static double hoodFAR=0.8494;
+    public static double offset=0, velocityThreshold = 60;
     public static boolean shooterEnabled = false;
     public static void update() {
         if (shooterEnabled){
@@ -58,8 +51,8 @@ public class Shooter {
             }
             if(!Shooter.readyForShoot || Turret.sotm)
                 servo.setPosition(hoodPos);
-            setVelocity(velocity);
-            motor1.update();
+          motor1.update(velocity);
+          motor2.update(velocity);
         } else setPower(0);
     }
     public static void updateAuto() {
@@ -75,12 +68,12 @@ public class Shooter {
             }
             if(!Shooter.readyForShoot || Turret.sotm)
                 servo.setPosition(hoodPos);
-            setVelocity(velocity);
-            motor1.update();
+            motor1.update(velocity);
+            motor2.update(velocity);
         } else setPower(0);
     }
     public static void tuningUpdate() {
-        setVelocity(velocity);
-        motor1.update();
+        motor1.update(velocity);
+        motor2.update(velocity);
     }
 }

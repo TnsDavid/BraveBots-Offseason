@@ -141,11 +141,11 @@ public class Turret {
                 turretRelative += offset;
                 turretRelative = Range.clip(turretRelative, 0, 360);
                 double finalPos = turretRelative / 360;
-                if (finalPos >= 0.1425 && finalPos <= 0.91) {
+                if (finalPos >= 0.07 && finalPos <= 0.95) {
                     turret1.setPosition(finalPos);
                     turret2.setPosition(finalPos);
                 }
-            }else setNeutralPosition(0.5);
+            } else setNeutralPosition(0.5);
         }
     }
     public static double normalize(double h){

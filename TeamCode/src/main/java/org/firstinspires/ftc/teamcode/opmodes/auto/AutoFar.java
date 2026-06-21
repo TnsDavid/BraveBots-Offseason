@@ -27,7 +27,7 @@ public abstract class AutoFar extends BetterOpMode {
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
-    public double offset = 0;
+    public double offset = -3.5;
 
     @Override
     public void initialize() {
@@ -37,7 +37,6 @@ public abstract class AutoFar extends BetterOpMode {
                 .setOpModeType(Robot.OpModeType.AUTO)
                 .initialize();
         LLMath.init(hardwareMap);
-        Turret.setNeutralPosition(0.5);
         follower= Constants.createFollower(hardwareMap);
         auto= new Command(follower);
         pos = Shooter.hoodFAR;
@@ -51,7 +50,7 @@ public abstract class AutoFar extends BetterOpMode {
     public void initialize_loop() {
         follower.update();
         Pose robotPose= follower.getPose();
-        Turret.updateAuto(follower , offset);
+        //Turret.setNeutralPosition(0.1895);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
@@ -67,7 +66,6 @@ public abstract class AutoFar extends BetterOpMode {
         follower.update();
         auto.update();
         Pose robotPose= follower.getPose();
-        Turret.updateAuto(follower , offset);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
@@ -78,9 +76,9 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.update();
 
         Shooter.shooterEnabled = true;
-        Shooter.setVelocity(Shooter.velocityFAR);
         Shooter.servo.setPosition(Shooter.hoodFAR);
-        Shooter.motor1.update();
+        Shooter.motor1.update(Shooter.velocityFAR);
+        Shooter.motor2.update(Shooter.velocityFAR);
         Storage.update();
         Intake.update();
     }

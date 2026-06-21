@@ -140,7 +140,7 @@ public class LLMath {
                 update();
                 Pose robotRelPose = getBestRobotRelativePose();
                 Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
-                optimalPose = new Pose((Robot.a == Alliance.RED ? (fieldRelPose.getX() - robotLength / 2) : (fieldRelPose.getX() + robotLength/2)), (fieldRelPose.getY() - 5 >= 3) ? (fieldRelPose.getY() - 5) : fieldRelPose.getY() , flw.getHeading() + Math.toRadians(5));
+                optimalPose = new Pose((Robot.a == Alliance.RED ? (fieldRelPose.getX() - robotLength / 2 + 2) : (fieldRelPose.getX() + robotLength/2) - 2), (fieldRelPose.getY() - 5 >= 3) ? (fieldRelPose.getY() - 5) : fieldRelPose.getY() , flw.getHeading() + Math.toRadians(5));
             }
         Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
         path.setConstantHeadingInterpolation(Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));

@@ -75,8 +75,8 @@ public abstract class Auto extends BetterOpMode {
         telemetry.update();
         Intake.update();
         Storage.update();
-        Shooter.setVelocity(velocity);
-        Shooter.motor1.update();
+        Shooter.motor1.update(velocity);
+        Shooter.motor2.update(velocity);
         Shooter.servo.setPosition(pos);
     }
 

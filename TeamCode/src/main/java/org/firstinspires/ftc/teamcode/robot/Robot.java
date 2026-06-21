@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -50,6 +52,7 @@ public class Robot {
     public Limelight3A ll;
     public BetterServo hood, blocker;
     BreakBeam downLaser, upLaser;
+    DigitalChannel middleLaser;
 
     public BetterServoEx turret1, turret2;
     public static GoBildaPinpointDriver odo;
@@ -94,8 +97,10 @@ public class Robot {
         this.a= a;
     }
     public double dtlength=.356;//metri
-    public double dtwidth=.432;//metri
-   // public double dtwidth=.38; //metri
+    public double dtwidth=.414;//metri
+    public double classifierWidth=.1875;//metri
+    public double intakeWidth=.092;//metri
+   // public double dtwidth=.3v8; //metri
 
     //4.01
     //
@@ -104,15 +109,14 @@ public class Robot {
     }
     public void resetPinPoint() {
         odo.setPosX(playStyle == PlayStyle.FAR ?
-                ( a == Alliance.RED ? dtwidth / 2 : 3.65 - (dtwidth / 2) ) :
-               // ( a == Alliance.RED ? 3.232 : 0.427 ), DistanceUnit.METER);
-                ( a == Alliance.RED ? 3.232 : 0.362 ), DistanceUnit.METER);//field length 141,5
+                ( a == Alliance.RED ? dtwidth / 2 : (3.65 - (dtwidth / 2)) ) :
+                ( a == Alliance.RED ? (3.65 - classifierWidth - dtlength / 2 - intakeWidth) : (classifierWidth + dtlength / 2 + intakeWidth) ), DistanceUnit.METER);
         odo.setPosY(playStyle == PlayStyle.FAR ?
                 ( dtlength / 2 ) :
-                ( 1.94 ), DistanceUnit.METER);
+                ( 2.00 ), DistanceUnit.METER);
         odo.setHeading(playStyle == PlayStyle.FAR ?
                 ( Math.toRadians(90) ):
-                ( a == Alliance.RED ? Math.toRadians(180) : Math.toRadians(0) ), AngleUnit.RADIANS);
+                ( a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180) ), AngleUnit.RADIANS);
         robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
     }
     public void initializeControllers() {
@@ -165,6 +169,7 @@ public class Robot {
         Storage.transfer=transfer;
         Storage.bDown=downLaser;
         Storage.bUp=upLaser;
+        Storage.laserMiddle=middleLaser;
         Intake.motor=intake;
         Drivetrain.leftBack=BackLeft;
         Drivetrain.leftFront=FrontLeft;
@@ -189,11 +194,16 @@ public class Robot {
             odo.setOffsets(Constants.yOffset, Constants.xOffset, DistanceUnit.INCH);
             odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
             odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-            resetPinPoint();
+            //resetPinPoint();
+            robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
+
         }
         voltageSensor= hm.voltageSensor.iterator().next();
         downLaser = new BreakBeam(controller, 7);
         upLaser = new BreakBeam(controller, 1);
+        middleLaser = hm.get(DigitalChannel.class, "laser");
+        middleLaser.setMode(DigitalChannel.Mode.INPUT);
+
         Storage.count=0;
         Storage.startedTimer = false;
         setPlayStyle(PlayStyle.CLOSE);

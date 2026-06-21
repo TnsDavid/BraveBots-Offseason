@@ -20,6 +20,7 @@
             <BreakBeam name="breakbeam up" port="7" />
             <ControlHubImuBHI260AP name="imu" port="0" bus="0" />
             <goBILDAPinpoint name="pinpoint" port="0" bus="1" />
+            <DigitalDevices name="laser" port="2"/>
         </LynxModule>
     </LynxUsbDevice>
     <EthernetDevice serialNumber="EthernetOverUsb:eth0:172.29.0.24" name="ll" port="-1" ipAddress="172.29.0.1" />

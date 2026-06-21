@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tasks.seasonal_tasks;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
@@ -15,36 +16,38 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 public class Shoot implements Task {
     private Command s;
 
-    public static double coef = 1.35, coefFar = 1.4, increment= 0.0082, waitTime= 0.01, waitTime2= 0.02, incrementFar = 0.08, inc;
+    public static double coef = 1.35, coefFar = 1.4,totalShootTime=0.05, increment= 0.0082, waitTime= 0.01, waitTime2= 0.02, incrementFar = 0.08, inc;
 
 
     public double pos;
+    ElapsedTime timer;
 
     public Shoot(){
         s= new Command()
                 .addTask(() -> pos = Shooter.servo.getPosition())
-                .addTask(() -> Shooter.readyForShoot = true)
+                .addTask(() ->Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.1)
                 .addTask(Intake::start)
                 .addTask(Storage::start)
-                .waitSeconds(waitTime)
+                .addTask(()-> timer=new ElapsedTime())
+                .addTask(() -> Storage.status.equals(Storage.Status.TWOBALL)||(timer.seconds()>totalShootTime))
                 .addTask(()->{
                     inc = Robot.playStyle == Robot.PlayStyle.CLOSE ? increment : incrementFar;
                     if(!Turret.sotm) Shooter.servo.setPosition(pos- inc);
                 })
-                .waitSeconds(waitTime2)
+                .addTask(() -> Storage.status.equals(Storage.Status.ONEBALL)||(timer.seconds()>totalShootTime))
                 .addTask(()->{
                     double cf = Robot.playStyle == Robot.PlayStyle.CLOSE ? coef : coefFar;
                     if(!Turret.sotm) Shooter.servo.setPosition(pos-cf* inc);
                 })
-                .waitSeconds(1)
+                .waitSeconds(0.4)
                 .addTask(Storage::stop)
                 .addTask(Intake::stop)
                 .addTask(Blocker::block)
                 .addTask(() -> {
                     Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
-                    Storage.count = 0;
+                    Storage.status= Storage.Status.EMPTY;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;
                     Turret.checkedStatus = false;

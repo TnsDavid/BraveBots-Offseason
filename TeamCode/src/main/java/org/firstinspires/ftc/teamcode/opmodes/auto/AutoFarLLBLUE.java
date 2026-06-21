@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
@@ -23,6 +24,7 @@ public class AutoFarLLBLUE extends AutoFar{
 
         public HPCollect() {
             s = new Command(follower)
+                    .addTask(()-> Turret.setNeutralPosition(0.821))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .curveToConstantSync(Poses.FarPoses.HpCollectPoseCP.mirror(), Poses.FarPoses.HPCollectPose.mirror(), Poses.FarPoses.HPCollectPose.mirror().getHeading())
@@ -50,6 +52,7 @@ public class AutoFarLLBLUE extends AutoFar{
 
         public SpikeCollect() {
             s = new Command(follower)
+                    .addTask(()-> Turret.setNeutralPosition(0.821))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .curveToConstantSync(Poses.FarPoses.spikeCollectCP.mirror(), Poses.FarPoses.spikeCollectPose.mirror(),Math.toRadians(180))
@@ -74,6 +77,7 @@ public class AutoFarLLBLUE extends AutoFar{
         ElapsedTime SmartCollectTimer;
         public CycleCollect() {
             s = new Command(follower)
+                    .addTask(()-> Turret.setNeutralPosition(0.821))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> LLMath.scan(follower))

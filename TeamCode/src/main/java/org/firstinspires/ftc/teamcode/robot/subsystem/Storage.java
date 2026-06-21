@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BreakBeam;
 public class Storage {
     public static BetterMotorEx transfer;
     public static BreakBeam bUp, bDown;
+    public static DigitalChannel laserMiddle;
     public static double last, updateTime = 100;
     public enum Status {
         EMPTY, ONEBALL, TWOBALL, STORAGEFULL
@@ -38,6 +40,7 @@ public class Storage {
     }
     public static int count = 0;
     public static ElapsedTime ballUp;
+    public static boolean up = false, down = false, middle = false;
     public static boolean startedTimer = false;
     public static double storageStopTime = 60;
 
@@ -75,5 +78,23 @@ public class Storage {
                 }
                 break;
         }
+    }
+
+    public static void update2(){
+        if(!Shooter.readyForShoot){
+            if(!startedTimer && bUp.isBeamBroken()){
+                ballUp = new ElapsedTime();
+                startedTimer = true;
+            }
+            if(ballUp != null && ballUp.milliseconds()>storageStopTime && startedTimer) stop();
+        }
+        up = bUp.isBeamBroken();
+        down = bDown.isBeamBroken();
+        middle = laserMiddle.getState();
+
+        if(up && !middle && !down) status = Status.ONEBALL;
+        else if(up && middle && !down) status = Status.TWOBALL;
+        else if(up && middle && down) status = Status.STORAGEFULL;
+        else if(!up && !middle && !down) status=Status.EMPTY;
     }
 }

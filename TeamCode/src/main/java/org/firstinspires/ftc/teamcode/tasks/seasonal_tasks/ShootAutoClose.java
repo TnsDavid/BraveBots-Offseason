@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tasks.auto_task;
+package org.firstinspires.ftc.teamcode.tasks.seasonal_tasks;
 
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
@@ -28,7 +28,7 @@ public class ShootAutoClose implements Task {
                  .addTask(Storage::stop)
                  .addTask(Intake::stop)
                  .addTask(() -> {
-                     Storage.count = 0;
+                     Storage.status= Storage.Status.EMPTY;
                      Storage.startedTimer = false;
                      Shooter.readyForShoot = false;
                      Turret.checkedStatus = false;

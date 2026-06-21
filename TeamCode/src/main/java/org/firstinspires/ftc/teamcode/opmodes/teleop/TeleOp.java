@@ -48,9 +48,15 @@ public abstract class TeleOp extends BetterOpMode {
         gamepadEx1.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Shoot::new, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.OPTIONS)
-                .whenPressed(() -> robot.resetPinPoint(), BetterGamepad.Type.MAIN);
+                .whenPressed(() -> {
+                    robot.resetPinPoint();
+                    Turret.offset=0;
+                }, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_DOWN)
-                        .whenPressed(Intake::start,BetterGamepad.Type.PARALLEL);//intake fortat
+                        .whenPressed(()->{
+                            Intake.start();
+                            Intake.status= Intake.IntakeStatus.FORCEDINTAKE;
+                        },BetterGamepad.Type.PARALLEL);//intake fortat
         gamepadEx1.getButton(BetterGamepad.Buttons.TRIANGLE)
                 .whenPressed(Blocker::toggle, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.CIRCLE)
@@ -75,7 +81,7 @@ public abstract class TeleOp extends BetterOpMode {
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
                 try {
-                    Shooter.tuningUpdate();
+                    Shooter.update();
                     Thread.sleep(3);
                 } catch (InterruptedException e ) {
                     Thread.currentThread().interrupt();
@@ -147,12 +153,12 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("curr vel", Shooter.motor1.getVelocity());
         telemetry.addData("shooter enb", Shooter.shooterEnabled);
         telemetry.addData("hood pos", Shooter.servo.getPosition());
-        telemetry.addData("count" , Storage.count);
+        telemetry.addData("status" , Storage.status);
         telemetry.addData("TOF", Turret.TOF);
         telemetry.addData("blocker blocked?", Blocker.blocked);
 
         Intake.update();
-        Storage.update();
+        Storage.update2();
         robot.update();
         telemetry.update();
     }

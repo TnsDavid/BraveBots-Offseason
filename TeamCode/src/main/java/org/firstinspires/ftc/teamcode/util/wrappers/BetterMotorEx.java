@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.util.wrappers;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.hardware.configuration.annotations.MotorType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.math.PDSFController;
 
 @DeviceProperties(
@@ -27,6 +29,7 @@ import org.firstinspires.ftc.teamcode.util.math.PDSFController;
         achieveableMaxRPMFraction = 1.0,
         orientation = Rotation.CCW
 )
+@Configurable
 public class BetterMotorEx extends DcMotorImplEx implements DcMotorEx, HardwareDevice {
 
     double ticksPerRevolution= 0;
@@ -101,12 +104,16 @@ public class BetterMotorEx extends DcMotorImplEx implements DcMotorEx, HardwareD
 
     private double lastPower= 0;
     public double output;
+    public static double nominalvoltage = 10.5;
 
-    public void update(){
-        double velocity= super.getVelocity();
-        //output= targetVelocity/ maxVelocity * f + controller.calculate(0,Math.abs(velocity)- targetVelocity);
-        output= targetVelocity/ maxVelocity * f + controller.calculate(velocity,-targetVelocity) + s;
-        setPower(output);
+    public void update(double targetVelocity){
+            this.targetVelocity=targetVelocity;
+            double velocity= super.getVelocity();
+            double currentvoltage= Robot.voltageSensor.getVoltage();
+            double velocityCompensationFactor = currentvoltage < nominalvoltage ? nominalvoltage / currentvoltage : 1;
+            double pid=controller.calculate(velocity,-targetVelocity)+s+f * targetVelocity / maxVelocity;
+            output=pid*velocityCompensationFactor;
+            setPower(output);
     }
 
 
