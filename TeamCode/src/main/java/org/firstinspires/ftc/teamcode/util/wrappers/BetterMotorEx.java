@@ -104,7 +104,7 @@ public class BetterMotorEx extends DcMotorImplEx implements DcMotorEx, HardwareD
 
     private double lastPower= 0;
     public double output;
-    public static double nominalvoltage = 10.5;
+    public static double nominalvoltage = 11;
 
     public void update(double targetVelocity){
             this.targetVelocity=targetVelocity;

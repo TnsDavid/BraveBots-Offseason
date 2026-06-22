@@ -97,4 +97,15 @@ public class Storage {
         else if(up && middle && down) status = Status.STORAGEFULL;
         else if(!up && !middle && !down) status=Status.EMPTY;
     }
+
+    public static void updateAuto(){
+        up = bUp.isBeamBroken();
+        down = bDown.isBeamBroken();
+        middle = laserMiddle.getState();
+
+        if(up && !middle && !down) status = Status.ONEBALL;
+        else if(up && middle && !down) status = Status.TWOBALL;
+        else if(up && middle && down) status = Status.STORAGEFULL;
+        else if(!up && !middle && !down) status = Status.EMPTY;
+    }
 }

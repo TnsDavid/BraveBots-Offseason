@@ -76,7 +76,7 @@ public class Turret {
             robotRelative = Robot.a == Alliance.RED ? robotRelative : -robotRelative;
             turretRelative+= 180 + offset;
             double finalPos= turretRelative/360;
-            if(finalPos>= 0.05 && finalPos<=0.95) {
+            if(finalPos>= 0.0475 && finalPos<=0.95) {
 
                 turret1.setPosition(finalPos );
                 turret2.setPosition(finalPos );
@@ -141,7 +141,7 @@ public class Turret {
                 turretRelative += offset;
                 turretRelative = Range.clip(turretRelative, 0, 360);
                 double finalPos = turretRelative / 360;
-                if (finalPos >= 0.07 && finalPos <= 0.95) {
+                if (finalPos >= 0.0475 && finalPos <= 0.95) {
                     turret1.setPosition(finalPos);
                     turret2.setPosition(finalPos);
                 }

@@ -16,7 +16,7 @@ public class ShootAutoClose implements Task {
          command.addTask(() -> pos = Shooter.servo.getPosition())
                  .addTask(() -> Shooter.readyForShoot = true)
                  .addTask(Blocker::unblock)
-                 .addTask(Blocker::atPosition)
+                 .waitSeconds(0.1)
                  .addTask(Intake::start)
                  .addTask(Storage::start)
                  .waitSeconds(waitTime)

@@ -53,10 +53,10 @@ public abstract class TeleOp extends BetterOpMode {
                     Turret.offset=0;
                 }, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_DOWN)
-                        .whenPressed(()->{
-                            Intake.start();
-                            Intake.status= Intake.IntakeStatus.FORCEDINTAKE;
-                        },BetterGamepad.Type.PARALLEL);//intake fortat
+                .whenPressed(()->{
+                    Intake.start();
+                    Intake.status= Intake.IntakeStatus.FORCEDINTAKE;
+                },BetterGamepad.Type.PARALLEL);//intake fortat
         gamepadEx1.getButton(BetterGamepad.Buttons.TRIANGLE)
                 .whenPressed(Blocker::toggle, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.CIRCLE)
@@ -112,7 +112,7 @@ public abstract class TeleOp extends BetterOpMode {
 
     @Override
     public void initialize_loop() {
-
+        Robot.odo.recalibrateIMU();
     }
 
     @Override
@@ -131,7 +131,7 @@ public abstract class TeleOp extends BetterOpMode {
     //volatile double slow;
     @Override
     public void active_loop() {
-       // slow= gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER);
+        // slow= gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER);
         now = System.nanoTime();
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);

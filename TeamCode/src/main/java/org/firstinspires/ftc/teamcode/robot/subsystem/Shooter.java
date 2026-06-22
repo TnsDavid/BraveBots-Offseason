@@ -34,7 +34,7 @@ public class Shooter {
         motor1.setPower(power);
         motor2.setPower(power);
     }
-    public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=2000,hoodFAR=0.92;
+    public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=2000,hoodFAR=0.92 , closeInc = 0.0082;
           //  public static double hoodFAR=0.8494;
     public static double offset=0, velocityThreshold = 60;
     public static boolean shooterEnabled = false;
@@ -43,7 +43,7 @@ public class Shooter {
             double virtualDistt = Turret.virtualDist;
             if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
                 velocity = ShooterMath.calculateVelocity(virtualDistt);
-                hoodPos = ShooterMath.calculateHoodAngle(virtualDistt);
+                hoodPos = ShooterMath.calculateHoodAngle(virtualDistt) + 0.0082;
             }
             else {
                 velocity=velocityFAR;

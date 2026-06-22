@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 public class Poses {
     public static class ClosePoses {
         public static Pose startingPose = new Pose(107.46622734761114 , 135.22240527182862 , Math.toRadians(270));
-        public static Pose shootPose = new Pose(84.45469522240526 , 82.79406919275122  );
+        public static Pose shootPose = new Pose(84.45469522240526 , 82.79406919275122   );
         public static Pose collectSecondSpike = new Pose(124.7858319604613, 59.20922570016476, 0);
         public static Pose collectSecondSpikeCP = new Pose(83.26853377265239, 64.05271828665568);
         public static Pose gateCollect = new Pose(130.84056783759362 , 59.15440638784079, Math.toRadians(31));
@@ -18,8 +18,8 @@ public class Poses {
 
     public static class FarPoses {
         public static Pose startingPose = new Pose(99.25118483412321, 8.71800947867298, 0);
-        public static Pose HPCollectPose = new Pose(125.5893076902935, 8.71800947867298, 0);
-        public static Pose HpCollectPoseCP = new Pose(127.67676284988609, 14.921208530805671);
+        public static Pose HPCollectPose = new Pose(133.6552055486131, 8.955241768623553, 0);
+        public static Pose HpCollectPoseCP = new Pose(135.74266070820568, 18.95415745996547);
         public static Pose shootPose = new Pose(88.85663507109003, 11.735781990521298, 0);
         public static Pose shootPoseScan = new Pose(82.3601186579735, 12.220527523936694, Math.toRadians(10));
         public static Pose spikeCollectPose = new Pose(133.1546961325967, 37.060589318600364);

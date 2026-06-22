@@ -24,15 +24,16 @@ public class Constants {
     public static double xOffset = -4.02, yOffset = 0.944;//0.98
 
     public static final double odometryResolution = 34.310551 * 25.4; //ticks per mm *
-    public static double kp = 0.06, kquad = 0.0018583773298043212, klinear = 0.06142244021388717;
+    public static double kp = 0.096, kquad = 0.001624282188277547, klinear = 0.08991429266679882;
     public static double p = 0, i = 0, d = 0, f= 0;
+    public static double nominalvoltage = 11;
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(12.48)
-            .forwardZeroPowerAcceleration(-45.17)
-            .lateralZeroPowerAcceleration(-65.64)
-            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad))
-            .centripetalScaling(0)
+            .forwardZeroPowerAcceleration(-24.26)
+            .lateralZeroPowerAcceleration(-53.7)
+            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad).withMaximumBrakingPower(0.3))
             .headingPIDFCoefficients(new PIDFCoefficients(1.2, 0, 0.06, 0.01))
+            .centripetalScaling(0)
             //.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0087 , 0 , 0.0005 , 0 , 0.03))
             .translationalPIDFCoefficients(new PIDFCoefficients(0.08,0,0.01,0.028 ))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15 , 0 , 0.02 ,0.028 ) )
@@ -40,7 +41,7 @@ public class Constants {
             .useSecondaryTranslationalPIDF(true);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.97, 80, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.97, 0, 1, 1);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(yOffset)
@@ -61,8 +62,9 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .useVoltageCompensation(true)
-            .xVelocity(83.75)
-            .yVelocity(64.85)
+            .nominalVoltage(nominalvoltage)
+            .xVelocity(87.49)
+            .yVelocity(71.16)
             ;
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

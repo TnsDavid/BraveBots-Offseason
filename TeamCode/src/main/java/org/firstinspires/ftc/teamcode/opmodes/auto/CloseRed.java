@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
@@ -23,7 +24,7 @@ public class CloseRed extends Auto {
         public ShootPreload(){
             command = new Command(follower);
             command.lineToTangentialASync(Poses.ClosePoses.shootPose)
-                    //.waitSeconds(0.05)
+                    .waitSeconds(0.05)
                     .addTask(new ShootAutoClose());
 
         }
@@ -44,7 +45,7 @@ public class CloseRed extends Auto {
                     .addTask(Intake::stop)
                     .addTask(Storage::stop)
                     .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
-                    .waitSeconds(0.02)//0.05
+                    .waitSeconds(0.1)//0.05
                     .addTask(new ShootAutoClose());
         }
         @Override
@@ -61,12 +62,12 @@ public class CloseRed extends Auto {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP, Poses.ClosePoses.gateCollect2, 0.55)
+                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP, Poses.ClosePoses.gateCollect, 0.55)
                     .addTask(() -> follower.getCurrentTValue() > 0.8)
                     .addTask(() -> time = new ElapsedTime())
                     .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1200))
                     .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
-                    .waitSeconds(0.01)
+                    .waitSeconds(0.05)
                     .addTask(new ShootAutoClose());
         }
 
@@ -84,7 +85,7 @@ public class CloseRed extends Auto {
                     .addTask(Storage::start)
                     .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
                     .lineToConstantAsync(Poses.ClosePoses.shootPoseLeave, Poses.ClosePoses.shootPoseLeave.getHeading())
-                    .waitSeconds(0.01)
+                    .waitSeconds(0.02)
                     .addTask(new ShootAutoClose());
         }
 
@@ -97,12 +98,11 @@ public class CloseRed extends Auto {
 
     @Override
     public void buildAuto() {
-        pos = 0.7832;
-        velocity = 1650;
+        pos = 0.834;
+        velocity = 1600;
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
-                .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
