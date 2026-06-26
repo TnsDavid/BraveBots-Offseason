@@ -111,7 +111,7 @@ public class BetterMotorEx extends DcMotorImplEx implements DcMotorEx, HardwareD
             double velocity= super.getVelocity();
             double currentvoltage= Robot.voltageSensor.getVoltage();
             double velocityCompensationFactor = currentvoltage < nominalvoltage ? nominalvoltage / currentvoltage : 1;
-            double pid=controller.calculate(velocity,-targetVelocity)+s+f * targetVelocity / maxVelocity;
+            double pid=controller.calculate(velocity,targetVelocity)+s+f * targetVelocity / maxVelocity;
             output=pid*velocityCompensationFactor;
             setPower(output);
     }

@@ -79,7 +79,6 @@ public class BetterCRServo extends CRServoImpl implements CRServo, HardwareDevic
     }
 
     private double normalize(double pos){
-
         while(pos>.5) pos-=1;
         while(pos<-.5) pos+=1;
         return pos;

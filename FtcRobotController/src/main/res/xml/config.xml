@@ -8,6 +8,8 @@
             <betterMotorEx name="Shooter2" port="3" />
             <BetterServo name="turret2 " port="0" />
             <BetterServo name="blocker " port="1" />
+            <RGBIndicator name="ledDR" port="5"/>
+
         </LynxModule>
         <LynxModule name="Control Hub" port="173">
             <betterMotorEx name="FL" port="0" />
@@ -16,11 +18,12 @@
             <betterMotorEx name="Shooter " port="3" />
             <BetterServo name="turret" port="0" />
             <BetterServo name="hood" port="1" />
+            <RGBIndicator name="ledST" port="5" />
             <BreakBeam name="breakbeam Intake" port="1" />
             <BreakBeam name="breakbeam up" port="7" />
             <ControlHubImuBHI260AP name="imu" port="0" bus="0" />
-            <goBILDAPinpoint name="pinpoint" port="0" bus="1" />
-            <DigitalDevices name="laser" port="2"/>
+            <goBILDAPinpoint name="pinpoint" port="0" bs="1" />
+            <DigitalDevices name="laser" port="3"/>
         </LynxModule>
     </LynxUsbDevice>
     <EthernetDevice serialNumber="EthernetOverUsb:eth0:172.29.0.24" name="ll" port="-1" ipAddress="172.29.0.1" />

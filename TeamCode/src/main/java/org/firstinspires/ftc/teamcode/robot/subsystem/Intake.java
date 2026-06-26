@@ -35,7 +35,7 @@ public class Intake {
         motor.setPower(power);
     }
     public static void toggle(){
-        if(status == IntakeStatus.NOTINTAKING|| status==IntakeStatus.FORCEDINTAKE){
+        if(status == IntakeStatus.NOTINTAKING){
             if(!(Storage.status.equals(Storage.Status.STORAGEFULL) && Storage.bUp.isBeamBroken())) start();
             if(!Storage.bUp.isBeamBroken()) Storage.start();
         }
@@ -53,5 +53,8 @@ public class Intake {
     }
     public static void update() {
         if(Storage.status.equals(Storage.Status.STORAGEFULL) && !status.equals(IntakeStatus.FORCEDINTAKE) && !Shooter.readyForShoot) stop();
+    }
+    public static void updateAuto() {
+        if( Storage.status.equals(Storage.Status.STORAGEFULL) && !Shooter.readyForShoot ) stop();
     }
 }

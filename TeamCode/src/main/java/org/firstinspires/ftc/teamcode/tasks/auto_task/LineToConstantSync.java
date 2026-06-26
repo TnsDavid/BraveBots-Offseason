@@ -12,16 +12,18 @@ public class LineToConstantSync implements Task {
     Follower f;
     Pose p;
     boolean started;
-    public LineToConstantSync(Follower f, Pose p){
+    double heading;
+    public LineToConstantSync(Follower f, Pose p, double heading){
         this.f= f;
         this.p= p;
+        this.heading= heading;
         started= false;
     }
     @Override
     public boolean Run() {
         if(!started){
             Path path= new Path(new BezierLine(f.getPose(), p));
-            path.setHeadingInterpolation(HeadingInterpolator.constant(p.getHeading()));
+            path.setHeadingInterpolation(HeadingInterpolator.constant(heading));
             f.followPath(path);
             started= true;
         }

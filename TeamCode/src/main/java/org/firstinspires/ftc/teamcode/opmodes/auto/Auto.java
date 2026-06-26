@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
 
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
@@ -28,7 +29,7 @@ public abstract class Auto extends BetterOpMode {
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
-    public double offset = 0;
+    public double offset = -1.5;
 
     @Override
     public void initialize() {
@@ -39,6 +40,8 @@ public abstract class Auto extends BetterOpMode {
                 .initialize();
         Turret.setNeutralPosition(0.5);
         follower= Constants.createFollower(hardwareMap);
+        Storage.status = Storage.Status.EMPTY;
+        Shooter.shooterEnabled = false;
         auto= new Command(follower);
         buildAuto();
     }
@@ -47,6 +50,7 @@ public abstract class Auto extends BetterOpMode {
     public void initialize_loop() {
         follower.update();
         Pose robotPose= follower.getPose();
+        telemetry.addData("status", Storage.status);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
@@ -72,12 +76,18 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
+        Vector velo = follower.getVelocity();
+        velo.setComponents(velo.getMagnitude(), velo.getTheta());
+        telemetry.addData("velo", velo.getMagnitude());
+        telemetry.addData("veloX", velo.getXComponent());
+        telemetry.addData("veloY", velo.getYComponent());
         telemetry.update();
-        Intake.update();
+        if(!Shooter.shooterEnabled){
+            Shooter.motor1.update(velocity);
+            Shooter.motor2.update(velocity);
+            if(!Shooter.readyForShoot) Shooter.servo.setPosition(pos);
+        }else Shooter.updateAuto();
         Storage.updateAuto();
-        Shooter.motor1.update(velocity);
-        Shooter.motor2.update(velocity);
-        if(!Shooter.readyForShoot) Shooter.servo.setPosition(pos);
     }
 
     @Override

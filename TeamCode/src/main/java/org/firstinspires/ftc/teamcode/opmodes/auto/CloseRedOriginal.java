@@ -5,13 +5,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
 
-@Autonomous(name = "Close Red ORIGINAL", group = "Auto")
+@Autonomous(name = "Close Red", group = "Auto")
 @NotVibeCoded
 public class CloseRedOriginal extends Auto {
 
@@ -21,10 +22,11 @@ public class CloseRedOriginal extends Auto {
 
         public ShootPreload(){
             command = new Command(follower);
-            command.lineToConstantAsync(Poses.ClosePoses.shootPose, Math.toRadians(270))
-                    .waitSeconds(0.1)
-                    .addTask(new ShootAutoClose());
-
+            command.lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
+                    .addTask(() -> follower.getCurrentTValue() > 0.75)
+                    .addTask(() -> follower.setMaxPower(0.5))
+                    .addTask(new ShootAutoClose())
+                    .addTask(() -> Shooter.shooterEnabled = true);
         }
         @Override
         public boolean Run() {
@@ -39,12 +41,15 @@ public class CloseRedOriginal extends Auto {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
+                    .addTask(() -> follower.setMaxPower(1))
                     .curveToConstantAsync(Poses.ClosePoses.collectSecondSpikeCP, Poses.ClosePoses.collectSecondSpike, 0)
-                    .addTask(Intake::stop)
                     .addTask(Storage::stop)
-                    .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
-                    .waitSeconds(0.1)
-                    .addTask(new ShootAutoClose());
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
+                    .addTask(() -> follower.getCurrentTValue() > 0.5)
+                    .addTask(() -> follower.setMaxPower(0.5))
+                    .addTask(()->follower.getCurrentTValue()>0.6)
+                    .addTask(new ShootAutoClose())
+                    .addTask(() -> follower.setMaxPower(1));
         }
         @Override
         public boolean Run() {
@@ -56,6 +61,7 @@ public class CloseRedOriginal extends Auto {
     public class GateCycle implements Task {
         Command command;
         ElapsedTime time;
+        /*
         public GateCycle() {
             command = new Command(follower);
             command.addTask(Intake::start)
@@ -64,11 +70,29 @@ public class CloseRedOriginal extends Auto {
                     .addTask(() -> follower.getCurrentTValue() >= 0.8)
                     .addTask(() -> follower.setMaxPower(0.7))
                     .addTask(() -> time = new ElapsedTime())
-                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1200))
+                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1400))
                     .addTask(() -> follower.setMaxPower(1))
                     .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
                     .waitSeconds(0.05)
                     .addTask(new ShootAutoClose());
+        }
+         */
+        public GateCycle() {
+            command = new Command(follower);
+            command.addTask(Intake::start)
+                    .addTask(Storage::start)
+                    .lineToLinearSync(Poses.ClosePoses.gateCollect)
+                    .addTask(() -> follower.getCurrentTValue() >= 0.8)
+                    .addTask(() -> follower.setMaxPower(0.7))
+                    .addTask(() -> time = new ElapsedTime())
+                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1400))
+                    .addTask(() -> follower.setMaxPower(1))
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
+                    .addTask(() -> follower.getCurrentTValue() > 0.5)
+                    .addTask(() -> follower.setMaxPower(0.5))
+                    .addTask(()->follower.getCurrentTValue()>0.6)
+                    .addTask(new ShootAutoClose())
+                    .addTask(() -> follower.setMaxPower(1));
         }
 
         @Override
@@ -84,8 +108,10 @@ public class CloseRedOriginal extends Auto {
             command .addTask(Intake::start)
                     .addTask(Storage::start)
                     .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
-                    .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
-                    .waitSeconds(0.1)
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
+                    .addTask(() -> follower.getCurrentTValue() > 0.6)
+                    .addTask(() -> follower.setMaxPower(0.5))
+                    .addTask(()->follower.getCurrentTValue()>0.7)
                     .addTask(new ShootAutoClose());
         }
 
@@ -100,7 +126,8 @@ public class CloseRedOriginal extends Auto {
         Command command;
         public Park() {
             command = new Command(follower);
-            command.lineToConstantAsync(Poses.ClosePoses.parkingSpotdeHandicapati, Math.toRadians(0));
+            command.addTask(() -> follower.setMaxPower(1))
+                    .lineToConstantAsync(Poses.ClosePoses.parkingSpotdeHandicapati, Math.toRadians(0));
         }
         @Override
         public boolean Run() {
@@ -108,15 +135,16 @@ public class CloseRedOriginal extends Auto {
             return command.done();
         }
     }
+    public static double inc=0.0052;
 
     @Override
     public void buildAuto() {
-        pos = 0.834;
+        pos = 0.834+inc;
         velocity = 1600;
-        offset = -3;
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
+                .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())

@@ -30,11 +30,13 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
+import org.firstinspires.ftc.teamcode.util.wrappers.BetterCRServo;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BreakBeam;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
+import org.firstinspires.ftc.teamcode.util.wrappers.RGBIndicator;
 
 import java.util.List;
 
@@ -51,12 +53,13 @@ public class Robot {
     DcMotorControllerEx exExpansionHubMotors;
     public Limelight3A ll;
     public BetterServo hood, blocker;
+    public RGBIndicator ledST,ledDR;
     BreakBeam downLaser, upLaser;
     DigitalChannel middleLaser;
 
     public BetterServoEx turret1, turret2;
     public static GoBildaPinpointDriver odo;
-    public BetterMotorEx intake, transfer, shooter, shooter2, hang,FrontRight,FrontLeft,BackLeft,BackRight;
+    public BetterMotorEx intake, transfer, shooter, shooter2,FrontRight,FrontLeft,BackLeft,BackRight;
     public ServoController controlHubServos, expansionHubServos;
 
     public DigitalChannelController controller;
@@ -157,7 +160,7 @@ public class Robot {
                 .setPFCoefficients(Shooter.pClose, Shooter.fClose);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter2.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     private void assignHardware(){
         Blocker.blocker=blocker;
@@ -170,11 +173,14 @@ public class Robot {
         Storage.bDown=downLaser;
         Storage.bUp=upLaser;
         Storage.laserMiddle=middleLaser;
+        Storage.ledST=ledST;
+        Storage.ledDR=ledDR;
         Intake.motor=intake;
         Drivetrain.leftBack=BackLeft;
         Drivetrain.leftFront=FrontLeft;
         Drivetrain.rightBack=BackRight;
         Drivetrain.rightFront=FrontRight;
+
     }
 
     public void initializeServos(){
@@ -184,6 +190,8 @@ public class Robot {
         turret2.setPwmRange(new PwmControl.PwmRange(500, 2500));
         hood= new BetterServo(controlHubServos, 1);
         blocker = new BetterServo(expansionHubServos, 1);
+        ledST=new RGBIndicator(controlHubServos,5);
+        ledDR=new RGBIndicator(expansionHubServos,5);
     }
 
     public void initializeRest(){

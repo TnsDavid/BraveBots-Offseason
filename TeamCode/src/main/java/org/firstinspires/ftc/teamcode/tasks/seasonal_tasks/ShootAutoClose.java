@@ -16,7 +16,7 @@ public class ShootAutoClose implements Task {
          command.addTask(() -> pos = Shooter.servo.getPosition())
                  .addTask(() -> Shooter.readyForShoot = true)
                  .addTask(Blocker::unblock)
-                 .waitSeconds(0.1)
+                 .waitSeconds(0.05)
                  .addTask(Intake::start)
                  .addTask(Storage::start)
                  .waitSeconds(waitTime)
@@ -24,9 +24,12 @@ public class ShootAutoClose implements Task {
                  .waitSeconds(waitTime2)
                  .addTask(() -> Shooter.servo.setPosition(pos - coef * increment))
                  .waitSeconds(0.05)
-                 .addTask(Blocker::block)
-                 .addTask(Storage::stop)
-                 .addTask(Intake::stop)
+                 .addTask(()->{
+                     Storage.stop();
+                     Intake.stop();
+                     Blocker.block();
+                     return true;
+                 })
                  .addTask(() -> {
                      Storage.status= Storage.Status.EMPTY;
                      Storage.startedTimer = false;
@@ -36,6 +39,7 @@ public class ShootAutoClose implements Task {
                  .addTask(() -> Shooter.servo.setPosition(pos));
 
      }
+     @Override
      public boolean Run() {
          command.update();
          return command.done();

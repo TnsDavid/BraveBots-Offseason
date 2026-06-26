@@ -63,23 +63,4 @@ public class Drivetrain {
         drive(finalX, finalY, rotation);
 
     }
-    public static void setTeleOpMovementVectors(double forwardDrive, double lateralDrive, double heading, boolean robotCentric, double headingOffset) {
-        try {
-            teleopDriveValues[0] = MathFunctions.clamp(forwardDrive, -1, 1);
-            teleopDriveValues[1] = MathFunctions.clamp(lateralDrive, -1, 1);
-            teleopDriveValues[2] = MathFunctions.clamp(heading, -1, 1);
-            teleopDriveVector.setOrthogonalComponents(teleopDriveValues[0], teleopDriveValues[1]);
-            teleopDriveVector.setMagnitude(MathFunctions.clamp(teleopDriveVector.getMagnitude(), 0, 1));
-
-            if (robotCentric) {
-                teleopDriveVector.rotateVector(Robot.robotPose.getHeading());
-            }
-
-            teleopDriveVector.rotateVector(headingOffset);
-
-            teleopHeadingVector.setComponents(teleopDriveValues[2], Robot.robotPose.getHeading());
-        } catch (Exception e) {
-            log.error("e: ", e);
-        }
-    }
 }

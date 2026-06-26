@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 public class Poses {
     public static class ClosePoses {
         public static Pose startingPose = new Pose(107.46622734761114 , 135.22240527182862 , Math.toRadians(270));
-        public static Pose shootPose = new Pose(84.45469522240526 , 82.79406919275122   );
+        public static Pose shootPose = new Pose(84.45469522240526 , 82.79406919275122);
         public static Pose collectSecondSpike = new Pose(124.7858319604613, 59.20922570016476, 0);
         public static Pose collectSecondSpikeCP = new Pose(83.26853377265239, 64.05271828665568);
         public static Pose gateCollect = new Pose(130.84056783759362 , 59.15440638784079, Math.toRadians(31));

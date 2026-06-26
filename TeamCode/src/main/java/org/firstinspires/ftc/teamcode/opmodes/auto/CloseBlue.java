@@ -96,8 +96,8 @@ public class CloseBlue extends Auto {
 
     @Override
     public void buildAuto() {
-        pos = 0.7832;
-        velocity = 1650;
+        pos = 0.834;
+        velocity = 1600;
         follower.setStartingPose(Poses.ClosePoses.startingPose.mirror(144));
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())

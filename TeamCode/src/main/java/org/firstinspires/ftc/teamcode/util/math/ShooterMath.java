@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 @Configurable
 public class ShooterMath {
 
-    public static final double aVClose = -116.65867, bVClose = 800.80404, cVClose = 386.81867;
-    public static final double aHClose = -0.101926, bHClose = 0.585852, cHClose = -0.0537098;
+    public static final double aVClose = 0, bVClose = 160, cVClose = 1104;
+    public static final double aHClose = -0.04, bHClose = 0.2416, cHClose = 0.40116;
     public static double TOFCoef = 1;
 
     public static double maxdegrees = Math.toRadians(60);

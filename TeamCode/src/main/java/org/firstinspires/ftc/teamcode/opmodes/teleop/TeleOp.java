@@ -57,21 +57,21 @@ public abstract class TeleOp extends BetterOpMode {
                     Intake.start();
                     Intake.status= Intake.IntakeStatus.FORCEDINTAKE;
                 },BetterGamepad.Type.PARALLEL);//intake fortat
-        gamepadEx1.getButton(BetterGamepad.Buttons.TRIANGLE)
+        gamepadEx2.getButton(BetterGamepad.Buttons.TRIANGLE)
                 .whenPressed(Blocker::toggle, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.CIRCLE)
-                .whenPressed(Spit::new, BetterGamepad.Type.MAIN);
+                .whenPressed(Spit::new, BetterGamepad.Type.PARALLEL);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_UP)
-                .whenPressed(Drivetrain::toggleControlMethod, BetterGamepad.Type.MAIN);
+                .whenPressed(Drivetrain::toggleControlMethod, BetterGamepad.Type.PARALLEL);
 
         gamepadEx2.getButton(BetterGamepad.Buttons.CROSS)
                 .whenPressed(() -> Shooter.shooterEnabled = !Shooter.shooterEnabled, BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Turret::toggleStatus,  BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_RIGHT)
-                .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.MAIN);
+                .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
-                .whenPressed(() -> Turret.offset += .5, BetterGamepad.Type.MAIN);
+                .whenPressed(() -> Turret.offset += .5, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> {
                     Robot.switchPlayStyle();
@@ -108,11 +108,12 @@ public abstract class TeleOp extends BetterOpMode {
                 }
             }
         });
+        Storage.status = Storage.Status.EMPTY;
     }
 
     @Override
     public void initialize_loop() {
-        Robot.odo.recalibrateIMU();
+
     }
 
     @Override
@@ -128,34 +129,36 @@ public abstract class TeleOp extends BetterOpMode {
 
     long now, last, dt;
     double pos;
-    //volatile double slow;
+    volatile double slow;
+
+    boolean rumbleIN = false, rumbleOUT = false;
     @Override
     public void active_loop() {
-        // slow= gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER);
+        slow= gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER);
         now = System.nanoTime();
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-        Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
 
         telemetry.addData("playstyle", Robot.playStyle);
-        telemetry.addData("robot centric", Drivetrain.robotCentric);
-        telemetry.addLine( "------------------");
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());
         telemetry.addData("heading", Robot.robotPose.getHeading());
         telemetry.addData("dist", Turret.dist);
-        telemetry.addData("bm up" , Storage.bUp.getBeamState());
-        telemetry.addData("bm down" , Storage.bDown.getBeamState());
-        telemetry.addLine("-------------------");
-        telemetry.addData("moving", Turret.sotm);
         telemetry.addData("velocity", Shooter.velocity);
         telemetry.addData("curr vel", Shooter.motor1.getVelocity());
-        telemetry.addData("shooter enb", Shooter.shooterEnabled);
         telemetry.addData("hood pos", Shooter.servo.getPosition());
-        telemetry.addData("status" , Storage.status);
-        telemetry.addData("TOF", Turret.TOF);
-        telemetry.addData("blocker blocked?", Blocker.blocked);
+
+        if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
+            gamepad1.rumble(300);
+            rumbleIN = true;
+            rumbleOUT = false;
+        }
+        if(Storage.status == Storage.Status.EMPTY && !rumbleOUT){
+            gamepad1.rumble(300);
+            rumbleIN = false;
+            rumbleOUT = true;
+        }
 
         Intake.update();
         Storage.update2();

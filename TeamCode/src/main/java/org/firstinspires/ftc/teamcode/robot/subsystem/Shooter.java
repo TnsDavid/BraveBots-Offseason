@@ -19,9 +19,9 @@ public class Shooter {
     public static double velocity=0;
     public static BetterServo servo;
     public static boolean readyForShoot = false;
-    public static double pClose= -0.0075,fClose = 0.77;
+    public static double pClose= 0.0075,fClose = 0.77;
     //public static double pFar = -0.004 , fFar = 0.9, s = 0.1;
-    public static double pFar = -0.0075 , fFar = 0.77, s = 0.1;
+    public static double pFar = 0.0075 , fFar = 0.77, s = 0.1;
 
     public static void setCoefs() {
         double pFinal , fFinal ;
@@ -42,8 +42,8 @@ public class Shooter {
         if (shooterEnabled){
             double virtualDistt = Turret.virtualDist;
             if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
-                velocity = ShooterMath.calculateVelocity(virtualDistt);
-                hoodPos = ShooterMath.calculateHoodAngle(virtualDistt) + 0.0082;
+                velocity = ShooterMath.calculateVelocity(Turret.virtualDist);
+                hoodPos = ShooterMath.calculateHoodAngle(Turret.virtualDist) + 0.0082;
             }
             else {
                 velocity=velocityFAR;

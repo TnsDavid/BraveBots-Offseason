@@ -150,7 +150,7 @@ public class Command {
     public Command lineToConstantSync(Pose p, double heading){
         if(f== null)
             throw new IllegalArgumentException("Follower not set");
-        list.addLast(new LineToConstantSync(f, p));
+        list.addLast(new LineToConstantSync(f, p, heading));
         return this;
     }
     public Command lineToLinearAsync(Pose p){

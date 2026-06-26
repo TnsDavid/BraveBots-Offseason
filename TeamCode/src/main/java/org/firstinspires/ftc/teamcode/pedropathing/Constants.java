@@ -24,14 +24,15 @@ public class Constants {
     public static double xOffset = -4.02, yOffset = 0.944;//0.98
 
     public static final double odometryResolution = 34.310551 * 25.4; //ticks per mm *
-    public static double kp = 0.096, kquad = 0.001624282188277547, klinear = 0.08991429266679882;
+   // public static double kp = 0.096, kquad = 0.001624282188277547, klinear = 0.08991429266679882;
+    public static double kp = 0.22, kquad = 8.0835216117517028E-4, klinear = 0.110305361687285;
     public static double p = 0, i = 0, d = 0, f= 0;
     public static double nominalvoltage = 11;
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(12.48)
             .forwardZeroPowerAcceleration(-24.26)
             .lateralZeroPowerAcceleration(-53.7)
-            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad).withMaximumBrakingPower(0.3))
+            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(kp,klinear,kquad).withMaximumBrakingPower(0.2))
             .headingPIDFCoefficients(new PIDFCoefficients(1.2, 0, 0.06, 0.01))
             .centripetalScaling(0)
             //.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0087 , 0 , 0.0005 , 0 , 0.03))

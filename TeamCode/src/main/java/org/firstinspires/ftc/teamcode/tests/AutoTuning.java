@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Hang;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
@@ -19,7 +20,7 @@ public class AutoTuning extends BetterOpMode {
     @Override
     public void initialize() {
         r = new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
-        Turret.setNeutralPosition(0.5);
+        //Turret.setNeutralPosition(0);
         gamepadEx1.getButton(BetterGamepad.Buttons.CROSS)
                 .whenPressed(Intake::toggle, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
@@ -36,8 +37,10 @@ public class AutoTuning extends BetterOpMode {
     @Override
     public void active_loop() {
         Turret.setNeutralPosition(Turret.getPositon() + 0.01 * gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_X));
-        Shooter.motor1.update(Shooter.velocity);
-        Shooter.motor2.update(Shooter.velocity);
+        //if( !Hang.raised) Hang.setPower(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER));
+
+        //Shooter.motor1.update(Shooter.velocity);
+        //Shooter.motor2.update(Shooter.velocity);
         Shooter.servo.setPosition(Shooter.servo.getPosition() + 0.02 * (gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)));
 
         Intake.update();

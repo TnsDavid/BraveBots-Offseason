@@ -41,16 +41,21 @@ public class Shoot implements Task {
                     double cf = Robot.playStyle == Robot.PlayStyle.CLOSE ? coef : coefFar;
                     if(!Turret.sotm) Shooter.servo.setPosition(pos-cf* inc);
                 })
-                .waitSeconds(0.4)
-                .addTask(Storage::stop)
-                .addTask(Intake::stop)
-                .addTask(Blocker::block)
+                .addTask(() -> Storage.status.equals(Storage.Status.EMPTY))
+                .waitSeconds(0.05)
+                .addTask(()->{
+                    Storage.stop();
+                    Intake.stop();
+                    Blocker.block();
+                    return true;
+                })
                 .addTask(() -> {
                     Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
                     Storage.status= Storage.Status.EMPTY;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;
                     Turret.checkedStatus = false;
+                    return true;
                 })
                 .addTask(()-> Shooter.servo.setPosition(pos));
     }
