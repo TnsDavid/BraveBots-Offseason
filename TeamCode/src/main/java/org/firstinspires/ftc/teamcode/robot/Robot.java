@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -25,12 +23,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
-import org.firstinspires.ftc.teamcode.robot.subsystem.Hang;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
-import org.firstinspires.ftc.teamcode.util.wrappers.BetterCRServo;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
@@ -44,7 +40,7 @@ import java.util.List;
 
 public class Robot {
     public static Pose robotPose;
-
+    public static final double nominalVoltage = 11.05;
     public static double odometryResolution = 34.310551; //ticks/mm*mm/inch = ticks/inch
     public static VoltageSensor voltageSensor;
     List<LynxModule> hubs;
@@ -66,7 +62,7 @@ public class Robot {
     public AnalogInputController expansionHubAnalogInputController, controlHubAnalogInputController;
     public HardwareMap hm;
     public Telemetry t;
-    public static Alliance a= null;
+    public static Alliance alliance = null;
 
     public Robot(HardwareMap hm, Telemetry t){
         this.hm= hm;
@@ -93,11 +89,11 @@ public class Robot {
     public Robot(HardwareMap hm, Telemetry t, Alliance a){
         this.hm= hm;
         this.t= t;
-        this.a= a;
+        this.alliance = a;
     }
     public Robot(HardwareMap hm, Alliance a){
         this.hm= hm;
-        this.a= a;
+        this.alliance = a;
     }
     public double dtlength=.356;//metri
     public double dtwidth=.414;//metri
@@ -112,14 +108,14 @@ public class Robot {
     }
     public void resetPinPoint() {
         odo.setPosX(playStyle == PlayStyle.FAR ?
-                ( a == Alliance.RED ? dtwidth / 2 : (3.65 - (dtwidth / 2)) ) :
-                ( a == Alliance.RED ? (3.65 - classifierWidth - dtlength / 2 - intakeWidth) : (classifierWidth + dtlength / 2 + intakeWidth) ), DistanceUnit.METER);
+                ( alliance == Alliance.RED ? dtwidth / 2 : (3.65 - (dtwidth / 2)) ) :
+                ( alliance == Alliance.RED ? (3.65 - classifierWidth - dtlength / 2 - intakeWidth) : (classifierWidth + dtlength / 2 + intakeWidth) ), DistanceUnit.METER);
         odo.setPosY(playStyle == PlayStyle.FAR ?
                 ( dtlength / 2 ) :
                 ( 2.00 ), DistanceUnit.METER);
         odo.setHeading(playStyle == PlayStyle.FAR ?
                 ( Math.toRadians(90) ):
-                ( a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180) ), AngleUnit.RADIANS);
+                ( alliance == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180) ), AngleUnit.RADIANS);
         robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
     }
     public void initializeControllers() {
@@ -166,7 +162,7 @@ public class Robot {
         Blocker.blocker=blocker;
         Turret.turret1=turret1;
         Turret.turret2=turret2;
-        Shooter.servo=hood;
+        Shooter.hoodServo =hood;
         Shooter.motor1=shooter;
         Shooter.motor2=shooter2;
         Storage.transfer=transfer;
@@ -198,6 +194,7 @@ public class Robot {
         if(opModeType== null)
             throw new IllegalArgumentException("OpMode type nesetat");
         if(opModeType== OpModeType.TELEOP) {
+            odo.resetPosAndIMU();
             odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
             odo.setOffsets(Constants.yOffset, Constants.xOffset, DistanceUnit.INCH);
             odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
@@ -229,7 +226,7 @@ public class Robot {
         }
 
     }
-    public Robot initialize()
+    public Robot  initialize()
     {
         hubs= hm.getAll(LynxModule.class);
         hubs.forEach((hub)-> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));

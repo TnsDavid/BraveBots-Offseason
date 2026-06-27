@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 public class Shoot implements Task {
     private Command s;
 
-    public static double coef = 1.35, coefFar = 1.4,totalShootTime=0.05, increment= 0.0082, waitTime= 0.01, waitTime2= 0.02, incrementFar = 0.08, inc;
+    public static double coef = 1.35, coefFar = 1.4,totalShootTime=0.05, increment= 0.0082, waitTime= 0.01, waitTime2= 0.02, incrementFar = 0.04, inc;
 
 
     public double pos;
@@ -24,7 +24,7 @@ public class Shoot implements Task {
 
     public Shoot(){
         s= new Command()
-                .addTask(() -> pos = Shooter.servo.getPosition())
+                .addTask(() -> pos = Shooter.hoodServo.getPosition())
                 .addTask(() ->Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.1)
@@ -34,12 +34,12 @@ public class Shoot implements Task {
                 .addTask(() -> Storage.status.equals(Storage.Status.TWOBALL)||(timer.seconds()>totalShootTime))
                 .addTask(()->{
                     inc = Robot.playStyle == Robot.PlayStyle.CLOSE ? increment : incrementFar;
-                    if(!Turret.sotm) Shooter.servo.setPosition(pos- inc);
+                    if(!Turret.sotm) Shooter.hoodServo.setPosition(pos- inc);
                 })
                 .addTask(() -> Storage.status.equals(Storage.Status.ONEBALL)||(timer.seconds()>totalShootTime))
                 .addTask(()->{
                     double cf = Robot.playStyle == Robot.PlayStyle.CLOSE ? coef : coefFar;
-                    if(!Turret.sotm) Shooter.servo.setPosition(pos-cf* inc);
+                    if(!Turret.sotm) Shooter.hoodServo.setPosition(pos-cf* inc);
                 })
                 .addTask(() -> Storage.status.equals(Storage.Status.EMPTY))
                 .waitSeconds(0.05)
@@ -57,7 +57,7 @@ public class Shoot implements Task {
                     Turret.checkedStatus = false;
                     return true;
                 })
-                .addTask(()-> Shooter.servo.setPosition(pos));
+                .addTask(()-> Shooter.hoodServo.setPosition(pos));
     }
 
     @Override

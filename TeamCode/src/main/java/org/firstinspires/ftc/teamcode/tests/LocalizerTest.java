@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.tests;
 
-import static org.firstinspires.ftc.teamcode.robot.Robot.a;
+import static org.firstinspires.ftc.teamcode.robot.Robot.alliance;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -28,9 +26,9 @@ public class LocalizerTest extends LinearOpMode {
         r = new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
         Turret.turret1.setPosition(0.5);
         Turret.turret2.setPosition(0.5);
-        Shooter.servo.setPosition(Shooter.minHoodpos);
+        Shooter.hoodServo.setPosition(Shooter.minHoodpos);
         f= Constants.createFollower(hardwareMap);
-        Pose resetPose = new Pose ((a == Alliance.RED ? dtwidth / 2 * 39.37 : (3.65 - (dtwidth / 2)) * 39.37) , (dtlength / 2 ) * 39.37 , Math.toRadians(90));
+        Pose resetPose = new Pose ((alliance == Alliance.RED ? dtwidth / 2 * 39.37 : (3.65 - (dtwidth / 2)) * 39.37) , (dtlength / 2 ) * 39.37 , Math.toRadians(90));
         waitForStart();
         while(opModeIsActive()){
             r.update();

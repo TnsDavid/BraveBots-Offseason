@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.RGBIndicator;
 
 @Configurable
 public class Storage {
+    public static double ultraClosePower =0.961, closePower =0.904, farPower = 0.5;
     public static BetterMotorEx transfer;
     public static RGBIndicator ledST,ledDR;
     public static BreakBeam bUp, bDown;
@@ -35,7 +36,6 @@ public class Storage {
     public static double startPower = 1;
     public static ActiveStatus activeStatus = ActiveStatus.NOTRANSFER;
     public static void start() {
-        transfer.setPower(startPower);
         activeStatus = ActiveStatus.TRANSFER;
     }
     public static void lowerPower() {
@@ -101,6 +101,7 @@ public class Storage {
         }
 
         setColour(colour);
+
     }
     public static boolean started=false;
     public static int valids = 0;
@@ -144,11 +145,17 @@ public class Storage {
             last=System.currentTimeMillis();
         }
         if(Robot.playStyle== Robot.PlayStyle.CLOSE){
-            if(Turret.dist <= 2.225) startPower = 0.85;
-            else startPower = 0.8;
+            if(Turret.dist <= 2.225) startPower = ultraClosePower;
+            else startPower = closePower;
         }
-        else startPower=0.7;
+        else startPower=farPower;
+        double currentVoltage=Robot.voltageSensor.getVoltage();
+        startPower=startPower*(Robot.nominalVoltage/currentVoltage);
+        if(activeStatus==ActiveStatus.TRANSFER) transfer.setPower(startPower);
+        else transfer.setPower(0);
+
     }
+
 
     public static void updateAuto(){
         if(!Shooter.readyForShoot){

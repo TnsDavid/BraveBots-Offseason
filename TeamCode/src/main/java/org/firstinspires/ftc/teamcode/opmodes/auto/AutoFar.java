@@ -4,7 +4,6 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -16,7 +15,6 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
-import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
 
 public abstract class AutoFar extends BetterOpMode {
 
@@ -28,6 +26,7 @@ public abstract class AutoFar extends BetterOpMode {
     public abstract void setAlliance();
     public Robot robot;
     public double offset = -3.5;
+    public double turretpos;
 
     @Override
     public void initialize() {
@@ -36,13 +35,16 @@ public abstract class AutoFar extends BetterOpMode {
                 .setPlayStyle(Robot.PlayStyle.FAR)
                 .setOpModeType(Robot.OpModeType.AUTO)
                 .initialize();
+        sleep(500);
+        turretpos= Robot.alliance==Alliance.RED? .1895 : 0.81;
+        Turret.setNeutralPosition(turretpos);
         LLMath.init(hardwareMap);
         follower= Constants.createFollower(hardwareMap);
         auto= new Command(follower);
         pos = Shooter.hoodFAR;
         Shooter.shooterEnabled = true;
         Shooter.velocity =Shooter.velocityFAR;
-        Shooter.servo.setPosition(Shooter.hoodFAR);
+        Shooter.hoodServo.setPosition(Shooter.hoodFAR);
         buildAuto();
     }
 
@@ -74,12 +76,11 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.addData("cond", Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - ShootFar.treshhold);
         telemetry.addData("alliance", alliance);
         telemetry.update();
-
         Shooter.shooterEnabled = true;
-        Shooter.servo.setPosition(Shooter.hoodFAR);
-        Shooter.motor1.update(Shooter.velocityFAR);
-        Shooter.motor2.update(Shooter.velocityFAR);
-        Storage.update();
+        Shooter.hoodServo.setPosition(Shooter.hoodFAR);
+        Shooter.tuningUpdate(Shooter.velocityFAR);
+
+        Storage.update2();
         Intake.update();
     }
 

@@ -48,7 +48,6 @@ public class Test extends BetterOpMode {
     @Override
     public void initialize_loop() {
         Blocker.block();
-        Shooter.setCoefs();
     }
     @Override
     public void on_start() {
@@ -62,8 +61,7 @@ public class Test extends BetterOpMode {
         telemetry.addData("hz", 1e9 / dt);
         last = now;
         //Turret.setNeutralPosition();
-        Shooter.servo.setPosition(Range.clip(Shooter.servo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
-        Shooter.setCoefs();
+        Shooter.hoodServo.setPosition(Range.clip(Shooter.hoodServo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
         if(gamepad1.crossWasPressed()) Intake.toggle();
         if(gamepad1.triangleWasPressed()) Blocker.toggle();
@@ -73,13 +71,12 @@ public class Test extends BetterOpMode {
         if(gamepad1.shareWasPressed()) Robot.switchPlayStyle();
         Drivetrain.betterDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         if( shooterEnabled ) {
-            Shooter.motor1.update(Shooter.velocity);
-            Shooter.motor2.update(Shooter.velocity);
+            Shooter.tuningUpdate(Shooter.velocity);
         } else
             Shooter.setPower(0);
         telemetry.addData("velocity", Shooter.motor1.getVelocity());
         telemetry.addData("target velocity", Shooter.velocity);
-        telemetry.addData("hood pos", Shooter.servo.getPosition());
+        telemetry.addData("hood pos", Shooter.hoodServo.getPosition());
         telemetry.addData("shooter enabled", shooterEnabled);
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());

@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.tests;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.firstinspires.ftc.teamcode.robot.subsystem.Hang;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
@@ -41,12 +39,12 @@ public class AutoTuning extends BetterOpMode {
 
         //Shooter.motor1.update(Shooter.velocity);
         //Shooter.motor2.update(Shooter.velocity);
-        Shooter.servo.setPosition(Shooter.servo.getPosition() + 0.02 * (gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)));
+        Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.02 * (gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)));
 
         Intake.update();
         Storage.update();
         telemetry.addData("turret", Turret.getPositon());
-        telemetry.addData("hood", Shooter.servo.getPosition());
+        telemetry.addData("hood", Shooter.hoodServo.getPosition());
         telemetry.update();
         r.update();
 

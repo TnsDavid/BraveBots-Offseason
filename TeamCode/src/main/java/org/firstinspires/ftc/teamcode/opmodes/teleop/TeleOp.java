@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.follower.Follower;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -72,11 +71,13 @@ public abstract class TeleOp extends BetterOpMode {
                 .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
                 .whenPressed(() -> Turret.offset += .5, BetterGamepad.Type.PARALLEL);
+        gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_UP)
+                .whenPressed(() -> Turret.offset += 2, BetterGamepad.Type.PARALLEL);
+        gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_DOWN)
+                .whenPressed(() -> Turret.offset -= 2, BetterGamepad.Type.PARALLEL);
+
         gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
-                .whenPressed(() -> {
-                    Robot.switchPlayStyle();
-                    Shooter.setCoefs();
-                }, BetterGamepad.Type.MAIN);
+                .whenPressed(Robot::switchPlayStyle, BetterGamepad.Type.MAIN);
 
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
@@ -113,7 +114,7 @@ public abstract class TeleOp extends BetterOpMode {
 
     @Override
     public void initialize_loop() {
-
+        Blocker.block();
     }
 
     @Override
@@ -145,9 +146,12 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("y", Robot.robotPose.getY());
         telemetry.addData("heading", Robot.robotPose.getHeading());
         telemetry.addData("dist", Turret.dist);
-        telemetry.addData("velocity", Shooter.velocity);
+        telemetry.addData(" target velocity", Shooter.velocity);
         telemetry.addData("curr vel", Shooter.motor1.getVelocity());
-        telemetry.addData("hood pos", Shooter.servo.getPosition());
+        telemetry.addData("hood pos", Shooter.hoodServo.getPosition());
+        telemetry.addData("robotCentric", Drivetrain.robotCentric);
+        telemetry.addData("blocker", Blocker.blocked);
+        telemetry.addData("blocker at pos", Blocker.atPosition());
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
             gamepad1.rumble(300);
@@ -159,6 +163,8 @@ public abstract class TeleOp extends BetterOpMode {
             rumbleIN = false;
             rumbleOUT = true;
         }
+
+        if(!Shooter.readyForShoot) Blocker.block();
 
         Intake.update();
         Storage.update2();

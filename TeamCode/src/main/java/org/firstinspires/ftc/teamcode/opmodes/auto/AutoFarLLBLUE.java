@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
 @Autonomous
 public class AutoFarLLBLUE extends AutoFar{
+    double fieldLength = 140;
+
     public class HPCollect implements Task {
         Command s;
 
@@ -27,7 +29,7 @@ public class AutoFarLLBLUE extends AutoFar{
                     .addTask(()-> Turret.setNeutralPosition(0.821))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToConstantSync(Poses.FarPoses.HpCollectPoseCP.mirror(), Poses.FarPoses.HPCollectPose.mirror(), Poses.FarPoses.HPCollectPose.mirror().getHeading())
+                    .curveToConstantSync(Poses.FarPoses.HpCollectPoseCP.mirror(fieldLength), Poses.FarPoses.HPCollectPose.mirror(fieldLength), Poses.FarPoses.HPCollectPose.mirror(fieldLength).getHeading())
                     .addTask(()->follower.getCurrentTValue()>0.75)
                     .addTask(()->SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.setMaxPower(0.8))
@@ -35,7 +37,7 @@ public class AutoFarLLBLUE extends AutoFar{
                     .waitSeconds(0.4)
                     .addTask(()->follower.setMaxPower(1))
                     .addTask(() -> !follower.isBusy())
-                    .lineToConstantAsync(Poses.FarPoses.shootPose.mirror(), Poses.FarPoses.shootPose.mirror().getHeading())
+                    .lineToConstantAsync(Poses.FarPoses.shootPose.mirror(fieldLength), Poses.FarPoses.shootPose.mirror(fieldLength).getHeading())
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
@@ -55,12 +57,12 @@ public class AutoFarLLBLUE extends AutoFar{
                     .addTask(()-> Turret.setNeutralPosition(0.821))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToConstantSync(Poses.FarPoses.spikeCollectCP.mirror(), Poses.FarPoses.spikeCollectPose.mirror(),Math.toRadians(180))
+                    .curveToConstantSync(Poses.FarPoses.spikeCollectCP.mirror(fieldLength), Poses.FarPoses.spikeCollectPose.mirror(fieldLength),Math.toRadians(180))
                     .addTask(() -> follower.getCurrentTValue() > 0.7)
                     .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(() -> !follower.isBusy())
                     .addTask(() -> follower.setMaxPower(1))
-                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(), Poses.FarPoses.shootPoseScan.mirror().getHeading())
+                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(fieldLength), Poses.FarPoses.shootPoseScan.mirror(fieldLength).getHeading())
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
@@ -77,7 +79,7 @@ public class AutoFarLLBLUE extends AutoFar{
         ElapsedTime SmartCollectTimer;
         public CycleCollect() {
             s = new Command(follower)
-                    .addTask(()-> Turret.setNeutralPosition(0.821))
+                    //.addTask(()-> Turret.setNeutralPosition(0.821))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> LLMath.scan(follower))
@@ -86,7 +88,7 @@ public class AutoFarLLBLUE extends AutoFar{
                     .addTask(() ->(!follower.isBusy()||SmartCollectTimer.seconds()>1.3))
                     .waitSeconds(0.25)
                     .addTask(()->follower.setMaxPower(1))
-                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(), Poses.FarPoses.shootPose.mirror().getHeading())
+                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(fieldLength), Poses.FarPoses.shootPose.mirror(fieldLength).getHeading())
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
@@ -105,7 +107,7 @@ public class AutoFarLLBLUE extends AutoFar{
                     .addTask(() -> follower.setMaxPower(1))
                     .addTask(Intake::stop)
                     .addTask(Storage::stop)
-                    .lineToConstantSync(Poses.FarPoses.leave.mirror(), Poses.FarPoses.leave.mirror().getHeading());
+                    .lineToConstantSync(Poses.FarPoses.leave.mirror(fieldLength), Poses.FarPoses.leave.mirror(fieldLength).getHeading());
         }
 
         @Override
@@ -117,8 +119,10 @@ public class AutoFarLLBLUE extends AutoFar{
 
     @Override
     public void buildAuto(){
-        follower.setStartingPose(Poses.FarPoses.startingPose.mirror());
-        auto.addTask(new ShootFar())
+        follower.setStartingPose(Poses.FarPoses.startingPose.mirror(fieldLength));
+        auto
+                //.addTask(() -> Turret.setNeutralPosition(0.81))
+                .addTask(new ShootFar())
                 .addTask(new HPCollect())
                 .addTask(new SpikeCollect())
                 .addTask(new CycleCollect())

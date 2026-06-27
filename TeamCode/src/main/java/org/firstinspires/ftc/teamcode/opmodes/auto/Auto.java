@@ -4,20 +4,16 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
-import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
-
-import java.util.LinkedList;
 
 public abstract class Auto extends BetterOpMode {
 
@@ -29,7 +25,7 @@ public abstract class Auto extends BetterOpMode {
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
-    public double offset = -1.5;
+    public double offset;
 
     @Override
     public void initialize() {
@@ -38,11 +34,13 @@ public abstract class Auto extends BetterOpMode {
                 .setOpModeType(Robot.OpModeType.AUTO)
                 .setPlayStyle(Robot.PlayStyle.CLOSE)
                 .initialize();
+        sleep(500);
         Turret.setNeutralPosition(0.5);
         follower= Constants.createFollower(hardwareMap);
         Storage.status = Storage.Status.EMPTY;
         Shooter.shooterEnabled = false;
         auto= new Command(follower);
+        offset = Robot.alliance == Alliance.RED ? -1.5 : 1.5;
         buildAuto();
     }
 
@@ -55,7 +53,7 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
         telemetry.update();
-        Shooter.servo.setPosition(pos);
+        Shooter.hoodServo.setPosition(pos);
     }
 
     @Override
@@ -83,11 +81,10 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("veloY", velo.getYComponent());
         telemetry.update();
         if(!Shooter.shooterEnabled){
-            Shooter.motor1.update(velocity);
-            Shooter.motor2.update(velocity);
-            if(!Shooter.readyForShoot) Shooter.servo.setPosition(pos);
+            Shooter.tuningUpdate(velocity);
+            if(!Shooter.readyForShoot) Shooter.hoodServo.setPosition(pos);
         }else Shooter.updateAuto();
-        Storage.updateAuto();
+        Storage.update2();
     }
 
     @Override

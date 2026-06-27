@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.tasks.seasonal_tasks;
 
-import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
@@ -25,11 +24,11 @@ public class ShootFar implements Task {
                 .addTask(Storage::start)
                 .waitSeconds(waitTime)
                 .addTask(()->{
-                    Shooter.servo.setPosition(Shooter.hoodFAR- incrementFar);
+                    Shooter.hoodServo.setPosition(Shooter.hoodFAR- incrementFar);
                 })
                 .waitSeconds(waitTime2)
                 .addTask(()->{
-                    Shooter.servo.setPosition(Shooter.hoodFAR-coefFar* incrementFar);
+                    Shooter.hoodServo.setPosition(Shooter.hoodFAR-coefFar* incrementFar);
                 })
                 .waitSeconds(1)
                 .addTask(Blocker::block)
@@ -40,7 +39,7 @@ public class ShootFar implements Task {
                     Shooter.readyForShoot = false;
                     Turret.checkedStatus = false;
                 })
-                .addTask(()-> Shooter.servo.setPosition(Shooter.hoodFAR));    }
+                .addTask(()-> Shooter.hoodServo.setPosition(Shooter.hoodFAR));    }
     @Override
     public boolean Run() {
         command.update();

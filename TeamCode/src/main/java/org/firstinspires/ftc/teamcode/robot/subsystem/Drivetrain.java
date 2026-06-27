@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
-import com.pedropathing.math.MathFunctions;
 import com.pedropathing.math.Vector;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.firstinspires.ftc.teamcode.tests.TestFCDrivetrain;
-import org.firstinspires.ftc.teamcode.util.math.Vector2D;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +44,10 @@ public class Drivetrain {
 
     public static void betterDrive(double rawX, double rawY, double rotation) {
         double finalX, finalY;
-        double influentaRotatiei = Robot.a == Alliance.RED ? 1 : -1;
+        double influentaRotatiei = Robot.alliance == Alliance.RED ? 1 : -1;
         if( !robotCentric ) {
             double robotHeading = Robot.odo.getHeading(AngleUnit.RADIANS);
-            finalX = (rawX * Math.cos(-robotHeading) - rawY * Math.sin(-robotHeading)) *  influentaRotatiei;
+            finalX = (rawX * Math.cos(-robotHeading) - rawY * Math.sin(-robotHeading)) * influentaRotatiei;
             finalY = (rawX * Math.sin(-robotHeading) + rawY * Math.cos(-robotHeading)) * influentaRotatiei;
         }
         else {

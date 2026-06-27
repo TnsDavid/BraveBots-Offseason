@@ -13,16 +13,16 @@ public class ShootAutoClose implements Task {
      public double pos, coef = 1.35, increment = 0.082, waitTime = 0.01, waitTime2 = 0.02;
      public ShootAutoClose() {
          command = new Command();
-         command.addTask(() -> pos = Shooter.servo.getPosition())
+         command.addTask(() -> pos = Shooter.hoodServo.getPosition())
                  .addTask(() -> Shooter.readyForShoot = true)
                  .addTask(Blocker::unblock)
                  .waitSeconds(0.05)
                  .addTask(Intake::start)
                  .addTask(Storage::start)
                  .waitSeconds(waitTime)
-                 .addTask(() -> Shooter.servo.setPosition(pos - increment))
+                 .addTask(() -> Shooter.hoodServo.setPosition(pos - increment))
                  .waitSeconds(waitTime2)
-                 .addTask(() -> Shooter.servo.setPosition(pos - coef * increment))
+                 .addTask(() -> Shooter.hoodServo.setPosition(pos - coef * increment))
                  .waitSeconds(0.05)
                  .addTask(()->{
                      Storage.stop();
@@ -36,7 +36,7 @@ public class ShootAutoClose implements Task {
                      Shooter.readyForShoot = false;
                      Turret.checkedStatus = false;
                  })
-                 .addTask(() -> Shooter.servo.setPosition(pos));
+                 .addTask(() -> Shooter.hoodServo.setPosition(pos));
 
      }
      @Override

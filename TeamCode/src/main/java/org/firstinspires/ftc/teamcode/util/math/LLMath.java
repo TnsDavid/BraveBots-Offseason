@@ -11,9 +11,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.opmodes.auto.Poses;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -140,10 +138,11 @@ public class LLMath {
                 update();
                 Pose robotRelPose = getBestRobotRelativePose();
                 Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
-                optimalPose = new Pose((Robot.a == Alliance.RED ? (fieldRelPose.getX() - robotLength / 2 + 2) : (fieldRelPose.getX() + robotLength/2) - 2) + 5, (fieldRelPose.getY() - 5 >= 3) ? (fieldRelPose.getY() - 5) : fieldRelPose.getY() , flw.getHeading() + Math.toRadians(5));
+                //optimalPose = new Pose((Robot.alliance == Alliance.RED ? (fieldRelPose.getX() - robotLength / 2 ): (fieldRelPose.getX() + robotLength/2))+5, (fieldRelPose.getY() - 5 >= 3) ? (fieldRelPose.getY() - 5) : fieldRelPose.getY() , flw.getHeading() + Math.toRadians(5));
+                optimalPose = new Pose((Robot.alliance == Alliance.RED ? ((fieldRelPose.getX() - robotLength / 2)+3) : ((fieldRelPose.getX() + robotLength/2) - 3)) ,fieldRelPose.getY() , Robot.alliance==Alliance.RED? 0 : 180);
             }
         Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
-        path.setConstantHeadingInterpolation(Robot.a == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
+        path.setConstantHeadingInterpolation(Robot.alliance == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));
         flw.followPath(path);
         return true;
     }

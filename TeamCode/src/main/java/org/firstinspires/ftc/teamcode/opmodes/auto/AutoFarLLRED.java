@@ -73,7 +73,7 @@ public class AutoFarLLRED extends AutoFar{
         ElapsedTime SmartCollectTimer;
         public CycleCollect() {
             s = new Command(follower)
-                    .addTask(() -> Turret.setNeutralPosition(0.155))
+                    .addTask(() -> Turret.setNeutralPosition(0.158))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> LLMath.scan(follower))
@@ -115,7 +115,8 @@ public class AutoFarLLRED extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
-        auto.addTask(() -> Turret.setNeutralPosition(0.1895))
+        auto
+                .addTask(() -> Turret.setNeutralPosition(0.1895))
                 .addTask(new ShootFar())
                 .addTask(new HPCollect())
                 .addTask(new SpikeCollect())

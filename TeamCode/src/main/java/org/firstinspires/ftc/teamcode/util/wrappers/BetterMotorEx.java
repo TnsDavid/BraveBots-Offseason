@@ -105,16 +105,15 @@ public class BetterMotorEx extends DcMotorImplEx implements DcMotorEx, HardwareD
     private double lastPower= 0;
     public double output;
     public static double nominalvoltage = 11;
-
-    public void update(double targetVelocity){
-            this.targetVelocity=targetVelocity;
-            double velocity= super.getVelocity();
-            double currentvoltage= Robot.voltageSensor.getVoltage();
-            double velocityCompensationFactor = currentvoltage < nominalvoltage ? nominalvoltage / currentvoltage : 1;
-            double pid=controller.calculate(velocity,targetVelocity)+s+f * targetVelocity / maxVelocity;
-            output=pid*velocityCompensationFactor;
-            setPower(output);
-    }
+    //double currentvoltage= Robot.voltageSensor.getVoltage();
+//    public void update(double targetVelocity){
+//            this.targetVelocity=targetVelocity;
+//            double velocity= super.getVelocity();
+//            double velocityCompensationFactor = currentvoltage < nominalvoltage ? nominalvoltage / currentvoltage : 1;
+       //     double pid=controller.calculate(velocity,targetVelocity)+s+f * targetVelocity / maxVelocity;
+//            output=pid*velocityCompensationFactor;
+//            setPower(output);
+//    }
 
 
     public void resetEncoder(){

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
 
-@Autonomous(name = "Close Blue", group = "Auto")
+//@Autonomous(name = "Close Blue", group = "Auto")
 @NotVibeCoded
 public class CloseBlue extends Auto {
 

@@ -15,18 +15,17 @@ import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
 @Autonomous(name = "Close Red", group = "Auto")
 @NotVibeCoded
 public class CloseRedOriginal extends Auto {
-
-
     public class ShootPreload implements Task {
         Command command;
 
         public ShootPreload(){
             command = new Command(follower);
-            command.lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
+            command.addTask(() -> Shooter.shooterEnabled = true)
+                    .lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
                     .addTask(() -> follower.getCurrentTValue() > 0.75)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(new ShootAutoClose())
-                    .addTask(() -> Shooter.shooterEnabled = true);
+                    .addTask(new ShootAutoClose());
+
         }
         @Override
         public boolean Run() {
@@ -81,11 +80,11 @@ public class CloseRedOriginal extends Auto {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .lineToLinearSync(Poses.ClosePoses.gateCollect)
-                    .addTask(() -> follower.getCurrentTValue() >= 0.8)
-                    .addTask(() -> follower.setMaxPower(0.7))
+                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP,Poses.ClosePoses.gateCollect,0.6)/// ////////
+                    .addTask(() -> follower.getCurrentTValue() >= 0.5)/// ///////
+                    .addTask(() -> follower.setMaxPower(0.6))/// ///////
                     .addTask(() -> time = new ElapsedTime())
-                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1400))
+                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1500))
                     .addTask(() -> follower.setMaxPower(1))
                     .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
@@ -126,7 +125,7 @@ public class CloseRedOriginal extends Auto {
         Command command;
         public Park() {
             command = new Command(follower);
-            command.addTask(() -> follower.setMaxPower(1))
+            command.addTask(() -> follower.setMaxPower(0.6))
                     .lineToConstantAsync(Poses.ClosePoses.parkingSpotdeHandicapati, Math.toRadians(0));
         }
         @Override
@@ -144,7 +143,6 @@ public class CloseRedOriginal extends Auto {
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
-                .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
