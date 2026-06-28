@@ -29,7 +29,7 @@ public class Shooter {
     }
     public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=1960, closeInc = 0.0082;
     //public static double hoodFAR=0.937;
-    public static double hoodFAR=0.945;
+    public static double hoodFAR=0.945 , hoodFarAuto = 0.92;
           //  public static double hoodFAR=0.8494;
     public static double offset=0, velocityThreshold = 60;
     public static boolean shooterEnabled = false;
@@ -41,8 +41,9 @@ public class Shooter {
         if (shooterEnabled){
             double virtualDistt = Turret.virtualDist;
             if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
-                velocity = ShooterMath.calculateVelocity(Turret.virtualDist);
-                hoodPos = ShooterMath.calculateHoodAngle(Turret.virtualDist) + 0.0082;
+                velocity = ShooterMath.calculateVelocity(Turret.virtualDist) + offset;
+                hoodPos = ShooterMath.calculateHoodAngle(Turret.virtualDist);
+                        //+ 0.0082;
             }
             else {
                 velocity=velocityFAR;

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 @Configurable
 public class Turret {
 
-    static double NEUTRAL_POSITION= .5;
+    static double NEUTRAL_POSITION= .5,turretRange=352.17;
     public static double x, y, heading, xCorner, yCorner, dist, fieldRelative, robotRelative, turretRelative, TOF, virtualDist;
     public static final double FIELD_LENGTH= 3.65, launchTime= .2, goalCircleRadius = .18;
     //y=-0.0239556x^{2}+0.242631x+0.322645
@@ -78,13 +78,7 @@ public class Turret {
 
             turretRelative += offset;
             turretRelative = Range.clip(turretRelative, 0, 360);
-            double finalPos = turretRelative / 360;
-//            if(finalPos>= 0.0475 && finalPos<=0.95) {//0.0475 0.5 red
-//                //0.5 0.95 blue
-//                turret1.setPosition(finalPos);
-//                turret2.setPosition(finalPos);
-//
-//            }
+            double finalPos = 0.5 + (turretRelative-180) / turretRange;
             if(Robot.alliance ==Alliance.RED){
                 if(finalPos>= 0.0475 && finalPos<=0.5){
                     turret1.setPosition(finalPos);
@@ -143,12 +137,14 @@ public class Turret {
                 turretRelative = normalize(robotRelative - 180);
                 turretRelative += 180;
 
-                turretRelative += offset; //TODO: buton offset
+                turretRelative += offset;
                 turretRelative = Range.clip(turretRelative, 0, 360);
-                double finalPos = turretRelative / 360;
+
+
+                double finalPos = 0.5 + (turretRelative-180) / turretRange;
                 if (finalPos >= 0.0475 && finalPos <= 0.95) {
-                    turret1.setPosition(finalPos);
-                    turret2.setPosition(finalPos);
+                        turret1.setPosition(finalPos);
+                        turret2.setPosition(finalPos);
                 }
             } else setNeutralPosition(0.5);
         }

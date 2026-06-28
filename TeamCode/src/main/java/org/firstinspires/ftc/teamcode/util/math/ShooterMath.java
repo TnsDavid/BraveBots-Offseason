@@ -29,7 +29,7 @@ public class ShooterMath {
     }
 
     public static double transformInMeters(double v){
-        return ( v * Math.PI * 0.072 ) / 28;   //Nu stiu ticks/rev cat e si nu cred ca e 1550
+        return ( v * Math.PI * 0.072 ) / 28;
     }
     public static double calculateTOF(double vel, double pos){
         double velocityTransformed = transformInMeters(vel);

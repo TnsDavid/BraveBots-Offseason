@@ -36,6 +36,7 @@ public class Shoot implements Task {
                     inc = Robot.playStyle == Robot.PlayStyle.CLOSE ? increment : incrementFar;
                     if(!Turret.sotm) Shooter.hoodServo.setPosition(pos- inc);
                 })
+                .addTask(()-> timer=new ElapsedTime())
                 .addTask(() -> Storage.status.equals(Storage.Status.ONEBALL)||(timer.seconds()>totalShootTime))
                 .addTask(()->{
                     double cf = Robot.playStyle == Robot.PlayStyle.CLOSE ? coef : coefFar;

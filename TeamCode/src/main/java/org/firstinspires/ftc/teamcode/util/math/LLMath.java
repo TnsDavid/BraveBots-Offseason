@@ -23,6 +23,7 @@ import java.util.List;
 public class LLMath {
     public static final double ballHeight = 2.5,
             cameraMountAngle = 10,
+            fieldLength = 140,
             xOffset = 0,
             yOffset = 6.7,
             zOffset = 9.8,//8.85
@@ -131,7 +132,7 @@ public class LLMath {
     }
 
     public static boolean scan(Follower flw){
-        optimalPose=Poses.FarPoses.HPCollectPose;
+        optimalPose=Robot.alliance == Alliance.RED ? Poses.FarPoses.HPCollectPose : Poses.FarPoses.HPCollectPose.mirror(140);
         update();
         if(!results.isEmpty())
             for(int i=0;i<2;i++) {
@@ -139,7 +140,7 @@ public class LLMath {
                 Pose robotRelPose = getBestRobotRelativePose();
                 Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
                 //optimalPose = new Pose((Robot.alliance == Alliance.RED ? (fieldRelPose.getX() - robotLength / 2 ): (fieldRelPose.getX() + robotLength/2))+5, (fieldRelPose.getY() - 5 >= 3) ? (fieldRelPose.getY() - 5) : fieldRelPose.getY() , flw.getHeading() + Math.toRadians(5));
-                optimalPose = new Pose((Robot.alliance == Alliance.RED ? ((fieldRelPose.getX() - robotLength / 2)+3) : ((fieldRelPose.getX() + robotLength/2) - 3)) ,fieldRelPose.getY() , Robot.alliance==Alliance.RED? 0 : 180);
+                optimalPose = new Pose((Robot.alliance == Alliance.RED ? (144 - robotLength / 2) : (robotLength / 2)), fieldRelPose.getY() , Robot.alliance==Alliance.RED? 0 : 180);
             }
         Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
         path.setConstantHeadingInterpolation(Robot.alliance == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));

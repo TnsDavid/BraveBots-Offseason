@@ -80,11 +80,11 @@ public class CloseRedOriginal extends Auto {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP,Poses.ClosePoses.gateCollect,0.6)/// ////////
+                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP,Poses.ClosePoses.gateCollect,0.4)/// ////////
                     .addTask(() -> follower.getCurrentTValue() >= 0.5)/// ///////
-                    .addTask(() -> follower.setMaxPower(0.6))/// ///////
+                    .addTask(() -> follower.setMaxPower(0.8))/// ///////
                     .addTask(() -> time = new ElapsedTime())
-                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1500))
+                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1900))
                     .addTask(() -> follower.setMaxPower(1))
                     .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
                     .addTask(() -> follower.getCurrentTValue() > 0.5)

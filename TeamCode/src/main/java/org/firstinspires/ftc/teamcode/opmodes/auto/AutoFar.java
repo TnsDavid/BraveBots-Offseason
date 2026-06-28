@@ -75,13 +75,14 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.addData("targetVel", Shooter.velocityFAR);
         telemetry.addData("cond", Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - ShootFar.treshhold);
         telemetry.addData("alliance", alliance);
+        telemetry.addData("optimal pose" , LLMath.optimalPose);
+        if(LLMath.results != null) telemetry.addData("LLMath results empty?", LLMath.results.isEmpty());
+        Turret.updateAuto(follower, 0);
         telemetry.update();
         Shooter.shooterEnabled = true;
-        Shooter.hoodServo.setPosition(Shooter.hoodFAR);
         Shooter.tuningUpdate(Shooter.velocityFAR);
-
+        if(!Shooter.readyForShoot)  Shooter.hoodServo.setPosition(Shooter.hoodFarAuto);
         Storage.update2();
-        Intake.update();
     }
 
     @Override

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
 @Autonomous(name = "Close Blue", group = "Auto")
 @NotVibeCoded
 public class CloseBlueOriginal extends Auto {
-    double fieldLength = 140;
+    double fieldLength = 141;
 
     public class ShootPreload implements Task {
         Command command;
@@ -81,11 +81,11 @@ public class CloseBlueOriginal extends Auto {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP.mirror(fieldLength),Poses.ClosePoses.gateCollect.mirror(fieldLength),0.6)
+                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP.mirror(fieldLength),Poses.ClosePoses.gateCollectBlue,0.4)
                     .addTask(() -> follower.getCurrentTValue() >= 0.5)
-                    .addTask(() -> follower.setMaxPower(0.6))
+                    .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(() -> time = new ElapsedTime())
-                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1500))
+                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1900))
                     .addTask(() -> follower.setMaxPower(1))
                     .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose.mirror(fieldLength))
                     .addTask(() -> follower.getCurrentTValue() > 0.5)

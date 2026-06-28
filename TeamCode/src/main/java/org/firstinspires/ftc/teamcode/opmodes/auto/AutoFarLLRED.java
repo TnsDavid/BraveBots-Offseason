@@ -21,17 +21,18 @@ public class AutoFarLLRED extends AutoFar{
 
         public HPCollect() {
             s = new Command(follower)
-                    .addTask(()->Turret.setNeutralPosition(0.179))
+                    //.addTask(()->Turret.setNeutralPosition(0.1835))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToConstantSync(Poses.FarPoses.HpCollectPoseCP, Poses.FarPoses.HPCollectPose, Poses.FarPoses.HPCollectPose.getHeading())
+                    .lineToConstantSync(Poses.FarPoses.HPCollectPose, Poses.FarPoses.HPCollectPose.getHeading())
                     .addTask(()->follower.getCurrentTValue()>0.75)
-                    .addTask(() -> SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.setMaxPower(0.8))
-                    .addTask(() -> !follower.isBusy() || SmartCollectTimer.seconds() > 0.3)
-                    .waitSeconds(0.4)
+                    .addTask(() -> !follower.isBusy())
+                    .addTask(() -> follower.turn(Math.toRadians(20), false))
+                    .waitSeconds(0.25)
+                    .addTask(() -> follower.turnTo(Math.toRadians(20)))
+                    .waitSeconds(0.25)
                     .addTask(()->follower.setMaxPower(1))
-                   // .addTask(() -> !follower.isBusy())
                     .lineToConstantAsync(Poses.FarPoses.shootPose, Poses.FarPoses.shootPose.getHeading())
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
@@ -48,7 +49,7 @@ public class AutoFarLLRED extends AutoFar{
         Command s;
         public SpikeCollect() {
             s = new Command(follower)
-                    .addTask(()->Turret.setNeutralPosition(0.179))
+//                    .addTask(()->Turret.setNeutralPosition(0.158))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .curveToConstantSync(Poses.FarPoses.spikeCollectCP, Poses.FarPoses.spikeCollectPose,Math.toRadians(0))
@@ -73,7 +74,7 @@ public class AutoFarLLRED extends AutoFar{
         ElapsedTime SmartCollectTimer;
         public CycleCollect() {
             s = new Command(follower)
-                    .addTask(() -> Turret.setNeutralPosition(0.158))
+                    //.addTask(() -> Turret.setNeutralPosition(0.158))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> LLMath.scan(follower))
@@ -116,10 +117,11 @@ public class AutoFarLLRED extends AutoFar{
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
         auto
-                .addTask(() -> Turret.setNeutralPosition(0.1895))
+                //.addTask(() -> Turret.setNeutralPosition(0.1895))
                 .addTask(new ShootFar())
                 .addTask(new HPCollect())
                 .addTask(new SpikeCollect())
+                .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())

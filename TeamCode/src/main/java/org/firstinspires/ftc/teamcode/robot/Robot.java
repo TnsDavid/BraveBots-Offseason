@@ -193,15 +193,21 @@ public class Robot {
     public void initializeRest(){
         if(opModeType== null)
             throw new IllegalArgumentException("OpMode type nesetat");
+
+        odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
+        odo.resetPosAndIMU();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         if(opModeType== OpModeType.TELEOP) {
-            odo.resetPosAndIMU();
-            odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
             odo.setOffsets(Constants.yOffset, Constants.xOffset, DistanceUnit.INCH);
             odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
             odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-            //resetPinPoint();
             robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
-
         }
         voltageSensor= hm.voltageSensor.iterator().next();
         downLaser = new BreakBeam(controller, 7);

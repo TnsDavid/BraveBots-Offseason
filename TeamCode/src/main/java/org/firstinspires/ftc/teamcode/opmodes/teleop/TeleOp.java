@@ -79,6 +79,11 @@ public abstract class TeleOp extends BetterOpMode {
         gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(Robot::switchPlayStyle, BetterGamepad.Type.MAIN);
 
+        gamepadEx2.getButton(BetterGamepad.Buttons.SQUARE)
+                .whenPressed(()->Shooter.offset += 30 , BetterGamepad.Type.PARALLEL);
+        gamepadEx2.getButton(BetterGamepad.Buttons.CIRCLE)
+                .whenPressed(()->Shooter.offset -= 30 , BetterGamepad.Type.PARALLEL);
+
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
                 try {
