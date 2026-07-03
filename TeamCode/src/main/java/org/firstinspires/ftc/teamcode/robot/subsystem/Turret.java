@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.util.math.LowPassFilter;
 import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 
@@ -25,6 +26,8 @@ public class Turret {
     public static boolean reseted = false;
     public static boolean sotm = false;
     public static boolean checkedStatus = false;
+
+    public static LowPassFilter ChassisLpf;
 
     public enum TurretStatus {
         NOTACTIVE, ACTIVE
@@ -54,6 +57,7 @@ public class Turret {
 
             Vector velo = f.getVelocity();
             velo.setComponents(velo.getMagnitude(), velo.getTheta());
+            velo.setMagnitude(ChassisLpf.update(velo.getMagnitude()));
 
             double Vx = velo.getXComponent() * 0.0254;
             double Vy = velo.getYComponent() * 0.0254;
@@ -108,40 +112,32 @@ public class Turret {
             y= robotPose.getY();
             heading= robotPose.getHeading();
 
-            yCorner= FIELD_LENGTH- y;
-            xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x : -x;
+            yCorner= FIELD_LENGTH- y - goalCircleRadius;
+            xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x - goalCircleRadius : -x + goalCircleRadius;
 
-            dist = Math.hypot(xCorner, yCorner);
+//            dist = Math.hypot(xCorner, yCorner);
 
             double Vx = Robot.odo.getVelX(DistanceUnit.METER);
             double Vy = Robot.odo.getVelY(DistanceUnit.METER);
-            double V = Math.hypot(Vx, Vy);
+            Vector velocity = new Vector();
+            velocity.setOrthogonalComponents(Vx , Vy);
+            velocity.setMagnitude(ChassisLpf.update(velocity.getMagnitude()));
 
-            sotm = Shooter.readyForShoot && V > 1;
+            sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
 
             TOF = tofCoeff *  ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
 
-            xCorner -= Vx * TOF;
-            yCorner -= Vy * TOF;
+            xCorner -= velocity.getXComponent() * TOF;
+            yCorner -= velocity.getYComponent() * TOF;
 
             virtualDist = Math.hypot(xCorner, yCorner);
-            xCorner += Robot.alliance == Alliance.RED ?-goalCircleRadius : goalCircleRadius;
-            yCorner -= goalCircleRadius;
 
             if(turrStatus.equals(TurretStatus.ACTIVE)) {
-                heading = Math.toDegrees(heading);
+                Vector turrVector = new Vector();
+                turrVector.setOrthogonalComponents(xCorner, yCorner);
+                turrVector.rotateVector(-heading);// posibil -heading, trebuie verificat
 
-                fieldRelative = Math.atan2(yCorner, xCorner);
-                fieldRelative = Math.toDegrees(fieldRelative);
-                robotRelative = normalize(fieldRelative - heading);
-                turretRelative = normalize(robotRelative - 180);
-                turretRelative += 180;
-
-                turretRelative += offset;
-                turretRelative = Range.clip(turretRelative, 0, 360);
-
-
-                double finalPos = 0.5 + (turretRelative-180) / turretRange;
+                double finalPos = turrVector.getTheta() / turretRange;
                 if (finalPos >= 0.0475 && finalPos <= 0.95) {
                         turret1.setPosition(finalPos);
                         turret2.setPosition(finalPos);

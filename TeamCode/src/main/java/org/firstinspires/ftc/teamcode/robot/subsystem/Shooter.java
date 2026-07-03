@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.robot.subsystem;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.util.math.LowPassFilter;
 import org.firstinspires.ftc.teamcode.util.math.PDSFCoefficients;
 import org.firstinspires.ftc.teamcode.util.math.PDSFController;
 import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
@@ -20,13 +23,16 @@ public class Shooter {
     //public static double pFar = 0.0075 , fFar = 0.77, s = 0.1;
 
 
-   public static PDSFController controller = new PDSFController(pClose , 0 , s , fClose/2600);
+    public static PDSFController controller = new PDSFController(pClose , 0 , s , fClose/2600);
+
+    public static LowPassFilter ShooterLpf;
 
 
     public static void setPower(double power) {
         motor1.setPower(power);
         motor2.setPower(power);
     }
+
     public static double hoodPos = 0, minHoodpos = 0.45 ,maxHoodPos = 0.96,velocityFAR=1960, closeInc = 0.0082;
     //public static double hoodFAR=0.937;
     public static double hoodFAR=0.945 , hoodFarAuto = 0.92;
@@ -39,11 +45,9 @@ public class Shooter {
 
     public static void update() {
         if (shooterEnabled){
-            double virtualDistt = Turret.virtualDist;
             if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
                 velocity = ShooterMath.calculateVelocity(Turret.virtualDist) + offset;
                 hoodPos = ShooterMath.calculateHoodAngle(Turret.virtualDist);
-                        //+ 0.0082;
             }
             else {
                 velocity=velocityFAR;
@@ -51,29 +55,9 @@ public class Shooter {
             }
             if(!Shooter.readyForShoot || Turret.sotm)
                 hoodServo.setPosition(hoodPos);
-            double currentvoltage = Robot.voltageSensor.getVoltage();
-            double pid=controller.calculate(motor1.getVelocity(),velocity);
-            double output=pid*(Robot.nominalVoltage/currentvoltage);
-            setPower(output);
-        } else setPower(0);
-    }
-    public static void updateAuto() {
-        if (shooterEnabled){
-            double virtualDistt = Turret.virtualDist;
-            if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
-                velocity = ShooterMath.calculateVelocity(virtualDistt);
-                hoodPos = ShooterMath.calculateHoodAngle(virtualDistt);
-            }
-            else {
-                velocity=velocityFAR;
-                hoodPos=hoodFAR;
-            }
-            if(!Shooter.readyForShoot || Turret.sotm)
-                hoodServo.setPosition(hoodPos);
-            double currentvoltage = Robot.voltageSensor.getVoltage();
-
-            double pid=controller.calculate(motor1.getVelocity(),velocity);
-            double output=pid*(Robot.nominalVoltage/currentvoltage);
+            double currentVoltage = Robot.voltageSensor.getVoltage();
+            double pid=controller.calculate(ShooterLpf.update(motor1.getVelocity()),velocity);
+            double output=pid*(Robot.nominalVoltage/currentVoltage);
             setPower(output);
         } else setPower(0);
     }

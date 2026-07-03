@@ -83,7 +83,7 @@ public abstract class Auto extends BetterOpMode {
         if(!Shooter.shooterEnabled){
             Shooter.tuningUpdate(velocity);
             if(!Shooter.readyForShoot) Shooter.hoodServo.setPosition(pos);
-        }else Shooter.updateAuto();
+        }else Shooter.update();
         Storage.update2();
     }
 

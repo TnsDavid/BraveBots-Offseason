@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
+import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.ThreadedTask;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
@@ -24,7 +25,7 @@ public class CloseRedOriginal extends Auto {
                     .lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
                     .addTask(() -> follower.getCurrentTValue() > 0.75)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(new ShootAutoClose());
+                    .addTask(new ThreadedTask(ShootAutoClose::new, 1.5));
 
         }
         @Override
@@ -47,7 +48,7 @@ public class CloseRedOriginal extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.6)
-                    .addTask(new ShootAutoClose())
+                    .addTask(new ThreadedTask(ShootAutoClose::new, 1.5))
                     .addTask(() -> follower.setMaxPower(1));
         }
         @Override
@@ -90,7 +91,7 @@ public class CloseRedOriginal extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.6)
-                    .addTask(new ShootAutoClose())
+                    .addTask(new ThreadedTask(ShootAutoClose::new, 1.5))
                     .addTask(() -> follower.setMaxPower(1));
         }
 
@@ -111,7 +112,7 @@ public class CloseRedOriginal extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
-                    .addTask(new ShootAutoClose());
+                    .addTask(new ThreadedTask(ShootAutoClose::new, 1.5));
         }
 
         @Override

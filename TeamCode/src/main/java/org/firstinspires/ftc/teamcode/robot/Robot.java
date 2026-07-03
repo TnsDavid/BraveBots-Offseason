@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
+import org.firstinspires.ftc.teamcode.util.math.LowPassFilter;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
@@ -219,6 +220,8 @@ public class Robot {
         Storage.startedTimer = false;
         setPlayStyle(PlayStyle.CLOSE);
         LLMath.init(hm);
+        Turret.ChassisLpf = new LowPassFilter(0.5, 0.0);
+        Shooter.ShooterLpf = new LowPassFilter(0.5, 0.0);
     }
     ElapsedTime timer;
     public void update(){
