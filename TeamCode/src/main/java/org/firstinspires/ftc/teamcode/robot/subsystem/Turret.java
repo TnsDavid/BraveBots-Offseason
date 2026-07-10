@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 @Configurable
 public class Turret {
 
-    static double NEUTRAL_POSITION= .5,turretRange=352.17;
+    static double NEUTRAL_POSITION= .5,turretRange=351;
     public static double x, y, heading, xCorner, yCorner, dist, fieldRelative, robotRelative, turretRelative, TOF, virtualDist;
     public static final double FIELD_LENGTH= 3.65, launchTime= .2, goalCircleRadius = .18;
     //y=-0.0239556x^{2}+0.242631x+0.322645
@@ -99,6 +99,7 @@ public class Turret {
         }
     }
     public static double offset = 0;
+    public static double alpha;
     public static void update(){
         Pose robotPose= Robot.robotPose;
         //offset=getOffset(robotPose.getHeading());//nu merge
@@ -136,8 +137,10 @@ public class Turret {
                 Vector turrVector = new Vector();
                 turrVector.setOrthogonalComponents(xCorner, yCorner);
                 turrVector.rotateVector(-heading);// posibil -heading, trebuie verificat
+                alpha = Math.toDegrees(turrVector.getTheta());
+                alpha = Range.clip(alpha, 0, 360);
 
-                double finalPos = turrVector.getTheta() / turretRange;
+                double finalPos = 0.5 + (alpha - 180) / turretRange;
                 if (finalPos >= 0.0475 && finalPos <= 0.95) {
                         turret1.setPosition(finalPos);
                         turret2.setPosition(finalPos);
