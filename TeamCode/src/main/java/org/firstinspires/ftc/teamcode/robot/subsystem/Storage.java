@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.RGBIndicator;
 
 @Configurable
 public class Storage {
-    public static double ultraClosePower =0.961, closePower =0.904, farPower = 0.5;
+    public static double ultraClosePower =0.961, closePower =0.85, farPower = 0.5;
     public static BetterMotorEx transfer;
     public static RGBIndicator ledST,ledDR;
     public static BreakBeam bUp, bDown;
@@ -33,7 +33,7 @@ public class Storage {
     }
     public static Status status = Status.EMPTY;
 
-    public static double startPower = 1;
+    public static double startPower = closePower;
     public static ActiveStatus activeStatus = ActiveStatus.NOTRANSFER;
     public static void start() {
         activeStatus = ActiveStatus.TRANSFER;
@@ -116,39 +116,37 @@ public class Storage {
         up = bUp.isBeamBroken();
         down = bDown.isBeamBroken();
         middle = laserMiddle.getState();
-        if(System.currentTimeMillis() - last > 40){
-            if( !up && !middle && !down ) valids = 0;
-            else if( up && !middle && !down ) valids = 1;
-            else if( up && middle && !down ) valids = 2;
-            else if( up && middle && down ) valids = 3;
 
-            switch(valids){
-                case 0:
-                    status = Status.EMPTY;
-                    colour = RGBIndicator.Colors.WHITE ;
-                    break;
-                case 1:
-                    status = Status.ONEBALL;
-                    colour= RGBIndicator.Colors.RED;
-                    break;
-                case 2:
-                    status = Status.TWOBALL;
-                    colour= RGBIndicator.Colors.PURPLE;
-                    break;
-                case 3:
-                    status = Status.STORAGEFULL;
-                    colour= RGBIndicator.Colors.GREEN;
-                    break;
-            }
+        if( !up && !middle && !down ) valids = 0;
+        else if( up && !middle && !down ) valids = 1;
+        else if( up && middle && !down ) valids = 2;
+        else if( up && middle && down ) valids = 3;
 
-            setColour(colour);
-            last=System.currentTimeMillis();
+        switch(valids){
+            case 0:
+                status = Status.EMPTY;
+                colour = RGBIndicator.Colors.WHITE ;
+                break;
+            case 1:
+                status = Status.ONEBALL;
+                colour= RGBIndicator.Colors.RED;
+                break;
+            case 2:
+                status = Status.TWOBALL;
+                colour = RGBIndicator.Colors.PURPLE;
+                break;
+            case 3:
+                status = Status.STORAGEFULL;
+                colour = RGBIndicator.Colors.GREEN;
+                break;
         }
-        if(Robot.playStyle== Robot.PlayStyle.CLOSE){
-            if(Turret.dist <= 2.225) startPower = ultraClosePower;
-            else startPower = closePower;
-        }
-        else startPower=farPower;
+        setColour(colour);
+        if(Shooter.readyForShoot) {
+            if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
+                if (Turret.virtualDist <= 2.225) startPower = ultraClosePower;
+                else startPower = closePower;
+            } else startPower = farPower;
+        } else startPower = 1;
         double currentVoltage=Robot.voltageSensor.getVoltage();
         startPower=startPower*(Robot.nominalVoltage/currentVoltage);
         if(activeStatus==ActiveStatus.TRANSFER) transfer.setPower(startPower);

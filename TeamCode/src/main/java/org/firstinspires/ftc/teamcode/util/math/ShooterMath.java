@@ -11,8 +11,10 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 @Configurable
 public class ShooterMath {
 
-    public static final double aVClose = 0, bVClose = 160, cVClose = 1104;
-    public static final double aHClose = -0.04, bHClose = 0.2416, cHClose = 0.40116;
+    public static final double aVClose = 0, bVClose = 240, cVClose = 960;
+    public static final double aHClose = -0.0147429, bHClose = 0.22292, cHClose = 0.295363;
+    public static final double aHClose2 = -0.000000255952, bHClose2 = 0.00142026, cHClose2 = -0.832203;
+
     public static double TOFCoef = 1;
 
     public static double maxdegrees = Math.toRadians(60);
@@ -20,11 +22,13 @@ public class ShooterMath {
     public static double robotPosition = 0.25 ;
 
     public static double g = 9.81;
-    public static double calculateHoodAngle(double dist){
+    public static double calculateHoodAngleFromDistance(double dist){
         return Range.clip(aHClose * Math.pow(dist, 2) + bHClose * dist + cHClose, minHoodpos, maxHoodPos);
     }
-
-    public static double  calculateVelocity(double dist){
+    public static double calculateHoodAngleFromVelocity(double velo) {
+        return Range.clip(aHClose2 * Math.pow(velo, 2) + bHClose2 * velo + cHClose2, minHoodpos, maxHoodPos);
+    }
+    public static double  calculateVelocityFromDistance(double dist){
         return (aVClose * Math.pow(dist, 2) + bVClose * dist + cVClose);
     }
 

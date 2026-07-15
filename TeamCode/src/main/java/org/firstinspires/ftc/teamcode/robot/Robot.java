@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -39,9 +40,10 @@ import java.util.List;
 
 //TODO: TELEOP PE PLAYSTYLE
 
+@Configurable
 public class Robot {
     public static Pose robotPose;
-    public static final double nominalVoltage = 11.05;
+    public static  double nominalVoltage = 10.5;
     public static double odometryResolution = 34.310551; //ticks/mm*mm/inch = ticks/inch
     public static VoltageSensor voltageSensor;
     List<LynxModule> hubs;

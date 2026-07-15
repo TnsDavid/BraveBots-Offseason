@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.dist;
+import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.virtualDist;
 import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.xCorner;
 import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.yCorner;
 
@@ -65,11 +66,11 @@ public class Test extends BetterOpMode {
         if(gamepad2.crossWasPressed()) shooterEnabled = !shooterEnabled;
         if(gamepad1.crossWasPressed()) Intake.toggle();
         if(gamepad1.triangleWasPressed()) Blocker.toggle();
-        if(gamepad2.rightBumperWasPressed()) Turret.reseted = !Turret.reseted;
+        if(gamepad2.rightBumperWasPressed()) Turret.toggleStatus();
         if(gamepad1.optionsWasPressed()) robila.resetPinPoint();
         if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
         if(gamepad1.shareWasPressed()) Robot.switchPlayStyle();
-        Drivetrain.betterDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        Drivetrain.betterDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
         if( shooterEnabled ) {
             Shooter.tuningUpdate(Shooter.velocity);
         } else
@@ -84,11 +85,11 @@ public class Test extends BetterOpMode {
         telemetry.addData("status", Storage.status);
         telemetry.addData("xCorner", xCorner);
         telemetry.addData("yCorner", yCorner);
-        telemetry.addData("distance to goal", dist);
+        telemetry.addData("distance to goal", virtualDist);
         telemetry.addData("play style", Robot.playStyle);
 
         robila.update();
-        Storage.update();
+        Storage.update2();
         Intake.update();
         Turret.update();
         telemetry.update();

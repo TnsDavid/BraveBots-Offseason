@@ -62,7 +62,7 @@ public class Turret {
             double Vx = velo.getXComponent() * 0.0254;
             double Vy = velo.getYComponent() * 0.0254;
 
-            TOF = tofCoeff * ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist)) * tofCoeff;
+            TOF = tofCoeff * ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist)) * tofCoeff;
 
             xCorner -= Vx * TOF;
             yCorner -= Vy * TOF;
@@ -126,7 +126,7 @@ public class Turret {
 
             sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
 
-            TOF = tofCoeff *  ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocity(dist)),ShooterMath.calculateHoodAngle(dist));
+            TOF = tofCoeff *  ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
 
             xCorner -= velocity.getXComponent() * TOF;
             yCorner -= velocity.getYComponent() * TOF;
@@ -137,7 +137,7 @@ public class Turret {
                 Vector turrVector = new Vector();
                 turrVector.setOrthogonalComponents(xCorner, yCorner);
                 turrVector.rotateVector(-heading);// posibil -heading, trebuie verificat
-                alpha = Math.toDegrees(turrVector.getTheta());
+                alpha = Math.toDegrees(turrVector.getTheta()) + offset;
                 alpha = Range.clip(alpha, 0, 360);
 
                 double finalPos = 0.5 + (alpha - 180) / turretRange;

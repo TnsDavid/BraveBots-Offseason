@@ -32,16 +32,8 @@ public class Shoot implements Task {
                 .addTask(Storage::start)
                 .addTask(()-> timer=new ElapsedTime())
                 .addTask(() -> Storage.status.equals(Storage.Status.TWOBALL)||(timer.seconds()>totalShootTime))
-                .addTask(()->{
-                    inc = Robot.playStyle == Robot.PlayStyle.CLOSE ? increment : incrementFar;
-                    if(!Turret.sotm) Shooter.hoodServo.setPosition(pos- inc);
-                })
                 .addTask(()-> timer=new ElapsedTime())
                 .addTask(() -> Storage.status.equals(Storage.Status.ONEBALL)||(timer.seconds()>totalShootTime))
-                .addTask(()->{
-                    double cf = Robot.playStyle == Robot.PlayStyle.CLOSE ? coef : coefFar;
-                    if(!Turret.sotm) Shooter.hoodServo.setPosition(pos-cf* inc);
-                })
                 .addTask(() -> Storage.status.equals(Storage.Status.EMPTY))
                 .waitSeconds(0.05)
                 .addTask(()->{

@@ -18,7 +18,7 @@ public class Shooter {
     public static double velocity=0;
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
-    public static double pClose= 0.0075,fClose = 0.77,s=0.1;
+    public static double pClose= 0.008,fClose = 1.125,s=0.1;
     public static double alpha = 0.5;
     //public static double pFar = -0.004 , fFar = 0.9, s = 0.1;
     //public static double pFar = 0.0075 , fFar = 0.77, s = 0.1;
@@ -49,16 +49,14 @@ public class Shooter {
 
     public static void update() {
         if (shooterEnabled){
-            if(Robot.playStyle == Robot.PlayStyle.CLOSE) {
-                velocity = ShooterMath.calculateVelocity(Turret.virtualDist) + offset;
-                hoodPos = ShooterMath.calculateHoodAngle(Turret.virtualDist);
+            if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
+                velocity = ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) + offset;
+                hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor1.getVelocity());
+            } else {
+                velocity = velocityFAR;
+                hoodPos = !Shooter.readyForShoot ? hoodFAR : hoodFAR * (motor1.getVelocity() / velocityFAR);
             }
-            else {
-                velocity=velocityFAR;
-                hoodPos=hoodFAR;
-            }
-            if(!Shooter.readyForShoot || Turret.sotm)
-                hoodServo.setPosition(hoodPos);
+            hoodServo.setPosition(hoodPos);
             double currentVoltage = Robot.voltageSensor.getVoltage();
             double pid=controller.calculate((motor1.getVelocity()),velocity);
             double output=pid*(Robot.nominalVoltage/currentVoltage);

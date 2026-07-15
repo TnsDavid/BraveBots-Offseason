@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.follower.Follower;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -89,7 +90,7 @@ public abstract class TeleOp extends BetterOpMode {
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
                 try {
-                    Shooter.tuningUpdate(Shooter.velocity);
+                    Shooter.update();
                     Thread.sleep(3);
                 } catch (InterruptedException e ) {
                     Thread.currentThread().interrupt();
@@ -117,6 +118,7 @@ public abstract class TeleOp extends BetterOpMode {
             }
         });
         Storage.status = Storage.Status.EMPTY;
+        Shooter.hoodServo.setPosition(0.75);
     }
 
     @Override
@@ -146,7 +148,7 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-        if(!Shooter.readyForShoot || Turret.sotm) Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.0025* (gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER)));
+        if(!Shooter.readyForShoot ) Shooter.hoodServo.setPosition(Range.clip(Shooter.hoodServo.getPosition() + 0.0025 *(gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)), Shooter.minHoodpos, Shooter.maxHoodPos));
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());
