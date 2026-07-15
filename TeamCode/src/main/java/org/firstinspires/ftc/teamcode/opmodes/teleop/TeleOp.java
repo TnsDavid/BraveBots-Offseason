@@ -67,6 +67,8 @@ public abstract class TeleOp extends BetterOpMode {
                 .whenPressed(() -> Shooter.shooterEnabled = !Shooter.shooterEnabled, BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Turret::toggleStatus,  BetterGamepad.Type.PARALLEL);
+        gamepadEx2.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
+                .whenPressed(() -> Shooter.setLpfAlpha(), BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_RIGHT)
                 .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
@@ -87,7 +89,7 @@ public abstract class TeleOp extends BetterOpMode {
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
                 try {
-                    Shooter.update();
+                    Shooter.tuningUpdate(Shooter.velocity);
                     Thread.sleep(3);
                 } catch (InterruptedException e ) {
                     Thread.currentThread().interrupt();
@@ -140,17 +142,16 @@ public abstract class TeleOp extends BetterOpMode {
     boolean rumbleIN = false, rumbleOUT = false;
     @Override
     public void active_loop() {
-        slow= gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER);
         now = System.nanoTime();
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-
+        if(!Shooter.readyForShoot || Turret.sotm) Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.0025* (gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER)));
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());
         telemetry.addData("heading", Robot.robotPose.getHeading());
-        telemetry.addData("dist", Turret.dist);
+        telemetry.addData("dist", Turret.virtualDist);
         telemetry.addData(" target velocity", Shooter.velocity);
         telemetry.addData("curr vel", Shooter.motor1.getVelocity());
         telemetry.addData("hood pos", Shooter.hoodServo.getPosition());

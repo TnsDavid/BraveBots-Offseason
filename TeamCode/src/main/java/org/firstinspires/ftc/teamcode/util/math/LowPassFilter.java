@@ -15,6 +15,10 @@ public class LowPassFilter {
         this.y = initialValue;
     }
 
+    public void setAlpha(double alpha){
+        this.alpha = alpha;
+    }
+
     public double update(double x) {
         y = alpha * x + (1.0 - alpha) * y;
         return y;

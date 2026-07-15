@@ -19,6 +19,7 @@ public class Shooter {
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
     public static double pClose= 0.0075,fClose = 0.77,s=0.1;
+    public static double alpha = 0.5;
     //public static double pFar = -0.004 , fFar = 0.9, s = 0.1;
     //public static double pFar = 0.0075 , fFar = 0.77, s = 0.1;
 
@@ -27,6 +28,9 @@ public class Shooter {
 
     public static LowPassFilter ShooterLpf;
 
+    public static void setLpfAlpha(){
+        ShooterLpf.setAlpha(alpha);
+    }
 
     public static void setPower(double power) {
         motor1.setPower(power);
@@ -56,7 +60,7 @@ public class Shooter {
             if(!Shooter.readyForShoot || Turret.sotm)
                 hoodServo.setPosition(hoodPos);
             double currentVoltage = Robot.voltageSensor.getVoltage();
-            double pid=controller.calculate(ShooterLpf.update(motor1.getVelocity()),velocity);
+            double pid=controller.calculate((motor1.getVelocity()),velocity);
             double output=pid*(Robot.nominalVoltage/currentVoltage);
             setPower(output);
         } else setPower(0);
