@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 public class ShooterMath {
 
     public static final double aVClose = 0, bVClose = 240, cVClose = 960;
+    public static final double aVFar = -136.05442, bVFar = 1111.56463, cVFar = -302.20408;
     public static final double aHClose = -0.0147429, bHClose = 0.22292, cHClose = 0.295363;
     public static final double aHClose2 = -0.000000255952, bHClose2 = 0.00142026, cHClose2 = -0.832203;
 
@@ -30,6 +31,9 @@ public class ShooterMath {
     }
     public static double  calculateVelocityFromDistance(double dist){
         return (aVClose * Math.pow(dist, 2) + bVClose * dist + cVClose);
+    }
+    public static double calculateVelocityFARFromDistance(double dist){
+        return (aVFar * Math.pow(dist, 2) + bVFar * dist + cVFar);
     }
 
     public static double transformInMeters(double v){

@@ -53,7 +53,7 @@ public class Shooter {
                 velocity = ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) + offset;
                 hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor1.getVelocity());
             } else {
-                velocity = velocityFAR;
+                velocity = ShooterMath.calculateVelocityFARFromDistance(Turret.virtualDist) + offset;
                 hoodPos = !Shooter.readyForShoot ? hoodFAR : hoodFAR * (motor1.getVelocity() / velocityFAR);
             }
             hoodServo.setPosition(hoodPos);

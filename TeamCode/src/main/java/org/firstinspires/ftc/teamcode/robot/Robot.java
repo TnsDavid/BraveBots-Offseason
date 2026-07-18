@@ -179,7 +179,6 @@ public class Robot {
         Drivetrain.leftFront=FrontLeft;
         Drivetrain.rightBack=BackRight;
         Drivetrain.rightFront=FrontRight;
-
     }
 
     public void initializeServos(){

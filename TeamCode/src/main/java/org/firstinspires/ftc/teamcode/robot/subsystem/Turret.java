@@ -19,7 +19,6 @@ public class Turret {
     static double NEUTRAL_POSITION= .5,turretRange=351;
     public static double x, y, heading, xCorner, yCorner, dist, fieldRelative, robotRelative, turretRelative, TOF, virtualDist;
     public static final double FIELD_LENGTH= 3.65, launchTime= .2, goalCircleRadius = .18;
-    //y=-0.0239556x^{2}+0.242631x+0.322645
     public static final double at = -0.0275109, bt = 0.253576, ct = 0.273474;
     public static double tofCoeff = 1.15, shooterTOFCoef = 1.05;
     public static BetterServoEx turret1, turret2;
@@ -99,14 +98,10 @@ public class Turret {
         }
     }
     public static double offset = 0;
-    public static double alpha;
+    public static double alpha, theta = 0.3;
     public static void update(){
         Pose robotPose= Robot.robotPose;
         //offset=getOffset(robotPose.getHeading());//nu merge
-        if(Storage.status.equals(Storage.Status.STORAGEFULL) && !checkedStatus){
-            turrStatus = TurretStatus.ACTIVE;
-            checkedStatus = true;
-        }
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
 
             x= robotPose.getX();
@@ -122,6 +117,7 @@ public class Turret {
             double Vy = Robot.odo.getVelY(DistanceUnit.METER);
             Vector velocity = new Vector();
             velocity.setOrthogonalComponents(Vx , Vy);
+            ChassisLpf.setAlpha(theta);
             velocity.setMagnitude(ChassisLpf.update(velocity.getMagnitude()));
 
             sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
@@ -136,7 +132,7 @@ public class Turret {
             if(turrStatus.equals(TurretStatus.ACTIVE)) {
                 Vector turrVector = new Vector();
                 turrVector.setOrthogonalComponents(xCorner, yCorner);
-                turrVector.rotateVector(-heading);// posibil -heading, trebuie verificat
+                turrVector.rotateVector(-heading);
                 alpha = Math.toDegrees(turrVector.getTheta()) + offset;
                 alpha = Range.clip(alpha, 0, 360);
 

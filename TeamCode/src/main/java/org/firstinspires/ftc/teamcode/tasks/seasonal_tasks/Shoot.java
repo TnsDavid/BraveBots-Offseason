@@ -23,34 +23,37 @@ public class Shoot implements Task {
     ElapsedTime timer;
 
     public Shoot(){
-        s= new Command()
-                .addTask(() -> pos = Shooter.hoodServo.getPosition())
-                .addTask(() ->Shooter.readyForShoot = true)
-                .addTask(Blocker::unblock)
-                .waitSeconds(0.1)
-                .addTask(Intake::start)
-                .addTask(Storage::start)
-                .addTask(()-> timer=new ElapsedTime())
-                .addTask(() -> Storage.status.equals(Storage.Status.TWOBALL)||(timer.seconds()>totalShootTime))
-                .addTask(()-> timer=new ElapsedTime())
-                .addTask(() -> Storage.status.equals(Storage.Status.ONEBALL)||(timer.seconds()>totalShootTime))
-                .addTask(() -> Storage.status.equals(Storage.Status.EMPTY))
-                .waitSeconds(0.05)
-                .addTask(()->{
-                    Storage.stop();
-                    Intake.stop();
-                    Blocker.block();
-                    return true;
-                })
-                .addTask(() -> {
-                    Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
-                    Storage.status= Storage.Status.EMPTY;
-                    Storage.startedTimer = false;
-                    Shooter.readyForShoot = false;
-                    Turret.checkedStatus = false;
-                    return true;
-                })
-                .addTask(()-> Shooter.hoodServo.setPosition(pos));
+        if(Storage.isEmpty())
+            s = new Command().addTask(Blocker::block);
+        else
+            s= new Command()
+                    .addTask(() -> pos = Shooter.hoodServo.getPosition())
+                    .addTask(() ->Shooter.readyForShoot = true)
+                    .addTask(Blocker::unblock)
+                    .waitSeconds(0.1)
+                    .addTask(Intake::start)
+                    .addTask(Storage::start)
+                    .addTask(()-> timer=new ElapsedTime())
+                    .addTask(() -> Storage.status.equals(Storage.Status.TWOBALL)||(timer.seconds()>totalShootTime))
+                    .addTask(()-> timer=new ElapsedTime())
+                    .addTask(() -> Storage.status.equals(Storage.Status.ONEBALL)||(timer.seconds()>totalShootTime))
+                    .addTask(Storage::isEmpty)
+                    .waitSeconds(0.05)
+                    .addTask(()->{
+                        Storage.stop();
+                        Intake.stop();
+                        Blocker.block();
+                        return true;
+                    })
+                    .addTask(() -> {
+                        Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
+                        Storage.status= Storage.Status.EMPTY;
+                        Storage.startedTimer = false;
+                        Shooter.readyForShoot = false;
+                        Turret.checkedStatus = false;
+                        return true;
+                    })
+                    .addTask(()-> Shooter.hoodServo.setPosition(pos));
     }
 
     @Override
