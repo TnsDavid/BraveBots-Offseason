@@ -28,19 +28,12 @@ public class ShootFar implements Task {
                 .addTask(Storage::start)
                 .addTask(()-> timer=new ElapsedTime())
                 .addTask(() -> Storage.status.equals(Storage.Status.TWOBALL)||(timer.seconds()>totalShootTime))
-                .addTask(()->{
-                    Shooter.hoodServo.setPosition(Shooter.hoodFAR- incrementFar);
-                })
                 .addTask(()-> timer=new ElapsedTime())
                 .addTask(() -> Storage.status.equals(Storage.Status.ONEBALL)||(timer.seconds()>totalShootTime))
-                .addTask(()->{
-                    Shooter.hoodServo.setPosition(Shooter.hoodFAR-coefFar* incrementFar);
-                })
-                .addTask(() -> Storage.status.equals(Storage.Status.EMPTY))
+                .addTask(Storage::isEmpty)
                 .waitSeconds(0.1)
                 .addTask(Blocker::block)
                 .addTask(() -> {
-                    Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
                     Storage.status= Storage.Status.EMPTY;
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;

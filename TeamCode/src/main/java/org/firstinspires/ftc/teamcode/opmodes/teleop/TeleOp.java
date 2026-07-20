@@ -26,9 +26,7 @@ public abstract class TeleOp extends BetterOpMode {
     public Alliance a;
     boolean updateTurret;
     Robot robot;
-    Follower f;
     MultipleTelemetry telemetry;
-    private boolean readyForRaise=false;
     volatile boolean shooterThreadRunning, turretThreadRunning, driveThreadRunning;
     Thread shooterThread, turretThread, driveThread;
 
@@ -42,7 +40,6 @@ public abstract class TeleOp extends BetterOpMode {
         robot = new Robot(hardwareMap, this.telemetry, this.a)
                 .setOpModeType(Robot.OpModeType.TELEOP)
                 .initialize();
-
         gamepadEx1.getButton(BetterGamepad.Buttons.CROSS)
                 .whenPressed(Intake::toggle, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
@@ -68,8 +65,6 @@ public abstract class TeleOp extends BetterOpMode {
                 .whenPressed(() -> Shooter.shooterEnabled = !Shooter.shooterEnabled, BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Turret::toggleStatus,  BetterGamepad.Type.PARALLEL);
-        gamepadEx2.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
-                .whenPressed(() -> Shooter.setLpfAlpha(), BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_RIGHT)
                 .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
@@ -148,6 +143,8 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
+
+       // Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.0025 * gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER));
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());

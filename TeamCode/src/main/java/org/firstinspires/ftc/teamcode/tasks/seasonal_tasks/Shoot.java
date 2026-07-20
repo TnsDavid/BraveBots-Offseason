@@ -23,9 +23,6 @@ public class Shoot implements Task {
     ElapsedTime timer;
 
     public Shoot(){
-        if(Storage.isEmpty())
-            s = new Command().addTask(Blocker::block);
-        else
             s= new Command()
                     .addTask(() -> pos = Shooter.hoodServo.getPosition())
                     .addTask(() ->Shooter.readyForShoot = true)
@@ -46,7 +43,6 @@ public class Shoot implements Task {
                         return true;
                     })
                     .addTask(() -> {
-                        Turret.turrStatus= Turret.TurretStatus.NOTACTIVE;
                         Storage.status= Storage.Status.EMPTY;
                         Storage.startedTimer = false;
                         Shooter.readyForShoot = false;

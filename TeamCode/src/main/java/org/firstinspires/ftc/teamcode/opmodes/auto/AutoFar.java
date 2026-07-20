@@ -7,7 +7,7 @@ import com.pedropathing.geometry.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
@@ -25,7 +25,7 @@ public abstract class AutoFar extends BetterOpMode {
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
-    public double offset = -3.5;
+    public double offset = 0;
     public double turretpos;
 
     @Override
@@ -44,7 +44,6 @@ public abstract class AutoFar extends BetterOpMode {
         pos = Shooter.hoodFAR;
         Shooter.shooterEnabled = true;
         Shooter.velocity =Shooter.velocityFAR;
-        Shooter.hoodServo.setPosition(Shooter.hoodFAR);
         buildAuto();
     }
 
@@ -52,6 +51,8 @@ public abstract class AutoFar extends BetterOpMode {
     public void initialize_loop() {
         follower.update();
         Pose robotPose= follower.getPose();
+        Blocker.block();
+        Shooter.hoodServo.setPosition(Shooter.hoodFAR);
         //Turret.setNeutralPosition(0.1895);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
@@ -68,21 +69,23 @@ public abstract class AutoFar extends BetterOpMode {
         follower.update();
         auto.update();
         Pose robotPose= follower.getPose();
+        Turret.turrStatus = Turret.TurretStatus.ACTIVE;
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
         telemetry.addData("velo",Shooter.motor1.getVelocity());
+        telemetry.addData("dist" , Turret.virtualDist);
         telemetry.addData("targetVel", Shooter.velocityFAR);
         telemetry.addData("cond", Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - ShootFar.treshhold);
         telemetry.addData("alliance", alliance);
         telemetry.addData("optimal pose" , LLMath.optimalPose);
+        telemetry.addData("transferPower" , Storage.transfer.getPower());
         if(LLMath.results != null) telemetry.addData("LLMath results empty?", LLMath.results.isEmpty());
-        Turret.updateAuto(follower, 0);
         telemetry.update();
         Shooter.shooterEnabled = true;
-        Shooter.tuningUpdate(Shooter.velocityFAR);
-        if(!Shooter.readyForShoot)  Shooter.hoodServo.setPosition(Shooter.hoodFarAuto);
-        Storage.update2();
+        Turret.updateAuto(follower, offset);
+        Shooter.tuningUpdate(Shooter.velocityFAR, Shooter.hoodFAR);
+        Storage.updateAuto();
     }
 
     @Override

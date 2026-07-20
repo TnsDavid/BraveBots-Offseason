@@ -38,11 +38,10 @@ import org.firstinspires.ftc.teamcode.util.wrappers.RGBIndicator;
 
 import java.util.List;
 
-//TODO: TELEOP PE PLAYSTYLE
-
 @Configurable
 public class Robot {
     public static Pose robotPose;
+
     public static  double nominalVoltage = 10.5;
     public static double odometryResolution = 34.310551; //ticks/mm*mm/inch = ticks/inch
     public static VoltageSensor voltageSensor;

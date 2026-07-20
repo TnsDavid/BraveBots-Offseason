@@ -81,8 +81,7 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("veloY", velo.getYComponent());
         telemetry.update();
         if(!Shooter.shooterEnabled){
-            Shooter.tuningUpdate(velocity);
-            if(!Shooter.readyForShoot) Shooter.hoodServo.setPosition(pos);
+            Shooter.tuningUpdate(velocity , pos);
         }else Shooter.update();
         Storage.update2();
     }

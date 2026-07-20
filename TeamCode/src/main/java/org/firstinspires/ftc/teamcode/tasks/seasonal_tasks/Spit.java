@@ -9,7 +9,7 @@ public class Spit implements Task {
     public Spit(){
         command= new Command()
                 .addTask(Intake::reverse)
-                .waitSeconds(.4)
+                .waitSeconds(.2)
                 .addTask(Intake::stop);
     }
     @Override

@@ -163,15 +163,14 @@ public class Storage {
             }
             if(ballUp != null && ballUp.milliseconds()>storageStopTime && startedTimer) stop();
         }
-
         up = bUp.isBeamBroken();
         down = bDown.isBeamBroken();
         middle = laserMiddle.getState();
 
-        if(System.currentTimeMillis() - last > 40){
-            valids = (up ? 1 : 0) + (middle ? 1 : 0) + (down ? 1 : 0);
-            last=System.currentTimeMillis();
-        }
+        if( !up && !middle && !down ) valids = 0;
+        else if( up && !middle && !down ) valids = 1;
+        else if( up && middle && !down ) valids = 2;
+        else if( up && middle && down ) valids = 3;
 
         switch(valids){
             case 0:
@@ -184,13 +183,21 @@ public class Storage {
                 break;
             case 2:
                 status = Status.TWOBALL;
-                colour= RGBIndicator.Colors.PURPLE;
+                colour = RGBIndicator.Colors.PURPLE;
                 break;
             case 3:
                 status = Status.STORAGEFULL;
-                colour= RGBIndicator.Colors.GREEN;
+                colour = RGBIndicator.Colors.GREEN;
                 break;
         }
+        setColour(colour);
+        if(Shooter.readyForShoot) {
+            startPower = farPower;
+        } else startPower = 1;
+        double currentVoltage=Robot.voltageSensor.getVoltage();
+        startPower=startPower*(Robot.nominalVoltage/currentVoltage);
+        if(activeStatus==ActiveStatus.TRANSFER) transfer.setPower(startPower);
+        else transfer.setPower(0);
     }
 
 

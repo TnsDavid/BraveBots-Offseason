@@ -50,58 +50,45 @@ public class Turret {
             y= robotPose.getY();
             heading= robotPose.getHeading();
 
-            yCorner= FIELD_LENGTH- y;
-            xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x : -x;
-            dist = Math.hypot(xCorner, yCorner);
+            yCorner= FIELD_LENGTH- y - goalCircleRadius;
+            xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x - goalCircleRadius : -x + goalCircleRadius;
 
-            Vector velo = f.getVelocity();
-            velo.setComponents(velo.getMagnitude(), velo.getTheta());
-            velo.setMagnitude(ChassisLpf.update(velo.getMagnitude()));
 
-            double Vx = velo.getXComponent() * 0.0254;
-            double Vy = velo.getYComponent() * 0.0254;
+            double Vx = Robot.odo.getVelX(DistanceUnit.METER);
+            double Vy = Robot.odo.getVelY(DistanceUnit.METER);
+            Vector velocity = new Vector();
+            velocity.setOrthogonalComponents(Vx , Vy);
+            ChassisLpf.setAlpha(theta);
+            velocity.setMagnitude(ChassisLpf.update(velocity.getMagnitude()));
 
-            TOF = tofCoeff * ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist)) * tofCoeff;
+            sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
 
-            xCorner -= Vx * TOF;
-            yCorner -= Vy * TOF;
+            TOF = tofCoeff *  ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
+
+            xCorner -= velocity.getXComponent() * TOF;
+            yCorner -= velocity.getYComponent() * TOF;
 
             virtualDist = Math.hypot(xCorner, yCorner);
-            xCorner += Robot.alliance == Alliance.RED ?-goalCircleRadius : goalCircleRadius;
-            yCorner -= goalCircleRadius;
 
+            if(turrStatus.equals(TurretStatus.ACTIVE)) {
+                Vector turrVector = new Vector();
+                turrVector.setOrthogonalComponents(xCorner, yCorner);
+                turrVector.rotateVector(-heading);
+                alpha = Math.toDegrees(turrVector.getTheta()) + offset;
+                alpha = Range.clip(alpha, 0, 360);
 
-            heading = Math.toDegrees(heading);
-
-            fieldRelative = Math.atan2(yCorner, xCorner);
-            fieldRelative = Math.toDegrees(fieldRelative);
-            robotRelative = normalize(fieldRelative - heading);
-            turretRelative = normalize(robotRelative - 180);
-            turretRelative += 180;
-
-            turretRelative += offset;
-            turretRelative = Range.clip(turretRelative, 0, 360);
-            double finalPos = 0.5 + (turretRelative-180) / turretRange;
-            if(Robot.alliance ==Alliance.RED){
-                if(finalPos>= 0.0475 && finalPos<=0.5){
+                double finalPos = 0.5 + (alpha - 180) / turretRange;
+                if (finalPos >= 0.0475 && finalPos <= 0.95) {
                     turret1.setPosition(finalPos);
                     turret2.setPosition(finalPos);
                 }
-            }
-            else{
-                if(finalPos>= 0.5 && finalPos<=0.95){
-                    turret1.setPosition(finalPos);
-                    turret2.setPosition(finalPos);
-                }
-            }
-
+            } else setNeutralPosition(0.5);
         }
     }
     public static double offset = 0;
     public static double alpha, theta = 0.3;
     public static void update(){
         Pose robotPose= Robot.robotPose;
-        //offset=getOffset(robotPose.getHeading());//nu merge
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
 
             x= robotPose.getX();
@@ -111,7 +98,6 @@ public class Turret {
             yCorner= FIELD_LENGTH- y - goalCircleRadius;
             xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x - goalCircleRadius : -x + goalCircleRadius;
 
-//            dist = Math.hypot(xCorner, yCorner);
 
             double Vx = Robot.odo.getVelX(DistanceUnit.METER);
             double Vy = Robot.odo.getVelY(DistanceUnit.METER);

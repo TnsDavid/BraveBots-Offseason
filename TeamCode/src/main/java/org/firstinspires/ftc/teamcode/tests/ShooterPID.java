@@ -30,7 +30,7 @@ public class ShooterPID extends LinearOpMode {
         waitForStart();
         while( opModeIsActive() ) {
             robot.update();
-            Shooter.tuningUpdate(velocity);
+            Shooter.tuningUpdate(velocity , 0);
             telemetry.addData(" target velocity", Shooter.velocity);
             telemetry.addData("curr vel", Shooter.motor1.getVelocity());
             telemetry.update();
