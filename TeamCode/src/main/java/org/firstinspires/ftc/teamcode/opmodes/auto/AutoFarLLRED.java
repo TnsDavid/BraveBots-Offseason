@@ -20,7 +20,6 @@ public class AutoFarLLRED extends AutoFar{
 
         public HPCollect() {
             s = new Command(follower)
-                    //.addTask(()->Turret.setNeutralPosition(0.1835))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .lineToConstantSync(Poses.FarPoses.HPCollectPose, Poses.FarPoses.HPCollectPose.getHeading())

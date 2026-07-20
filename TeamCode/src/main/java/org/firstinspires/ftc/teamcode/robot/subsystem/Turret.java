@@ -16,11 +16,10 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 @Configurable
 public class Turret {
 
-    static double NEUTRAL_POSITION= .5,turretRange=351;
-    public static double x, y, heading, xCorner, yCorner, dist, fieldRelative, robotRelative, turretRelative, TOF, virtualDist;
-    public static final double FIELD_LENGTH= 3.65, launchTime= .2, goalCircleRadius = .18;
-    public static final double at = -0.0275109, bt = 0.253576, ct = 0.273474;
-    public static double tofCoeff = 1.15, shooterTOFCoef = 1.05;
+    static double turretRange=351;
+    public static double x, y, heading, xCorner, yCorner, dist, TOF, virtualDist;
+    public static final double FIELD_LENGTH= 3.65, goalCircleRadius = .18;
+    public static double tofCoeff = 1.15;
     public static BetterServoEx turret1, turret2;
     public static boolean reseted = false;
     public static boolean sotm = false;
@@ -29,13 +28,13 @@ public class Turret {
     public static LowPassFilter ChassisLpf;
 
     public enum TurretStatus {
-        NOTACTIVE, ACTIVE
+        NONACTIVE, ACTIVE
     }
 
-    public static TurretStatus turrStatus = TurretStatus.NOTACTIVE;
+    public static TurretStatus turrStatus = TurretStatus.NONACTIVE;
 
     public static void toggleStatus(){
-        turrStatus = turrStatus.equals(TurretStatus.ACTIVE) ? TurretStatus.NOTACTIVE : TurretStatus.ACTIVE;
+        turrStatus = turrStatus.equals(TurretStatus.ACTIVE) ? TurretStatus.NONACTIVE : TurretStatus.ACTIVE;
     }
     public static void setNeutralPosition(double pos){
         turret1.setPosition(pos);

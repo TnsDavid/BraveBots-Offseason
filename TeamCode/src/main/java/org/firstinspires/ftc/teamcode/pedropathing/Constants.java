@@ -27,7 +27,7 @@ public class Constants {
    // public static double kp = 0.096, kquad = 0.001624282188277547, klinear = 0.08991429266679882;
     public static double kp = 0.22, kquad = 8.0835216117517028E-4, klinear = 0.110305361687285;
     public static double p = 0, i = 0, d = 0, f= 0;
-    public static double nominalvoltage = 11;
+    public static double nominalvoltage = 10.5;
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(12.48)
             .forwardZeroPowerAcceleration(-24.26)
