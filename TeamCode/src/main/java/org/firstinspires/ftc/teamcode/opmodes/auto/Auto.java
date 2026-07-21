@@ -25,7 +25,7 @@ public abstract class Auto extends BetterOpMode {
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
-    public double offset;
+    public double offset, flwX;
 
     @Override
     public void initialize() {
@@ -79,6 +79,7 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("velo", velo.getMagnitude());
         telemetry.addData("veloX", velo.getXComponent());
         telemetry.addData("veloY", velo.getYComponent());
+        telemetry.addData("flwX", flwX);
         telemetry.update();
         if(!Shooter.shooterEnabled){
             Shooter.tuningUpdate(velocity , pos);

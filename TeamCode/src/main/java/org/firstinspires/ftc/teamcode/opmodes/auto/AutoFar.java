@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -22,10 +23,13 @@ public abstract class AutoFar extends BetterOpMode {
     protected Alliance alliance;
     protected Follower follower;
     protected double velocity, pos;
+    public void setFlwX(double x){
+        flwX = x;
+    }
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
-    public double offset = 0;
+    public double offset = 0, flwX;
     public double turretpos;
 
     @Override
@@ -57,6 +61,7 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
+        telemetry.addData("flwX", flwX);
         telemetry.update();
     }
 
@@ -80,6 +85,7 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.addData("alliance", alliance);
         telemetry.addData("optimal pose" , LLMath.optimalPose);
         telemetry.addData("transferPower" , Storage.transfer.getPower());
+        telemetry.addData("vel", Robot.odo.getVelX(DistanceUnit.METER));
         if(LLMath.results != null) telemetry.addData("LLMath results empty?", LLMath.results.isEmpty());
         telemetry.update();
         Shooter.shooterEnabled = true;

@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
@@ -77,9 +79,9 @@ public class AutoFarLLRED extends AutoFar{
                     .addTask(Storage::start)
                     .addTask(() -> LLMath.scan(follower))
                     .addTask(() -> SmartCollectTimer = new ElapsedTime())
-                    .addTask(() -> follower.setMaxPower(0.7))
-                    .addTask(() ->(!follower.isBusy()||SmartCollectTimer.seconds()>0.7))
-                    .waitSeconds(0.2)
+                    .addTask(() -> follower.getCurrentTValue() > 0.5)
+                    .addTask(() -> !follower.isBusy() || Robot.odo.getVelX(DistanceUnit.METER) < 0.5)
+                    .waitSeconds(0.1)
                     .addTask(()->follower.setMaxPower(1))
                     .lineToConstantAsync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPoseScan.getHeading())
                     .waitSeconds(0.1)
@@ -114,6 +116,7 @@ public class AutoFarLLRED extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
+        offset = -3;
         auto
                 //.addTask(() -> Turret.setNeutralPosition(0.1895))
                 .addTask(new ShootFar())

@@ -4,7 +4,9 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
@@ -75,14 +77,13 @@ public class AutoFarLLBLUE extends AutoFar{
         ElapsedTime SmartCollectTimer;
         public CycleCollect() {
             s = new Command(follower)
+                    .addTask(()->follower.setMaxPower(1))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> LLMath.scan(follower))
-                    .addTask(() -> SmartCollectTimer = new ElapsedTime())
-                    .addTask(() -> follower.setMaxPower(0.7))
-                    .addTask(() ->(!follower.isBusy()||SmartCollectTimer.seconds()>1.3))
-                    .waitSeconds(0.2)
-                    .addTask(()->follower.setMaxPower(1))
+                    .addTask(() -> follower.getCurrentTValue() > 0.5)
+                    .addTask(() -> !follower.isBusy() || Robot.odo.getVelX(DistanceUnit.METER) > -0.5)
+                    .waitSeconds(0.1)
                     .lineToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(fieldLength), Poses.FarPoses.shootPose.mirror(fieldLength).getHeading())
                     .addTask(Spit::new)
                     .waitSeconds(0.1)

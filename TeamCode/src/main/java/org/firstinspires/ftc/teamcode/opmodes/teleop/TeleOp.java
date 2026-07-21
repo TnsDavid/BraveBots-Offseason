@@ -156,6 +156,7 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("robotCentric", Drivetrain.robotCentric);
         telemetry.addData("blocker", Blocker.blocked);
         telemetry.addData("blocker at pos", Blocker.atPosition());
+        telemetry.speak("Hussam esti un cacat" ,  "ISO 639-2" , "+40");
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
             gamepad1.rumble(300);

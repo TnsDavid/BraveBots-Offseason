@@ -52,7 +52,6 @@ public class Turret {
             yCorner= FIELD_LENGTH- y - goalCircleRadius;
             xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x - goalCircleRadius : -x + goalCircleRadius;
 
-
             double Vx = Robot.odo.getVelX(DistanceUnit.METER);
             double Vy = Robot.odo.getVelY(DistanceUnit.METER);
             Vector velocity = new Vector();
