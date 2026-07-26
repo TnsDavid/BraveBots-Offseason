@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
 public class Blocker {
 
     public static BetterServo blocker;
-    public static double locked =0 ,  unlocked = .6;
+    public static double locked =0.4983 ,  unlocked = 0.6578;
 
     public static boolean blocked = true;
 

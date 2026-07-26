@@ -27,6 +27,7 @@ public class PDSFController extends PIDFController {
 
     public double sign = 0;
 
+
     public double calculate(int current, int target) {
 
         sign = Math.signum(target - current);

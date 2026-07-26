@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.dist;
 import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.virtualDist;
 import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.xCorner;
 import static org.firstinspires.ftc.teamcode.robot.subsystem.Turret.yCorner;
@@ -72,7 +71,7 @@ public class Test extends BetterOpMode {
         if(gamepad1.shareWasPressed()) Robot.switchPlayStyle();
         Drivetrain.betterDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
         if( shooterEnabled ) {
-            Shooter.tuningUpdate(Shooter.velocity , 0);
+            Shooter.AutoUpdate(Shooter.velocity , 0);
         } else
             Shooter.setPower(0);
         telemetry.addData("velocity", Shooter.motor1.getVelocity());

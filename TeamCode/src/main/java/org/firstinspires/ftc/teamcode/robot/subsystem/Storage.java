@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.RGBIndicator;
 
 @Configurable
 public class Storage {
-    public static double ultraClosePower =0.961, closePower =0.85, farPower = 0.5;
+    public static double ultraClosePower =0.961, closePower =0.85, farPower = 0.53;
     public static BetterMotorEx transfer;
     public static RGBIndicator ledST,ledDR;
     public static BreakBeam bUp, bDown;

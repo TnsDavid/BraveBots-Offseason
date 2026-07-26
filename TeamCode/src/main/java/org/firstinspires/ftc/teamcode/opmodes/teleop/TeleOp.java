@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
-import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
@@ -29,7 +28,6 @@ public abstract class TeleOp extends BetterOpMode {
     MultipleTelemetry telemetry;
     volatile boolean shooterThreadRunning, turretThreadRunning, driveThreadRunning;
     Thread shooterThread, turretThread, driveThread;
-
     public abstract void setAlliance();
 
     @Override
@@ -113,7 +111,7 @@ public abstract class TeleOp extends BetterOpMode {
             }
         });
         Storage.status = Storage.Status.EMPTY;
-        Shooter.hoodServo.setPosition(0.75);
+        Shooter.hoodServo.setPosition(0.5);
     }
 
     @Override
@@ -132,6 +130,7 @@ public abstract class TeleOp extends BetterOpMode {
 
     }
 
+
     long now, last, dt;
     double pos;
     volatile double slow;
@@ -143,8 +142,7 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-
-       // Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.0025 * gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER));
+    //    Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.0025 * (gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER)));
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());
@@ -156,7 +154,6 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("robotCentric", Drivetrain.robotCentric);
         telemetry.addData("blocker", Blocker.blocked);
         telemetry.addData("blocker at pos", Blocker.atPosition());
-        telemetry.speak("Hussam esti un cacat" ,  "ISO 639-2" , "+40");
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
             gamepad1.rumble(300);

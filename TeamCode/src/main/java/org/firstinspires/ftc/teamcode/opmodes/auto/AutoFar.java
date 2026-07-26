@@ -90,7 +90,7 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.update();
         Shooter.shooterEnabled = true;
         Turret.updateAuto(follower, offset);
-        Shooter.tuningUpdate(Shooter.velocityFAR, Shooter.hoodFAR);
+        Shooter.AutoUpdate(Shooter.velocityFAR, Shooter.hoodFAR);
         Storage.updateAuto();
     }
 

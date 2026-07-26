@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DigitalChannelController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -151,14 +152,14 @@ public class Robot {
         transfer.setDirection(DcMotorSimple.Direction.FORWARD);
 
         shooter2= new BetterMotorEx(expansionHubMotors, 3).setCachingTolerance(.01)
-                .setMaxVelocity(2600)
+                .setMaxVelocity(1660)
                 .setPFCoefficients(Shooter.pClose, Shooter.fClose);
         shooter= new BetterMotorEx(controlHubMotors, 3).setCachingTolerance(.01)
-                .setMaxVelocity(2600)
+                .setMaxVelocity(1660)
                 .setPFCoefficients(Shooter.pClose, Shooter.fClose);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shooter2.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     private void assignHardware(){
         Blocker.blocker=blocker;
@@ -189,6 +190,8 @@ public class Robot {
         blocker = new BetterServo(expansionHubServos, 1);
         ledST=new RGBIndicator(controlHubServos,5);
         ledDR=new RGBIndicator(expansionHubServos,5);
+
+        hood.setDirection(Servo.Direction.REVERSE);
     }
 
     public void initializeRest(){
@@ -220,8 +223,9 @@ public class Robot {
         Storage.startedTimer = false;
         setPlayStyle(PlayStyle.CLOSE);
         LLMath.init(hm);
-        Turret.ChassisLpf = new LowPassFilter(0.5, 0.0);
+        Turret.ChassisLpf = new LowPassFilter(0.85, 0.0);
         Shooter.ShooterLpf = new LowPassFilter(0.5, 0.0);
+        Shooter.HoodLpf = new LowPassFilter(0.4, 0.0);
     }
     ElapsedTime timer;
     public void update(){

@@ -40,7 +40,6 @@ public class Turret {
         turret1.setPosition(pos);
         turret2.setPosition(pos);
     }
-
     public static void updateAuto(Follower f , double offset){
         Pose robotPose = new Pose(f.getPose().getX() * 0.0254, f.getPose().getY() * 0.0254, f.getHeading());
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
@@ -56,7 +55,6 @@ public class Turret {
             double Vy = Robot.odo.getVelY(DistanceUnit.METER);
             Vector velocity = new Vector();
             velocity.setOrthogonalComponents(Vx , Vy);
-            ChassisLpf.setAlpha(theta);
             velocity.setMagnitude(ChassisLpf.update(velocity.getMagnitude()));
 
             sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
@@ -83,8 +81,8 @@ public class Turret {
             } else setNeutralPosition(0.5);
         }
     }
-    public static double offset = 0;
-    public static double alpha, theta = 0.3;
+    public static double offset = 0, addedOffset = 0 , coef = 1.5 ;
+    public static double alpha;
     public static void update(){
         Pose robotPose= Robot.robotPose;
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
@@ -96,12 +94,10 @@ public class Turret {
             yCorner= FIELD_LENGTH- y - goalCircleRadius;
             xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x - goalCircleRadius : -x + goalCircleRadius;
 
-
             double Vx = Robot.odo.getVelX(DistanceUnit.METER);
             double Vy = Robot.odo.getVelY(DistanceUnit.METER);
             Vector velocity = new Vector();
             velocity.setOrthogonalComponents(Vx , Vy);
-            ChassisLpf.setAlpha(theta);
             velocity.setMagnitude(ChassisLpf.update(velocity.getMagnitude()));
 
             sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
@@ -117,13 +113,21 @@ public class Turret {
                 Vector turrVector = new Vector();
                 turrVector.setOrthogonalComponents(xCorner, yCorner);
                 turrVector.rotateVector(-heading);
-                alpha = Math.toDegrees(turrVector.getTheta()) + offset;
+                double headingInDeg = Math.toDegrees(heading);
+                if(Robot.playStyle == Robot.PlayStyle.FAR) {
+                    if (headingInDeg <= 90 && headingInDeg >= -90)
+                        addedOffset = (90 - (headingInDeg > 0 ? headingInDeg : -headingInDeg)) * -4.5 / 90;
+                    else
+                        addedOffset = ((headingInDeg > 0 ? headingInDeg : -headingInDeg) - 90) * coef / 90;
+                } else addedOffset = 0;
+
+                alpha = Math.toDegrees(turrVector.getTheta()) + addedOffset + offset;
                 alpha = Range.clip(alpha, 0, 360);
 
                 double finalPos = 0.5 + (alpha - 180) / turretRange;
                 if (finalPos >= 0.0475 && finalPos <= 0.95) {
-                        turret1.setPosition(finalPos);
-                        turret2.setPosition(finalPos);
+                    turret1.setPosition(finalPos);
+                    turret2.setPosition(finalPos);
                 }
             } else setNeutralPosition(0.5);
         }

@@ -4,7 +4,6 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
@@ -82,7 +81,7 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("flwX", flwX);
         telemetry.update();
         if(!Shooter.shooterEnabled){
-            Shooter.tuningUpdate(velocity , pos);
+            Shooter.AutoUpdate(velocity , pos);
         }else Shooter.update();
         Storage.update2();
     }
