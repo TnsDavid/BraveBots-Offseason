@@ -20,6 +20,9 @@ public class ShootFar implements Task {
 
     public ShootFar(){
         command = new Command()
+                .addTask(() -> {
+                    if(Storage.status.equals(Storage.Status.ONEBALL)) Storage.oneBall = true;
+                })
                 .addTask(()-> Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - treshhold )
                 .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
@@ -37,6 +40,7 @@ public class ShootFar implements Task {
                     Storage.startedTimer = false;
                     Shooter.readyForShoot = false;
                     Turret.checkedStatus = false;
+                    Storage.oneBall = false;
                 })
                 .addTask(()-> Shooter.hoodServo.setPosition(Shooter.hoodFAR));    }
     @Override

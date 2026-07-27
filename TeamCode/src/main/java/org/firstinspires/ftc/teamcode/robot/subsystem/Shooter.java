@@ -16,11 +16,11 @@ public class Shooter {
     public static double velocity = 0;
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
-    public static double pClose = 0.005, fClose = 1.2, s = 0.1, d = 0;
+    public static double pClose = 0.005, fClose = 1.15, s = 0.1, d = 0;
     public static double alpha = 0.5;
 
 
-    public static PDSFController controller = new PDSFController(pClose, 0, s, fClose / 2600);
+    public static PDSFController controller = new PDSFController(pClose, 0, s, fClose / 1700);
 
     public static LowPassFilter ShooterLpf, HoodLpf;
 
@@ -33,7 +33,7 @@ public class Shooter {
         motor2.setPower(power);
     }
 
-    public static double hoodPos = 0, minHoodpos = 0.3322, maxHoodPos = 0.8506, velocityFAR = 1920, closeInc = 0.0082;
+    public static double hoodPos = 0, minHoodpos = 0.3322, maxHoodPos = 0.8506, velocityFAR = 1100, closeInc = 0.0082;
     public static double hoodFAR = 0.6272;
     public static double offset = 0, velocityThreshold = 60;
     public static boolean shooterEnabled = false;
@@ -43,6 +43,12 @@ public class Shooter {
         hoodCompensation = HoodLpf.update(pos * (motor1.getVelocity() / velocity));
         return Range.clip(hoodCompensation, minHoodpos, maxHoodPos);
     }
+
+    //1120 - auto
+
+    //3.94 1190
+    //3.29 1120
+    //3.14 1100
 
     public static double error = 0;
     public static double theta = 0.4;
@@ -57,9 +63,9 @@ public class Shooter {
             hoodPos = calculateHoodByError(hoodFAR, velocity);
         }
         hoodServo.setPosition(hoodPos);
-        double currentvoltage = Robot.voltageSensor.getVoltage();
+        double currentVoltage = Robot.voltageSensor.getVoltage();
         double pid = controller.calculate(motor1.getVelocity(), velocity);
-        double output = pid * (Robot.nominalVoltage / currentvoltage);
+        double output = pid * (Robot.nominalVoltage / currentVoltage);
         if (shooterEnabled) setPower(output);
         else setPower(0);
     }

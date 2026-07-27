@@ -26,14 +26,18 @@ public class AutoFarLLRED extends AutoFar{
                     .addTask(Storage::start)
                     .lineToConstantSync(Poses.FarPoses.HPCollectPose, Poses.FarPoses.HPCollectPose.getHeading())
                     .addTask(()->follower.getCurrentTValue()>0.75)
-                    .addTask(() -> follower.setMaxPower(0.8))
+                    .addTask(() -> follower.setMaxPower(0.7))
                     .addTask(() -> !follower.isBusy())
-                    .addTask(() -> follower.turn(Math.toRadians(20), false))
                     .waitSeconds(0.25)
-                    .addTask(() -> follower.turnTo(Math.toRadians(20)))
-                    .waitSeconds(0.25)
-                    .addTask(()->follower.setMaxPower(1))
-                    .lineToConstantAsync(Poses.FarPoses.shootPose, Poses.FarPoses.shootPose.getHeading())
+//                    .addTask(() -> follower.turn(Math.toRadians(20), false))
+//                    .waitSeconds(0.25)
+//                    .addTask(() -> follower.turnTo(Math.toRadians(20)))
+//                    .waitSeconds(0.25)
+                    .addTask(()->follower.setMaxPower(0.6))
+                    .lineToConstantSync(Poses.FarPoses.shootPose, Poses.FarPoses.shootPose.getHeading())
+                    .addTask(() -> follower.getCurrentTValue()>0.3)
+                    .addTask(() -> follower.setMaxPower(1))
+                    .addTask(() -> !follower.isBusy())
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
@@ -116,7 +120,7 @@ public class AutoFarLLRED extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
-        offset = -3;
+        offset = -1;
         auto
                 //.addTask(() -> Turret.setNeutralPosition(0.1895))
                 .addTask(new ShootFar())

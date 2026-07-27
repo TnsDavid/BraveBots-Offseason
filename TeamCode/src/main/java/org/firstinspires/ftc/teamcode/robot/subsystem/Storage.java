@@ -48,6 +48,7 @@ public class Storage {
     }
     public static int count = 0;
     public static ElapsedTime ballUp;
+    public static boolean oneBall = false;
 
     public static void setColour(RGBIndicator.Colors colour){
         ledDR.setColor(colour);
@@ -192,7 +193,7 @@ public class Storage {
         }
         setColour(colour);
         if(Shooter.readyForShoot) {
-            startPower = farPower;
+            startPower = oneBall ? 1 : farPower;
         } else startPower = 1;
         double currentVoltage=Robot.voltageSensor.getVoltage();
         startPower=startPower*(Robot.nominalVoltage/currentVoltage);
