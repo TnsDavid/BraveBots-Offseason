@@ -16,7 +16,7 @@ public class Shooter {
     public static double velocity = 0;
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
-    public static double pClose = 0.003, fClose = 1.15, s = 0.1, d = 0;
+    public static double pClose = 0.005, fClose = 1.2, s = 0.1, d = 0;
     public static double alpha = 0.5;
 
 
@@ -45,8 +45,9 @@ public class Shooter {
     }
 
     public static double error = 0;
-
+    public static double theta = 0.4;
     public static void update() {
+        HoodLpf.setAlpha(theta);
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
         if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
             velocity = ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) + offset;
