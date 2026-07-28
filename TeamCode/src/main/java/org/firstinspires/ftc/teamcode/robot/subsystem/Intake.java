@@ -15,7 +15,7 @@ public class Intake {
         INTAKING, NOTINTAKING, FORCEDINTAKE
     }
     public static void start(){
-        motor.setPower(.94);
+        motor.setPower(1);
         timer= new ElapsedTime();
         status= IntakeStatus.INTAKING;
     }

@@ -118,7 +118,7 @@ public class Turret {
                     if (headingInDeg <= 90 && headingInDeg >= -90)
                         addedOffset = (90 - (headingInDeg > 0 ? headingInDeg : -headingInDeg)) * -3 / 90 + 2 ;
                     else
-                        addedOffset = ((headingInDeg > 0 ? headingInDeg : -headingInDeg) - 90) * 3 / 90;
+                        addedOffset = ((headingInDeg > 0 ? headingInDeg : -headingInDeg) - 90) * 3 / 90 + 2 ;
                 } else addedOffset = 0;
 
                 alpha = Math.toDegrees(turrVector.getTheta()) + addedOffset + offset;

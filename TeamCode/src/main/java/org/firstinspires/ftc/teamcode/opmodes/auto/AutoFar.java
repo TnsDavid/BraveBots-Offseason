@@ -57,7 +57,6 @@ public abstract class AutoFar extends BetterOpMode {
         Pose robotPose= follower.getPose();
         Blocker.block();
         Shooter.hoodServo.setPosition(Shooter.hoodFAR);
-        //Turret.setNeutralPosition(0.1895);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());

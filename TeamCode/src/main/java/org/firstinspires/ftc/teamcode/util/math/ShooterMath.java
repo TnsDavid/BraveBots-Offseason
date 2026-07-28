@@ -10,12 +10,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 
 @Configurable
 public class ShooterMath {
-
-    //public static final double aVClose = 0, bVClose = 240, cVClose = 960;
-    //public static final double aHClose = -0.0147429, bHClose = 0.22292, cHClose = 0.295363;
-    //public static final double aHClose2 = -0.000000255952, bHClose2 = 0.00142026, cHClose2 = -0.832203;
-    // public static double aVFar = -21.63357, bVFar = 263.88751, cVFar = 485.974;
-    public static final double aVFar = 0, bVFar = 80, cVFar = 788;
+    public static double aVFar = -32.30065, bVFar = 341.02654, cVFar = 347.6482;
     public static final double aHFar = 0.004, bHFar = -0.0882, cHFar = 0.85144;
     public static final double aVClose = 0, bVClose = 80, cVClose = 740;
     public static final double aHClose = -0.00342857, bHClose = 0.15032, cHClose = 0.226569;

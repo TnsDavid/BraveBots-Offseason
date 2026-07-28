@@ -13,16 +13,13 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 public class ShootFar implements Task {
     Command command ;
 
-    public static double treshhold = 100;
+    public static double treshhold = 80;
     public static double coefFar = 1.4, waitTime= 0.01, totalShootTime=0.05, waitTime2= 0.02, incrementFar = 0.04;
 
     ElapsedTime timer;
 
     public ShootFar(){
         command = new Command()
-                .addTask(() -> {
-                    if(Storage.status.equals(Storage.Status.ONEBALL)) Storage.oneBall = true;
-                })
                 .addTask(()-> Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - treshhold )
                 .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)

@@ -23,7 +23,7 @@ import java.util.List;
 public class LLMath {
     public static final double ballHeight = 2.5,
             cameraMountAngle = 10,
-            fieldLength = 140,
+            fieldLength = 144,
             xOffset = 0,
             yOffset = 6.7,
             zOffset = 9.8,//8.85
@@ -89,7 +89,7 @@ public class LLMath {
 
     public static Pose getFieldRelativePose(Pose p, Pose robotPose){
         Vector v = new Vector();
-        v.setOrthogonalComponents(p.getY(), -p.getX());//sunt invers axele RL fata de FL pt bila <3
+        v.setOrthogonalComponents(p.getY(), -p.getX());
         v.rotateVector(robotPose.getHeading());
 
         return new Pose(
@@ -132,8 +132,8 @@ public class LLMath {
                 update();
                 Pose robotRelPose = getBestRobotRelativePose();
                 Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
-                optimalPose = new Pose(129.5, Math.max(fieldRelPose.getY() > 24 ? fieldRelPose.getY() - 20 : fieldRelPose.getY() - 3, intakeWidth / 2 + 2));
-                if(Robot.alliance == Alliance.BLUE) optimalPose = optimalPose.mirror(fieldLength);
+                optimalPose = new Pose(132.5, Math.max(fieldRelPose.getY() > 24 ? fieldRelPose.getY() - 20 : fieldRelPose.getY() - 3, intakeWidth / 2 + 2));
+                if(Robot.alliance == Alliance.BLUE) optimalPose = optimalPose.mirror();
             }
         Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
         path.setConstantHeadingInterpolation(Robot.alliance == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));

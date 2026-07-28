@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
@@ -27,11 +28,10 @@ public class AutoFarLLBLUE extends AutoFar{
                     .addTask(()->follower.getCurrentTValue()>0.75)
                     .addTask(() -> follower.setMaxPower(0.7))
                     .addTask(() -> !follower.isBusy())
-                    .waitSeconds(0.25)
-//                    .addTask(() -> follower.turn(Math.toRadians(20), false))
-//                    .waitSeconds(0.25)
-//                    .addTask(() -> follower.turnTo(Math.toRadians(20)))
-//                    .waitSeconds(0.25)
+                    .addTask(() -> follower.turn(Math.toRadians(13), false))
+                    .waitSeconds(0.05)
+                    .addTask(() -> follower.turn(Math.toRadians(13), true))
+                    .waitSeconds(0.05)
                     .addTask(()->follower.setMaxPower(0.6))
                     .lineToConstantSync(Poses.FarPoses.shootPose.mirror(fieldLength), Poses.FarPoses.shootPose.mirror(fieldLength).getHeading())
                     .addTask(() -> follower.getCurrentTValue()>0.3)
@@ -52,10 +52,10 @@ public class AutoFarLLBLUE extends AutoFar{
         Command s;
         public SpikeCollect() {
             s = new Command(follower)
-//                    .addTask(()->Turret.setNeutralPosition(0.158))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToConstantSync(Poses.FarPoses.spikeCollectCP.mirror(fieldLength), Poses.FarPoses.spikeCollectPose.mirror(fieldLength),Math.toRadians(180))
+                    .addTask(() -> offset = 3)
+                    .curveToConstantSync(Poses.FarPoses.spikeCollectCP.mirror(fieldLength), Poses.FarPoses.spikeCollectPose.mirror(fieldLength),Math.PI)
                     .addTask(() -> follower.getCurrentTValue() > 0.7)
                     .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(() -> !follower.isBusy())
@@ -77,20 +77,21 @@ public class AutoFarLLBLUE extends AutoFar{
         ElapsedTime SmartCollectTimer;
         public CycleCollect() {
             s = new Command(follower)
-                    //.addTask(() -> Turret.setNeutralPosition(0.158))
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> LLMath.scan(follower))
                     .addTask(() -> SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
-                    .addTask(() -> !follower.isBusy() || Robot.odo.getVelX(DistanceUnit.METER) < 0.5)
-                    .waitSeconds(0.1)
+                    .addTask(() -> !follower.isBusy() || Math.abs(Robot.odo.getVelX(DistanceUnit.METER)) < 0.5)
+                    .addTask(() -> follower.turn(Math.toRadians(30), false))
+                    .waitSeconds(0.05)
+                    .addTask(() -> follower.turn(Math.toRadians(30), true))
+                    .waitSeconds(0.05)
                     .addTask(()->follower.setMaxPower(1))
                     .lineToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(fieldLength), Poses.FarPoses.shootPoseScan.mirror(fieldLength).getHeading())
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
-
         @Override
         public boolean Run(){
             s.update();
@@ -119,15 +120,14 @@ public class AutoFarLLBLUE extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose.mirror(fieldLength));
-        offset = 3;
-        velocity = 1080;
-        pos = 0.5583;
+        offset = 2;
+        velocity = Shooter.velocityFAR;
+        pos = Shooter.hoodFAR;
         auto
                 //.addTask(() -> Turret.setNeutralPosition(0.1895))
                 .addTask(new ShootFar())
                 .addTask(new HPCollect())
                 .addTask(new SpikeCollect())
-                .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())

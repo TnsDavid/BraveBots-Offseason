@@ -34,10 +34,10 @@ public class Shooter {
     }
 
     public static double hoodPos = 0, minHoodpos = 0.3322, maxHoodPos = 0.8506, velocityFAR = 1100, closeInc = 0.0082;
-    public static double hoodFAR = 0.6272;
+    public static double hoodFAR = 0.6;
     public static double offset = 0, velocityThreshold = 60;
     public static boolean shooterEnabled = false;
-    public static double hoodCompensation, naturalPos;
+    public static double hoodCompensation;
 
     public static double calculateHoodByError(double pos, double velocity) {
         hoodCompensation = HoodLpf.update(pos * (motor1.getVelocity() / velocity));
@@ -60,8 +60,7 @@ public class Shooter {
             hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor1.getVelocity());
         } else {
             velocity = ShooterMath.calculateVelocityFARFromDistance(Turret.virtualDist) + offset;
-            hoodPos = ShooterMath.calculateHoodFARFromDistance(Turret.virtualDist);
-            hoodPos = calculateHoodByError(hoodPos, velocity);
+            hoodPos = calculateHoodByError(hoodFAR, velocity);
         }
         hoodServo.setPosition(hoodPos);
         double currentVoltage = Robot.voltageSensor.getVoltage();

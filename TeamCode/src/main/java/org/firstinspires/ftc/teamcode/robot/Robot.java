@@ -225,7 +225,7 @@ public class Robot {
         LLMath.init(hm);
         Turret.ChassisLpf = new LowPassFilter(0.85, 0.0);
         Shooter.ShooterLpf = new LowPassFilter(0.5, 0.0);
-        Shooter.HoodLpf = new LowPassFilter(0.4, 0.0);
+        Shooter.HoodLpf = new LowPassFilter(0.7, 0.0);
     }
     ElapsedTime timer;
     public void update(){
