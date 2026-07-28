@@ -76,9 +76,9 @@ public abstract class TeleOp extends BetterOpMode {
                 .whenPressed(Robot::switchPlayStyle, BetterGamepad.Type.MAIN);
 
         gamepadEx2.getButton(BetterGamepad.Buttons.SQUARE)
-                .whenPressed(()->Shooter.offset += 30 , BetterGamepad.Type.PARALLEL);
+                .whenPressed(()->Shooter.offset += 20 , BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.CIRCLE)
-                .whenPressed(()->Shooter.offset -= 30 , BetterGamepad.Type.PARALLEL);
+                .whenPressed(()->Shooter.offset -= 20 , BetterGamepad.Type.PARALLEL);
 
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
@@ -142,7 +142,7 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-        //Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.0025 * (gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER)));
+        Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.0025 * (gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER)));
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());
@@ -154,6 +154,8 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("robotCentric", Drivetrain.robotCentric);
         telemetry.addData("blocker", Blocker.blocked);
         telemetry.addData("blocker at pos", Blocker.atPosition());
+        telemetry.addData("turret offset", Turret.offset);
+        telemetry.addData("shooter offset", Shooter.offset);
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
             gamepad1.rumble(300);

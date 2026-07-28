@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
 
-@Autonomous(name = "Close Red", group = "Auto")
+@Autonomous(name = "Close Red", group = "Auto Close")
 @NotVibeCoded
 public class CloseRedOriginal extends Auto {
     public class ShootPreload implements Task {

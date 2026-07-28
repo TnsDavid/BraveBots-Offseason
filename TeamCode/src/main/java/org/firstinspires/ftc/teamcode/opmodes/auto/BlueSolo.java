@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootAutoClose;
-@Autonomous
+@Autonomous(name = "Blue Solo", group = "Auto Solo")
 public class BlueSolo extends Auto{
 
     double fieldLength = 141;

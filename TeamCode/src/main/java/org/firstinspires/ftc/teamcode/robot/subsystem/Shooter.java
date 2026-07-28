@@ -51,7 +51,7 @@ public class Shooter {
     //3.14 1100
 
     public static double error = 0;
-    public static double theta = 0.4;
+    public static double theta = 0.8;
     public static void update() {
         HoodLpf.setAlpha(theta);
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
@@ -60,7 +60,8 @@ public class Shooter {
             hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor1.getVelocity());
         } else {
             velocity = ShooterMath.calculateVelocityFARFromDistance(Turret.virtualDist) + offset;
-            hoodPos = calculateHoodByError(hoodFAR, velocity);
+            hoodPos = ShooterMath.calculateHoodFARFromDistance(Turret.virtualDist);
+            hoodPos = calculateHoodByError(hoodPos, velocity);
         }
         hoodServo.setPosition(hoodPos);
         double currentVoltage = Robot.voltageSensor.getVoltage();

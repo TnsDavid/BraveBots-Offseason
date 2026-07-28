@@ -7,13 +7,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
-@Autonomous
+@Autonomous(name = "Far Red", group = "Auto Far")
 public class AutoFarLLRED extends AutoFar{
     public class HPCollect implements Task {
         Command s;
@@ -121,6 +122,8 @@ public class AutoFarLLRED extends AutoFar{
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
         offset = -1;
+        velocity = Shooter.velocityFAR;
+        pos = Shooter.hoodFAR;
         auto
                 //.addTask(() -> Turret.setNeutralPosition(0.1895))
                 .addTask(new ShootFar())
