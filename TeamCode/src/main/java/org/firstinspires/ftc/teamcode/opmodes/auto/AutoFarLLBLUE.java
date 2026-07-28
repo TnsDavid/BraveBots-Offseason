@@ -119,7 +119,7 @@ public class AutoFarLLBLUE extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose.mirror(fieldLength));
-        offset = Robot.alliance == Alliance.RED ? -1 : 3;
+        offset = 3;
         velocity = 1080;
         pos = 0.5583;
         auto

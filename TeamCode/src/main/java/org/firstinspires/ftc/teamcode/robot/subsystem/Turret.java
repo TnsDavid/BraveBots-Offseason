@@ -81,7 +81,7 @@ public class Turret {
             } else setNeutralPosition(0.5);
         }
     }
-    public static double offset = 0, addedOffset = 0 , coef = 1.5 ;
+    public static double offset = 0, addedOffset = 0 , coef = 4.5 ;
     public static double alpha;
     public static void update(){
         Pose robotPose= Robot.robotPose;
@@ -116,9 +116,9 @@ public class Turret {
                 double headingInDeg = Math.toDegrees(heading);
                 if(Robot.playStyle == Robot.PlayStyle.FAR) {
                     if (headingInDeg <= 90 && headingInDeg >= -90)
-                        addedOffset = (90 - (headingInDeg > 0 ? headingInDeg : -headingInDeg)) * -4.5 / 90;
+                        addedOffset = (90 - (headingInDeg > 0 ? headingInDeg : -headingInDeg)) * -3 / 90 + 2 ;
                     else
-                        addedOffset = ((headingInDeg > 0 ? headingInDeg : -headingInDeg) - 90) * coef / 90;
+                        addedOffset = ((headingInDeg > 0 ? headingInDeg : -headingInDeg) - 90) * 3 / 90;
                 } else addedOffset = 0;
 
                 alpha = Math.toDegrees(turrVector.getTheta()) + addedOffset + offset;
