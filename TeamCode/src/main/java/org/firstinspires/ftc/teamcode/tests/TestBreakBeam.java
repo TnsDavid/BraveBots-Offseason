@@ -14,13 +14,13 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BreakBeam;
 @Configurable
 public class TestBreakBeam extends LinearOpMode {
     BreakBeam bm , bmup;
-    int portNumber = 1;
+    int portNumber = 0;
     DigitalChannelController controller;
     @Override
     public void runOpMode() throws InterruptedException{
         Robot r = new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
         controller = hardwareMap.get(DigitalChannelController.class,"Control Hub");
-        //bm = new BreakBeam(controller, portNumber);
+        //bm = new BreakBeam(controller, portNumber);       „
         bmup = new BreakBeam(controller , portNumber);
         //bm.setMode(DigitalChannel.Mode.INPUT);
 

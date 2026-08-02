@@ -12,13 +12,14 @@ public class LineToTangentialToConstantSync implements Task {
     Follower f;
     Pose p;
 
-    boolean started;
+    boolean started, reverse;
     double tvalue;
-    public LineToTangentialToConstantSync(Follower f, Pose p , double tvalue){
+    public LineToTangentialToConstantSync(Follower f, Pose p , double tvalue, boolean reverse){
         this.f= f;
         this.p= p;
         started= false;
         this.tvalue = tvalue;
+        this.reverse = reverse;
     }
     @Override
     public boolean Run() {
@@ -28,7 +29,7 @@ public class LineToTangentialToConstantSync implements Task {
                     new HeadingInterpolator.PiecewiseNode(
                             0,
                             tvalue,
-                            HeadingInterpolator.tangent
+                            !reverse ? HeadingInterpolator.tangent : HeadingInterpolator.tangent.reverse()
                     ) ,
                     new HeadingInterpolator.PiecewiseNode(
                             tvalue ,

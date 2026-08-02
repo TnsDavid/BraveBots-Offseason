@@ -984,7 +984,6 @@ class TranslationalTuner extends OpMode {
     @Override
     public void start() {
         follower.deactivateAllPIDFs();
-        follower.activateHeading();
         follower.activateTranslational();
         forwards = new Path(new BezierLine(new Pose(72,72), new Pose(DISTANCE + 72,72)));
         forwards.setConstantHeadingInterpolation(0);

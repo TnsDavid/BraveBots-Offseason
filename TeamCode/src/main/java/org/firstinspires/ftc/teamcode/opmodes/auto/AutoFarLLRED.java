@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
-@Autonomous(name = "Far Red", group = "Auto Far")
 public class AutoFarLLRED extends AutoFar{
     public class HPCollect implements Task {
         Command s;
@@ -34,6 +33,8 @@ public class AutoFarLLRED extends AutoFar{
                     .lineToConstantSync(Poses.FarPoses.shootPose, Poses.FarPoses.shootPose.getHeading())
                     .addTask(() -> follower.getCurrentTValue()>0.3)
                     .addTask(() -> follower.setMaxPower(1))
+                    .addTask(()->follower.getCurrentTValue() > 0.6)
+                    .addTask(Intake::stop)
                     .addTask(() -> !follower.isBusy())
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
@@ -57,7 +58,7 @@ public class AutoFarLLRED extends AutoFar{
                     .addTask(() -> follower.setMaxPower(0.8))
                     .addTask(() -> !follower.isBusy())
                     .addTask(() -> follower.setMaxPower(1))
-                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPoseScan.getHeading())
+                    .lineToTangentialToConstantAsync(Poses.FarPoses.shootPoseScan, 0.7, true)
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
@@ -85,7 +86,7 @@ public class AutoFarLLRED extends AutoFar{
                     .addTask(() -> follower.turn(Math.toRadians(20), false))
                     .waitSeconds(0.05)
                     .addTask(()->follower.setMaxPower(1))
-                    .lineToConstantAsync(Poses.FarPoses.shootPoseScan, Poses.FarPoses.shootPoseScan.getHeading())
+                    .lineToTangentialToConstantAsync(Poses.FarPoses.shootPoseScan, 0.7, true)
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
@@ -118,8 +119,8 @@ public class AutoFarLLRED extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
-        offset = -1;
-        velocity = Shooter.velocityFAR;
+        offset = 1;
+        velocity = Shooter.velocityFAR - 20;
         pos = Shooter.hoodFAR;
         auto
                 //.addTask(() -> Turret.setNeutralPosition(0.1895))

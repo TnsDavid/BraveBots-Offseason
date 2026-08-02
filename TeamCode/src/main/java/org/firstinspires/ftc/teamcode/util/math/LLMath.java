@@ -132,8 +132,8 @@ public class LLMath {
                 update();
                 Pose robotRelPose = getBestRobotRelativePose();
                 Pose fieldRelPose = getFieldRelativePose(robotRelPose, flw.getPose());
-                optimalPose = new Pose(132.5, Math.max(fieldRelPose.getY() > 24 ? fieldRelPose.getY() - 20 : fieldRelPose.getY() - 3, intakeWidth / 2 + 2));
-                if(Robot.alliance == Alliance.BLUE) optimalPose = optimalPose.mirror();
+                optimalPose = new Pose(130.2, fieldRelPose.getY());
+                if(Robot.alliance == Alliance.BLUE) optimalPose = new Pose( 11.7, optimalPose.mirror().getY());
             }
         Path path = new Path(new BezierLine(flw.getPose(), optimalPose));
         path.setConstantHeadingInterpolation(Robot.alliance == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180));

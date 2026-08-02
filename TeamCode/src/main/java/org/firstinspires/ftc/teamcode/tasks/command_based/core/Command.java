@@ -27,13 +27,17 @@ import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialSync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialSyncReversed;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialToConstantAsync;
 import org.firstinspires.ftc.teamcode.tasks.auto_task.LineToTangentialToConstantSync;
+import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.TaskWithCondition;
 import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.Wait;
 
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 public class Command {
     Follower f;
     LinkedList<TaskFactory> factory;
+
+
 
     boolean last= true, current= false, justDone= false;
     public LinkedList<Task> list;
@@ -67,6 +71,12 @@ public class Command {
     public Command addTask(Task t){
         factory.addLast(()-> t);
         list.addLast(t);
+        return this;
+    }
+    public Command addTasks(Task... t){
+        for (Task task : t) {
+            list.addLast(task);
+        }
         return this;
     }
     public Command addTask(InstantTask t){
@@ -251,16 +261,16 @@ public class Command {
         list.addLast(new LineToTangentialASyncTValue(f, p, tValue));
         return this;
     }
-    public Command lineToTangentialToConstantAsync(Pose p, double tValue) {
+    public Command lineToTangentialToConstantAsync(Pose p, double tValue, boolean reverse) {
         if( f == null )
             throw new IllegalArgumentException("Follower not set");
-        list.addLast(new LineToTangentialToConstantAsync(f, p, tValue));
+        list.addLast(new LineToTangentialToConstantAsync(f, p, tValue, reverse));
         return this;
     }
-    public Command lineToTangentialToConstantSync(Pose p, double tValue) {
+    public Command lineToTangentialToConstantSync(Pose p, double tValue, boolean reverse) {
         if( f == null )
             throw new IllegalArgumentException("Follower not set");
-        list.addLast(new LineToTangentialToConstantSync(f, p, tValue));
+        list.addLast(new LineToTangentialToConstantSync(f, p, tValue, reverse));
         return this;
     }
     public Command curveToTangentialToConstantSync(Pose cp, Pose p, double tValue) {

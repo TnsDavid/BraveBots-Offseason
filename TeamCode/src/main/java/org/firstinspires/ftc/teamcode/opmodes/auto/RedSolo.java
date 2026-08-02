@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
 
-@Autonomous(name = "Red Solo", group = "Auto Solo")
 @NotVibeCoded
 public class RedSolo extends Auto {
     public class ShootPreload implements Task {

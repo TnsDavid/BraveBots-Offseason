@@ -4,11 +4,14 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.Globals;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
@@ -51,6 +54,7 @@ public abstract class AutoFar extends BetterOpMode {
         buildAuto();
     }
 
+    public static Pose robotPose = new Pose();
     @Override
     public void initialize_loop() {
         follower.update();
@@ -72,7 +76,8 @@ public abstract class AutoFar extends BetterOpMode {
         robot.update();
         follower.update();
         auto.update();
-        Pose robotPose= follower.getPose();
+        robotPose= follower.getPose();
+        Globals.lastPose = robotPose;
         Turret.turrStatus = Turret.TurretStatus.ACTIVE;
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
@@ -85,6 +90,8 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.addData("optimal pose" , LLMath.optimalPose);
         telemetry.addData("transferPower" , Storage.transfer.getPower());
         telemetry.addData("vel", Robot.odo.getVelX(DistanceUnit.METER));
+
+
         if(LLMath.results != null) telemetry.addData("LLMath results empty?", LLMath.results.isEmpty());
         telemetry.update();
         Shooter.shooterEnabled = true;
@@ -95,6 +102,6 @@ public abstract class AutoFar extends BetterOpMode {
 
     @Override
     public void end() {
-
+            Globals.lastPose = robotPose;
     }
 }

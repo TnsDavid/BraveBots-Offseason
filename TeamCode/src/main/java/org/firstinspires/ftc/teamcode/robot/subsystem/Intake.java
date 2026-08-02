@@ -2,13 +2,12 @@ package org.firstinspires.ftc.teamcode.robot.subsystem;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
 public class Intake {
     public static BetterMotorEx motor;
-
     static ElapsedTime timer = new ElapsedTime();
-
     public static IntakeStatus status = IntakeStatus.NOTINTAKING;
 
     public enum IntakeStatus{
@@ -18,10 +17,6 @@ public class Intake {
         motor.setPower(1);
         timer= new ElapsedTime();
         status= IntakeStatus.INTAKING;
-    }
-    public static void relanti(){
-        motor.setPower(0.5);
-        status = IntakeStatus.INTAKING;
     }
     public static void stop(){
         motor.setPower(0);
@@ -44,17 +39,8 @@ public class Intake {
             Storage.stop();
         }
     }
-    public static void toggleFortat(){
-        if(status == IntakeStatus.NOTINTAKING){
-            start();
-            status = IntakeStatus.FORCEDINTAKE;
-        }
-        else stop();
-    }
     public static void update() {
-        if(Storage.status.equals(Storage.Status.STORAGEFULL) && !status.equals(IntakeStatus.FORCEDINTAKE) && !Shooter.readyForShoot) stop();
+        if(Storage.status.equals(Storage.Status.STORAGEFULL) && !status.equals(IntakeStatus.FORCEDINTAKE) && !Shooter.readyForShoot ) stop();
     }
-    public static void updateAuto() {
-        if( Storage.status.equals(Storage.Status.STORAGEFULL) && !Shooter.readyForShoot ) stop();
-    }
+
 }

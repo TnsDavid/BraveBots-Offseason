@@ -32,13 +32,11 @@ public class Shooter {
         motor1.setPower(power);
         motor2.setPower(power);
     }
-
-    public static double hoodPos = 0, minHoodpos = 0.3322, maxHoodPos = 0.8506, velocityFAR = 1100, closeInc = 0.0082;
-    public static double hoodFAR = 0.6;
-    public static double offset = 0, velocityThreshold = 60;
+    public static double hoodPos = 0, minHoodpos = 0.3322, maxHoodPos = 0.8506, velocityFAR = 1120, closeInc = 0.0082;
+    public static double hoodFAR = 0.55;
+    public static double offset = -40, velocityThreshold = 60;
     public static boolean shooterEnabled = false;
     public static double hoodCompensation;
-
     public static double calculateHoodByError(double pos, double velocity) {
         hoodCompensation = HoodLpf.update(pos * (motor1.getVelocity() / velocity));
         return Range.clip(hoodCompensation, minHoodpos, maxHoodPos);
@@ -53,13 +51,12 @@ public class Shooter {
     public static double error = 0;
     public static double theta = 0.8;
     public static void update() {
-        HoodLpf.setAlpha(theta);
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
         if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
             velocity = ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) + offset;
             hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor1.getVelocity());
         } else {
-            velocity = ShooterMath.calculateVelocityFARFromDistance(Turret.virtualDist) + offset;
+            velocity = Turret.virtualDist < 3 ? 1000 : ShooterMath.calculateVelocityFARFromDistance(Turret.virtualDist) + offset;
             hoodPos = calculateHoodByError(hoodFAR, velocity);
         }
         hoodServo.setPosition(hoodPos);

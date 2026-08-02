@@ -42,7 +42,7 @@ public class AutoTuning extends BetterOpMode {
         Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() + 0.02 * (gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)));
 
         Intake.update();
-        Storage.update();
+        //Storage.update();
         telemetry.addData("turret", Turret.getPositon());
         telemetry.addData("hood", Shooter.hoodServo.getPosition());
         telemetry.update();

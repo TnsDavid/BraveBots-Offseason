@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.tasks.command_based.command_types;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 public class TaskWithCondition {
 

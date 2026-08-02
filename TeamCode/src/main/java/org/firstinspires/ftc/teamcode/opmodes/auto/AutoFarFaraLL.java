@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 
-@Autonomous
 public class AutoFarFaraLL extends Auto{
     public class HPCollect implements Task {
         Command s;

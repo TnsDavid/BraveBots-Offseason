@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -12,11 +13,13 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Spit;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
-@Autonomous(name = "Far Blue", group = "Auto Far")
 public class AutoFarLLBLUE extends AutoFar{
     public double fieldLength = 144;
+
+    public double amps = 10;
     public class HPCollect implements Task {
         Command s;
 
@@ -37,6 +40,9 @@ public class AutoFarLLBLUE extends AutoFar{
                     .addTask(() -> follower.getCurrentTValue()>0.3)
                     .addTask(() -> follower.setMaxPower(1))
                     .addTask(() -> !follower.isBusy())
+                    .addTask(()->{
+                        if(Intake.motor.getCurrent(CurrentUnit.AMPS) > amps) s.addTask(Spit::new);
+                    })
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
@@ -120,7 +126,7 @@ public class AutoFarLLBLUE extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose.mirror(fieldLength));
-        offset = 2;
+        offset = 3.5;
         velocity = Shooter.velocityFAR;
         pos = Shooter.hoodFAR;
         auto

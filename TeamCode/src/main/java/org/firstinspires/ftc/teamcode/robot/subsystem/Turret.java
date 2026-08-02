@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 @Configurable
 public class Turret {
 
-    static double turretRange=351;
+    public static double turretRange=351;
     public static double x, y, heading, xCorner, yCorner, dist, TOF, virtualDist;
     public static final double FIELD_LENGTH= 3.65, goalCircleRadius = .18;
     public static double tofCoeff = 1.15;
@@ -81,8 +81,9 @@ public class Turret {
             } else setNeutralPosition(0.5);
         }
     }
-    public static double offset = 0, addedOffset = 0 , coef = 4.5 ;
-    public static double alpha;
+    public static double offset = 2, addedOffset = 0 , coef = 4.5 ;
+    public static double xComp, yComp;
+    public static double alpha, offsetCenter = 0.037985, adjustableOffset = 4.5;
     public static void update(){
         Pose robotPose= Robot.robotPose;
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
@@ -110,18 +111,26 @@ public class Turret {
             virtualDist = Math.hypot(xCorner, yCorner);
 
             if(turrStatus.equals(TurretStatus.ACTIVE)) {
+                Vector offsetVector = new Vector();
+                offsetVector.setOrthogonalComponents(-offsetCenter, 0);
+                offsetVector.rotateVector(heading);
+
+                xComp = offsetVector.getXComponent() * 100;
+                yComp = offsetVector.getYComponent() * 100;
+
+                xCorner -= offsetVector.getXComponent();
+                yCorner -= offsetVector.getYComponent();
+
                 Vector turrVector = new Vector();
                 turrVector.setOrthogonalComponents(xCorner, yCorner);
                 turrVector.rotateVector(-heading);
+
                 double headingInDeg = Math.toDegrees(heading);
                 if(Robot.playStyle == Robot.PlayStyle.FAR) {
-                    if (headingInDeg <= 90 && headingInDeg >= -90)
-                        addedOffset = (90 - (headingInDeg > 0 ? headingInDeg : -headingInDeg)) * -3 / 90 + 2 ;
-                    else
-                        addedOffset = ((headingInDeg > 0 ? headingInDeg : -headingInDeg) - 90) * 3 / 90 + 2 ;
+                    addedOffset = (headingInDeg >= 0 ? headingInDeg : -headingInDeg) * adjustableOffset / 180;
                 } else addedOffset = 0;
 
-                alpha = Math.toDegrees(turrVector.getTheta()) + addedOffset + offset;
+                alpha = Math.toDegrees(turrVector.getTheta()) + offset + addedOffset;
                 alpha = Range.clip(alpha, 0, 360);
 
                 double finalPos = 0.5 + (alpha - 180) / turretRange;
