@@ -22,6 +22,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.HussamDogEater;
+import org.firstinspires.ftc.teamcode.RaduFaceHam;
+import org.firstinspires.ftc.teamcode.TanaseECiung;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
@@ -39,6 +42,9 @@ import org.firstinspires.ftc.teamcode.util.wrappers.RGBIndicator;
 
 import java.util.List;
 
+@RaduFaceHam
+@TanaseECiung
+@HussamDogEater
 @Configurable
 public class Robot {
     public static Pose robotPose;
