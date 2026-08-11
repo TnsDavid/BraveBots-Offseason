@@ -20,10 +20,12 @@ public class Scheduler {
         list.addLast(t);
     }
     public static void now(Task t){
+        list.getFirst().end(true);
         clear();
         list.addLast(t);
     }
     public static void now(InstantTask t){
+        list.getFirst().end(true);
         clear();
         list.addLast(()->{
             t.run();
@@ -31,6 +33,7 @@ public class Scheduler {
         });
     }
     public static void now(Supplier<? extends Task> supplier){
+        list.getFirst().end(true);
         clear();
         list.addLast(supplier.get());
     }
@@ -69,7 +72,10 @@ public class Scheduler {
     public static LinkedList<LinkedList<Task>> parallels= new LinkedList<>();
     public static void update(){
         if(!list.isEmpty()) {
-            if (list.getFirst().Run()) list.removeFirst();
+            if (list.getFirst().Run()){
+                list.getFirst().end(false);
+                list.removeFirst();
+            }
         }
         if(parallels.isEmpty()) return;
         Iterator<LinkedList<Task>> it= parallels.iterator();
@@ -81,7 +87,10 @@ public class Scheduler {
                 it.remove();
                 continue;
             }
-            if(q.getFirst().Run()) q.removeFirst();
+            if(q.getFirst().Run()){
+                q.getFirst().end(false);
+                q.removeFirst();
+            }
             if(q.isEmpty()) it.remove();
         }
     }

@@ -134,9 +134,10 @@ public class Command {
 
         Task t= list.getFirst();
         boolean result= t.Run();
-        if(result)
+        if(result) {
+            t.end(false);
             list.removeFirst();
-
+        }
     }
     public Command lineToConstantAsync(Pose p, double heading){
         if(f== null)
