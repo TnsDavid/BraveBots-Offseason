@@ -25,6 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.HussamDogEater;
 import org.firstinspires.ftc.teamcode.RaduFaceHam;
 import org.firstinspires.ftc.teamcode.TanaseECiung;
+import org.firstinspires.ftc.teamcode.opmodes.auto.Poses;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
@@ -63,6 +64,7 @@ public class Robot {
     DigitalChannel downLaser, middleLaser;
 
     public BetterServoEx turret1, turret2;
+
     public static GoBildaPinpointDriver odo;
     public BetterMotorEx intake, transfer, shooter, shooter2,FrontRight,FrontLeft,BackLeft,BackRight;
     public ServoController controlHubServos, expansionHubServos;
@@ -116,22 +118,22 @@ public class Robot {
         playStyle = playStyle == PlayStyle.CLOSE ? PlayStyle.FAR : PlayStyle.CLOSE;
     }
     public void resetPinPoint() {
-        odo.resetPosAndIMU();
+        Odo.odo.resetPosAndIMU();
         try {
             Thread.sleep(300);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        odo.setPosX(playStyle == PlayStyle.FAR ?
+        Odo.odo.setPosX(playStyle == PlayStyle.FAR ?
                 ( alliance == Alliance.RED ? (dtlength / 2 + intakeWidth) : (3.65 - (dtlength / 2 + intakeWidth)) ) :
                 ( alliance == Alliance.RED ? (3.65 - classifierWidth - dtlength / 2 - intakeWidth) : (classifierWidth + dtlength / 2 + intakeWidth) ), DistanceUnit.METER);
-        odo.setPosY(playStyle == PlayStyle.FAR ?
+        Odo.odo.setPosY(playStyle == PlayStyle.FAR ?
                 ( dtwidth / 2 ) :
                 ( 2.00 ), DistanceUnit.METER);
-        odo.setHeading(playStyle == PlayStyle.FAR ?
+        Odo.odo.setHeading(playStyle == PlayStyle.FAR ?
                 ( alliance == Alliance.RED ? Math.PI : 0 ):
                 ( alliance == Alliance.RED ? Math.toRadians(0) : Math.toRadians(180) ), AngleUnit.RADIANS);
-        robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
+        robotPose = new Pose(Odo.odo.getPosX(DistanceUnit.METER), Odo.odo.getPosY(DistanceUnit.METER), Odo.odo.getHeading(AngleUnit.RADIANS));
     }
     public void initializeControllers() {
         controlHubMotors= hm.get(DcMotorController.class, "Control Hub");
@@ -212,24 +214,6 @@ public class Robot {
         if(opModeType== null)
             throw new IllegalArgumentException("OpMode type nesetat");
 
-        odo = hm.get(GoBildaPinpointDriver.class, "pinpoint");
-        odo.resetPosAndIMU();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        if(opModeType== OpModeType.TELEOP) {
-            odo.setOffsets(Constants.yOffset, Constants.xOffset, DistanceUnit.INCH);
-            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-            odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-            odo.setPosX(Globals.lastPose.getX(), DistanceUnit.INCH);
-            odo.setPosY(Globals.lastPose.getY(), DistanceUnit.INCH);
-            odo.setHeading(Globals.lastPose.getHeading(), AngleUnit.RADIANS);
-            Drivetrain.robotCentric = false;
-            robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
-        }
         voltageSensor= hm.voltageSensor.iterator().next();
         downLaser = hm.get(DigitalChannel.class, "laser intake");
         downLaser.setMode(DigitalChannel.Mode.INPUT);
@@ -238,7 +222,9 @@ public class Robot {
         middleLaser.setMode(DigitalChannel.Mode.INPUT);
 
         Storage.startedTimer = false;
-        setPlayStyle(PlayStyle.FAR);
+        Odo.init(hm, opModeType, playStyle);
+        Drivetrain.robotCentric = false;
+        robotPose = new Pose(Odo.odo.getPosX(DistanceUnit.METER), Odo.odo.getPosY(DistanceUnit.METER), Odo.odo.getHeading(AngleUnit.RADIANS));
        // LLMath.init(hm);
         Turret.ChassisLpf = new LowPassFilter(0.85, 0.0);
         Shooter.HoodLpf = new LowPassFilter(0.8, 0.0);
@@ -251,8 +237,8 @@ public class Robot {
         hubs.forEach(LynxModule::clearBulkCache);
 
         if(opModeType== OpModeType.TELEOP) {
-            odo.update();
-            robotPose = new Pose(odo.getPosX(DistanceUnit.METER), odo.getPosY(DistanceUnit.METER), odo.getHeading(AngleUnit.RADIANS));
+            Odo.odo.update();
+            robotPose = new Pose(Odo.odo.getPosX(DistanceUnit.METER), Odo.odo.getPosY(DistanceUnit.METER), Odo.odo.getHeading(AngleUnit.RADIANS));
         }
 
     }

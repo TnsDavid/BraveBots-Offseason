@@ -89,7 +89,6 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.addData("alliance", alliance);
         telemetry.addData("optimal pose" , LLMath.optimalPose);
         telemetry.addData("transferPower" , Storage.transfer.getPower());
-        telemetry.addData("vel", Robot.odo.getVelX(DistanceUnit.METER));
 
 
         if(LLMath.results != null) telemetry.addData("LLMath results empty?", LLMath.results.isEmpty());

@@ -20,12 +20,12 @@ public class Scheduler {
         list.addLast(t);
     }
     public static void now(Task t){
-        list.getFirst().end(true);
+        if(!list.isEmpty()) list.getFirst().end(true);
         clear();
         list.addLast(t);
     }
     public static void now(InstantTask t){
-        list.getFirst().end(true);
+        if(!list.isEmpty()) list.getFirst().end(true);
         clear();
         list.addLast(()->{
             t.run();
@@ -33,7 +33,7 @@ public class Scheduler {
         });
     }
     public static void now(Supplier<? extends Task> supplier){
-        list.getFirst().end(true);
+        if(!list.isEmpty()) list.getFirst().end(true);
         clear();
         list.addLast(supplier.get());
     }

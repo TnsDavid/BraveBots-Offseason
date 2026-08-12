@@ -4,6 +4,7 @@ import com.pedropathing.math.Vector;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.Odo;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class Drivetrain {
         double finalX, finalY;
         double influentaRotatiei = Robot.alliance == Alliance.RED ? 1 : -1;
         if( !robotCentric ) {
-            double robotHeading = Robot.odo.getHeading(AngleUnit.RADIANS);
+            double robotHeading = Odo.odo.getHeading(AngleUnit.RADIANS);
             finalX = (rawX * Math.cos(-robotHeading) - rawY * Math.sin(-robotHeading)) * influentaRotatiei;
             finalY = (rawX * Math.sin(-robotHeading) + rawY * Math.cos(-robotHeading)) * influentaRotatiei;
         }

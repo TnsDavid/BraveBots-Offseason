@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.Odo;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.math.LowPassFilter;
 import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
@@ -51,8 +52,8 @@ public class Turret {
             yCorner= FIELD_LENGTH- y - goalCircleRadius;
             xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x - goalCircleRadius : -x + goalCircleRadius;
 
-            double Vx = Robot.odo.getVelX(DistanceUnit.METER);
-            double Vy = Robot.odo.getVelY(DistanceUnit.METER);
+            double Vx = Odo.odo.getVelX(DistanceUnit.METER);
+            double Vy = Odo.odo.getVelY(DistanceUnit.METER);
             Vector velocity = new Vector();
             velocity.setOrthogonalComponents(Vx , Vy);
             velocity.setMagnitude(ChassisLpf.update(velocity.getMagnitude()));
@@ -95,8 +96,8 @@ public class Turret {
             yCorner= FIELD_LENGTH- y - goalCircleRadius;
             xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x - goalCircleRadius : -x + goalCircleRadius;
 
-            double Vx = Robot.odo.getVelX(DistanceUnit.METER);
-            double Vy = Robot.odo.getVelY(DistanceUnit.METER);
+            double Vx = Odo.odo.getVelX(DistanceUnit.METER);
+            double Vy = Odo.odo.getVelY(DistanceUnit.METER);
             Vector velocity = new Vector();
             velocity.setOrthogonalComponents(Vx , Vy);
             velocity.setMagnitude(ChassisLpf.update(velocity.getMagnitude()));

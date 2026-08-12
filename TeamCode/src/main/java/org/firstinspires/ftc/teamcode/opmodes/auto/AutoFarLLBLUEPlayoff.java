@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.Odo;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
@@ -85,7 +86,7 @@ public class AutoFarLLBLUEPlayoff extends AutoFar{
                     .addTask(() -> LLMath.scan(follower))
                     .addTask(() -> SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
-                    .addTask(() -> !follower.isBusy() || Math.abs(Robot.odo.getVelX(DistanceUnit.METER)) < 0.5)
+                    .addTask(() -> !follower.isBusy() || Math.abs(Odo.odo.getVelX(DistanceUnit.METER)) < 0.5)
                     .addTask(() -> follower.turn(Math.toRadians(30), false))
                     .waitSeconds(0.05)
                     .addTask(() -> follower.turn(Math.toRadians(30), true))

@@ -16,17 +16,13 @@ public class Shooter {
     public static double velocity = 0;
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
-    public static double pClose = 0.005, fClose = 1.15, s = 0.1, d = 0;
+    public static double pClose = 0.005, fClose = 1.175, s = 0.1, d = 0;
     public static double alpha = 0.5;
 
 
     public static PDSFController controller = new PDSFController(pClose, 0, s, fClose / 1700);
 
     public static LowPassFilter ShooterLpf, HoodLpf;
-
-    public static void setLpfAlpha() {
-        ShooterLpf.setAlpha(alpha);
-    }
 
     public static void setPower(double power) {
         motor1.setPower(power);
@@ -52,6 +48,7 @@ public class Shooter {
     public static double theta = 0.8;
     public static void update() {
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
+        HoodLpf.setAlpha(theta);
         if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
             velocity = ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) + offset;
             hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor1.getVelocity());

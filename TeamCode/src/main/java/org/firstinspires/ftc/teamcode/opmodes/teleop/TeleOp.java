@@ -16,8 +16,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.ConsumerCommand;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot1;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.shoot;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Spit;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
 import org.firstinspires.ftc.teamcode.util.MultipleTelemetry;
@@ -32,7 +31,7 @@ public abstract class TeleOp extends BetterOpMode {
     MultipleTelemetry telemetry;
     volatile boolean shooterThreadRunning, turretThreadRunning, driveThreadRunning;
     Thread shooterThread, turretThread, driveThread;
-    shoot shootcom = new shoot();
+    Shoot shootcom = new Shoot();
     public abstract void setAlliance();
 
     @Override
@@ -42,11 +41,12 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.setMsTransmissionInterval(500);
         robot = new Robot(hardwareMap, this.telemetry, this.a)
                 .setOpModeType(Robot.OpModeType.TELEOP)
+                .setPlayStyle(Robot.PlayStyle.FAR)
                 .initialize();
         gamepadEx1.getButton(BetterGamepad.Buttons.CROSS)
-                .whenPressed(Intake::toggle, BetterGamepad.Type.MAIN);
+                .whenPressed(Intake::toggle, BetterGamepad.Type.PARALLEL);
         gamepadEx1.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
-                .whenPressed(Shoot1::new, BetterGamepad.Type.MAIN);
+                .whenPressed(Shoot::new, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> {
                     robot.resetPinPoint();
@@ -167,9 +167,6 @@ public abstract class TeleOp extends BetterOpMode {
         }
         if(!Blocker.blocked && !Shooter.readyForShoot){
             gamepad2.rumble(300);
-        }
-        if(gamepad2.right_bumper){
-            shootcom.runCommand();
         }
         robot.update();
         telemetry.update();
