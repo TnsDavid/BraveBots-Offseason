@@ -12,9 +12,12 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 public class ShooterMath {
     public static double aVFar = -32.30065, bVFar = 341.02654, cVFar = 347.6482;
     public static final double aHFar = 0.004, bHFar = -0.0882, cHFar = 0.85144;
-    public static final double aVClose = 0, bVClose = 80, cVClose = 740;
-    public static final double aHClose = -0.00342857, bHClose = 0.15032, cHClose = 0.226569;
-    public static final double aHClose2 = -0.000000535714, bHClose2 = 0.00267186, cHClose2 = -1.45725;
+    //y=160x+572
+    public static final double aVClose = 0, bVClose = 160, cVClose = 572;
+    //y=0.0126857x^{2}+0.0716514x+0.25198
+    public static final double aHClose = 0.0126857, bHClose = 0.0716514, cHClose = 0.25198;
+    //y=\left(4.95536\times10^{-7}\right)x^{2}-0.000119071x+0.157958
+    public static final double aHClose2 = 4.95536e-7, bHClose2 = -0.000119071, cHClose2 = 0.157958;
 
     public static double TOFCoef = 1;
 

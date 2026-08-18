@@ -16,13 +16,14 @@ public class Shooter {
     public static double velocity = 0;
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
-    public static double pClose = 0.005, fClose = 1.175, s = 0.1, d = 0;
+   // public static double pClose = 0.005, fClose = 1.175, s = 0.1, d = 0;
+    public static double pClose = 0.006, fClose = 0.94, s = 0.15, d = 0;
     public static double alpha = 0.5;
 
 
     public static PDSFController controller = new PDSFController(pClose, 0, s, fClose / 1700);
 
-    public static LowPassFilter ShooterLpf, HoodLpf;
+    public static LowPassFilter HoodLpf;
 
     public static void setPower(double power) {
         motor1.setPower(power);
@@ -45,7 +46,7 @@ public class Shooter {
     //3.14 1100
 
     public static double error = 0;
-    public static double theta = 0.8;
+    public static double theta = 0.75;
     public static void update() {
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
         HoodLpf.setAlpha(theta);
@@ -76,6 +77,7 @@ public class Shooter {
 
     public static void tuningupdate(double velocity) {
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
+        HoodLpf.setAlpha(theta);
         Shooter.velocity = velocity;
         double currentvoltage = Robot.voltageSensor.getVoltage();
         double pid = controller.calculate(motor1.getVelocity(), velocity);

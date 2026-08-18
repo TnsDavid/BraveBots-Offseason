@@ -82,7 +82,7 @@ public class Turret {
             } else setNeutralPosition(0.5);
         }
     }
-    public static double offset = 2, addedOffset = 0 , coef = 4.5 ;
+    public static double offset = -3, addedOffset = 0 , coef = 4.5 ;
     public static double xComp, yComp;
     public static double alpha, offsetCenter = 0.037985, adjustableOffset = 4.5;
     public static void update(){

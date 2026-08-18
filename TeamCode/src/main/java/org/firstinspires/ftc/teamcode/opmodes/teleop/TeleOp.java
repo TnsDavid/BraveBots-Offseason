@@ -50,8 +50,8 @@ public abstract class TeleOp extends BetterOpMode {
         gamepadEx1.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> {
                     robot.resetPinPoint();
-                     Turret.offset=0;
-                    gamepad1.rumble(200);//radu face ham
+                     Turret.offset = -3;
+                    gamepad1.rumble(200);
                 }, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_DOWN)
                 .whenPressed(()->{
@@ -113,7 +113,6 @@ public abstract class TeleOp extends BetterOpMode {
                     Thread.sleep(3);
                 } catch ( InterruptedException e ) {
                     Thread.currentThread().interrupt();
-                    Intake.update();
                 }
             }
         });
@@ -133,6 +132,10 @@ public abstract class TeleOp extends BetterOpMode {
         shooterThread.start();
         driveThread.start();
 
+        Blocker.block();
+        if( Blocker.atPosition() )
+            gamepad1.rumble(200);
+
     }
 
 
@@ -145,14 +148,21 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
+       // Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() +
+           //     0.01 * (gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) -
+              //          gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)));
 
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("x", Robot.robotPose.getX());
         telemetry.addData("y", Robot.robotPose.getY());
         telemetry.addData("heading", Robot.robotPose.getHeading());
+        telemetry.addData("dist", Turret.virtualDist);
+        telemetry.addData("hoodPos", Shooter.hoodServo.getPosition());
         telemetry.addData("turret offset", Turret.offset);
         telemetry.addData("shooter offset", Shooter.offset);
         telemetry.addData("transfer status", Storage.activeStatus);
+        telemetry.addData("cur vel", Shooter.motor1.getVelocity());
+        telemetry.addData("target vel", Shooter.velocity);
 
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
@@ -168,6 +178,8 @@ public abstract class TeleOp extends BetterOpMode {
         if(!Blocker.blocked && !Shooter.readyForShoot){
             gamepad2.rumble(300);
         }
+
+        Intake.update();
         robot.update();
         telemetry.update();
     }

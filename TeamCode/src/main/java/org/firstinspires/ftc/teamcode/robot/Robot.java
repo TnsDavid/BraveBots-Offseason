@@ -209,7 +209,7 @@ public class Robot {
     }
 
 
-    public static double lpf = 0.7;
+    public static double lpf = 0.85;
     public void initializeRest(){
         if(opModeType== null)
             throw new IllegalArgumentException("OpMode type nesetat");
@@ -226,8 +226,8 @@ public class Robot {
         Drivetrain.robotCentric = false;
         robotPose = new Pose(Odo.odo.getPosX(DistanceUnit.METER), Odo.odo.getPosY(DistanceUnit.METER), Odo.odo.getHeading(AngleUnit.RADIANS));
        // LLMath.init(hm);
-        Turret.ChassisLpf = new LowPassFilter(0.85, 0.0);
-        Shooter.HoodLpf = new LowPassFilter(0.8, 0.0);
+        Turret.ChassisLpf = new LowPassFilter(0.8, 0.0);
+        Shooter.HoodLpf = new LowPassFilter(0.75, 0.0);
 
     }
     ElapsedTime timer;
