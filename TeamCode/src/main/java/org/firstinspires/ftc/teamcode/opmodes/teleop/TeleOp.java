@@ -163,6 +163,7 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("transfer status", Storage.activeStatus);
         telemetry.addData("cur vel", Shooter.motor1.getVelocity());
         telemetry.addData("target vel", Shooter.velocity);
+        telemetry.addData("isRobotCentric" ,Drivetrain.robotCentric);
 
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){

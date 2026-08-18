@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 
 public class Shoot implements Task {
-    Command command ;
+    Command command;
     public static double totalShootTime=0.7;
     public Shoot() {
         command = new Command()

@@ -4,6 +4,8 @@ import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 
@@ -17,9 +19,10 @@ public class ThreadedTask implements Task {
     double secondsToWait;
     public ThreadedTask(Supplier<Task> s, double secondsToWait) {
         this.secondsToWait = secondsToWait;
-        tRunning = true;
         command = new Command()
                 .addTask(s.get())
+                .addTask(Intake::start)
+                .addTask(Storage::start)
                 .addTask(() -> {
                     tRunning = false;
                 });
@@ -33,12 +36,15 @@ public class ThreadedTask implements Task {
                 }
             }
         });
-        t.start();
-        timer = new ElapsedTime();
     }
 
     @Override
     public boolean Run(){
+        if(!tRunning){
+            timer = new ElapsedTime();
+            tRunning = true;
+            t.start();
+        }
         return timer.seconds() > this.secondsToWait;
     }
 }

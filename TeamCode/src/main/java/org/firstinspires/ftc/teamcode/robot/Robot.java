@@ -50,7 +50,7 @@ import java.util.List;
 public class Robot {
     public static Pose robotPose;
 
-    public static  double nominalVoltage = 10.2;
+    public static  double nominalVoltage = 10.1;
     public static double odometryResolution = 34.310551;
     public static VoltageSensor voltageSensor;
     List<LynxModule> hubs;
@@ -210,6 +210,7 @@ public class Robot {
 
 
     public static double lpf = 0.85;
+    public static double chassislpf = 0.8;
     public void initializeRest(){
         if(opModeType== null)
             throw new IllegalArgumentException("OpMode type nesetat");
@@ -225,9 +226,8 @@ public class Robot {
         Odo.init(hm, opModeType, playStyle);
         Drivetrain.robotCentric = false;
         robotPose = new Pose(Odo.odo.getPosX(DistanceUnit.METER), Odo.odo.getPosY(DistanceUnit.METER), Odo.odo.getHeading(AngleUnit.RADIANS));
-       // LLMath.init(hm);
         Turret.ChassisLpf = new LowPassFilter(0.8, 0.0);
-        Shooter.HoodLpf = new LowPassFilter(0.75, 0.0);
+        Shooter.HoodLpf = new LowPassFilter(lpf, 0.0);
 
     }
     ElapsedTime timer;
@@ -242,7 +242,7 @@ public class Robot {
         }
 
     }
-    public Robot  initialize()
+    public Robot initialize()
     {
         hubs= hm.getAll(LynxModule.class);
         hubs.forEach((hub)-> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));

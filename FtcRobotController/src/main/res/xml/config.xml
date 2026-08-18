@@ -15,7 +15,7 @@
             <betterMotorEx name="FL" port="0" />
             <betterMotorEx name="BL" port="1" />
             <betterMotorEx name="INT" port="2" />
-            <betterMotorEx name="Shooter " port="3" />
+            <betterMotorEx name="Shooter" port="3" />
             <BetterServo name="turret" port="0" />
             <BetterServo name="hood" port="1" />
             <RGBIndicator name="ledST" port="5" />

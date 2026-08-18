@@ -128,11 +128,8 @@ public class Storage {
                 break;
         }
         setColour(colour);
-        if(Shooter.readyForShoot) {
-            if(oneBall) {
-                startPower = 1;
-            } else startPower = farPower;
-        } else startPower = 1;
+        if(Shooter.readyForShoot) startPower = oneBall ? 1 : farPower;
+        else startPower = 1;
         double currentVoltage=Robot.voltageSensor.getVoltage();
         startPower=startPower*(Robot.nominalVoltage/currentVoltage);
         if(activeStatus==ActiveStatus.TRANSFER) transfer.setPower(startPower);

@@ -17,7 +17,7 @@ public class Shooter {
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
    // public static double pClose = 0.005, fClose = 1.175, s = 0.1, d = 0;
-    public static double pClose = 0.006, fClose = 0.94, s = 0.15, d = 0;
+    public static double pClose = 0.006, fClose = 1.175, s = 0.15, d = 0;
     public static double alpha = 0.5;
 
 
@@ -46,7 +46,7 @@ public class Shooter {
     //3.14 1100
 
     public static double error = 0;
-    public static double theta = 0.75;
+    public static double theta = 0.85;
     public static void update() {
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
         HoodLpf.setAlpha(theta);

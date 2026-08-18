@@ -34,13 +34,11 @@ public abstract class Auto extends BetterOpMode {
                 .setOpModeType(Robot.OpModeType.AUTO)
                 .setPlayStyle(Robot.PlayStyle.CLOSE)
                 .initialize();
-        sleep(500);
-        Turret.setNeutralPosition(0.5);
         follower= Constants.createFollower(hardwareMap);
         Storage.status = Storage.Status.EMPTY;
         Shooter.shooterEnabled = false;
         auto= new Command(follower);
-        offset = Robot.alliance == Alliance.RED ? -1.5 : 1.5;
+        offset = alliance == Alliance.RED ? -2.5 : 0;
         buildAuto();
     }
 
@@ -66,6 +64,7 @@ public abstract class Auto extends BetterOpMode {
         follower.update();
         auto.update();
         Pose robotPose= follower.getPose();
+        Turret.turrStatus = Turret.TurretStatus.ACTIVE;
         Turret.updateAuto(follower , offset);
         now = System.nanoTime();
         dt = now - last;
@@ -82,7 +81,7 @@ public abstract class Auto extends BetterOpMode {
         telemetry.addData("flwX", flwX);
         telemetry.update();
         if(!Shooter.shooterEnabled){
-            Shooter.AutoUpdate(velocity , pos);
+            Shooter.update();
         }else Shooter.update();
         Storage.update2();
     }
