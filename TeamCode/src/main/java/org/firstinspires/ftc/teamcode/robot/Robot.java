@@ -25,8 +25,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.HussamDogEater;
 import org.firstinspires.ftc.teamcode.RaduFaceHam;
 import org.firstinspires.ftc.teamcode.TanaseECiung;
-import org.firstinspires.ftc.teamcode.opmodes.auto.Poses;
-import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
@@ -38,7 +36,6 @@ import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServo;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;
 import org.firstinspires.ftc.teamcode.util.wrappers.BreakBeam;
-import org.firstinspires.ftc.teamcode.util.math.LLMath;
 import org.firstinspires.ftc.teamcode.util.wrappers.RGBIndicator;
 
 import java.util.List;
@@ -88,7 +85,7 @@ public class Robot {
 
     public static PlayStyle playStyle;
 
-    OpModeType opModeType= null;
+    public static OpModeType opModeType= null;
     public Robot setOpModeType(OpModeType type){
         opModeType= type;
         return this;

@@ -1,25 +1,28 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.notInUse;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Auto;
+import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Poses;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
-import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootAutoClose;
+//@Autonomous(name = "Blue Solo", group = "Auto Solo")
+public class BlueSolo extends Auto {
 
-@NotVibeCoded
-public class RedSolo extends Auto {
+    double fieldLength = 141;
+
     public class ShootPreload implements Task {
         Command command;
 
         public ShootPreload(){
             command = new Command(follower);
             command.addTask(() -> Shooter.shooterEnabled = true)
-                    .lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
+                    .lineToConstantSync(Poses.ClosePoses.shootPose.mirror(fieldLength), Math.toRadians(270))
                     .addTask(() -> follower.getCurrentTValue() > 0.75)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(new ShootAutoClose());
@@ -39,9 +42,9 @@ public class RedSolo extends Auto {
             command.addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> follower.setMaxPower(1))
-                    .curveToConstantAsync(Poses.ClosePoses.collectSecondSpikeCP, Poses.ClosePoses.collectSecondSpike, 0)
+                    .curveToConstantAsync(Poses.ClosePoses.collectSecondSpikeCP.mirror(fieldLength), Poses.ClosePoses.collectSecondSpike.mirror(fieldLength), 180)
                     .addTask(Storage::stop)
-                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose.mirror(fieldLength))
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.6)
@@ -58,33 +61,17 @@ public class RedSolo extends Auto {
     public class GateCycle implements Task {
         Command command;
         ElapsedTime time;
-        /*
         public GateCycle() {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .lineToLinearSync(Poses.ClosePoses.gateCollect)
-                    .addTask(() -> follower.getCurrentTValue() >= 0.8)
-                    .addTask(() -> follower.setMaxPower(0.7))
-                    .addTask(() -> time = new ElapsedTime())
-                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1400))
-                    .addTask(() -> follower.setMaxPower(1))
-                    .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
-                    .waitSeconds(0.05)
-                    .addTask(new ShootAutoClose());
-        }
-         */
-        public GateCycle() {
-            command = new Command(follower);
-            command.addTask(Intake::start)
-                    .addTask(Storage::start)
-                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP,Poses.ClosePoses.gateCollect,0.4)/// ////////
+                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP.mirror(fieldLength),Poses.ClosePoses.gateCollect.mirror(fieldLength),0.4)/// ////////
                     .addTask(() -> follower.getCurrentTValue() >= 0.5)/// ///////
                     .addTask(() -> follower.setMaxPower(0.8))/// ///////
                     .addTask(() -> time = new ElapsedTime())
                     .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1900))
                     .addTask(() -> follower.setMaxPower(1))
-                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose.mirror(fieldLength))
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.6)
@@ -105,8 +92,8 @@ public class RedSolo extends Auto {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .curveToTangentialToConstantAsync(Poses.ClosePoses.collectThirdSpikeCP, Poses.ClosePoses.collectThirdSpike, 0.7)
-                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
+                    .curveToTangentialToConstantAsync(Poses.ClosePoses.collectThirdSpikeCP.mirror(fieldLength), Poses.ClosePoses.collectThirdSpike.mirror(fieldLength), 0.7)
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose.mirror(fieldLength))
                     .addTask(() -> follower.getCurrentTValue() > 0.7)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.8)
@@ -125,8 +112,8 @@ public class RedSolo extends Auto {
             command = new Command(follower);
             command .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
-                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
+                    .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike.mirror(fieldLength))
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose.mirror(fieldLength))
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
@@ -145,7 +132,7 @@ public class RedSolo extends Auto {
         public Park() {
             command = new Command(follower);
             command.addTask(() -> follower.setMaxPower(0.6))
-                    .lineToConstantAsync(Poses.ClosePoses.parkingSpotdeHandicapati, Math.toRadians(0));
+                    .lineToConstantAsync(Poses.ClosePoses.parkingSpotdeHandicapati.mirror(fieldLength), Math.toRadians(180));
         }
         @Override
         public boolean Run() {
@@ -159,11 +146,12 @@ public class RedSolo extends Auto {
     public void buildAuto() {
         pos = 0.834+inc;
         velocity = 1600;
-        follower.setStartingPose(Poses.ClosePoses.startingPose);
+        follower.setStartingPose(Poses.ClosePoses.startingPose.mirror(fieldLength));
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
                 .addTask(new GateCycle())
                 .addTask(new ShootFirstSpike())
+                .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new ShootThirdSpike())
                 .addTask(new Park());
@@ -173,6 +161,6 @@ public class RedSolo extends Auto {
 
     @Override
     public void setAlliance() {
-        alliance = Alliance.RED;
+        alliance = Alliance.BLUE;
     }
 }

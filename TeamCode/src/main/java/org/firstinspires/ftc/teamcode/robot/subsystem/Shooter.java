@@ -47,9 +47,10 @@ public class Shooter {
 
     public static double error = 0;
     public static double theta = 0.85;
+    public static double thetaAuto = 0.83;
     public static void update() {
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
-        HoodLpf.setAlpha(theta);
+        HoodLpf.setAlpha(Robot.opModeType == Robot.OpModeType.AUTO ? thetaAuto : theta);
         if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
             velocity = ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) + offset;
             hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor1.getVelocity());
@@ -67,6 +68,7 @@ public class Shooter {
 
     public static void AutoUpdate(double velocity, double hoodPos) {
         Shooter.velocity = velocity;
+        HoodLpf.setAlpha(thetaAuto);
         if (Shooter.readyForShoot) hoodPos = calculateHoodByError(hoodPos, velocity);
         double currentvoltage = Robot.voltageSensor.getVoltage();
         double pid = controller.calculate(motor1.getVelocity(), velocity);
@@ -77,7 +79,7 @@ public class Shooter {
 
     public static void tuningupdate(double velocity) {
         controller.setCoefficients(pClose, 0, fClose / 1700, s);
-        HoodLpf.setAlpha(theta);
+        HoodLpf.setAlpha(thetaAuto);
         Shooter.velocity = velocity;
         double currentvoltage = Robot.voltageSensor.getVoltage();
         double pid = controller.calculate(motor1.getVelocity(), velocity);

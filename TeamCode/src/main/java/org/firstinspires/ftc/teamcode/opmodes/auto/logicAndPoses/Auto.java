@@ -1,106 +1,93 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses;
 
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
-import org.firstinspires.ftc.teamcode.robot.Globals;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
-import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
-import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
-public abstract class AutoFar extends BetterOpMode {
+public abstract class Auto extends BetterOpMode {
 
     protected Command auto;
     protected Alliance alliance;
     protected Follower follower;
     protected double velocity, pos;
-    public void setFlwX(double x){
-        flwX = x;
-    }
+    long now, last, dt;
     public abstract void buildAuto();
     public abstract void setAlliance();
     public Robot robot;
-    public double offset = 0, flwX;
-    public double turretpos;
+    public double offset, flwX;
 
     @Override
     public void initialize() {
         setAlliance();
         robot= new Robot(hardwareMap, telemetry, alliance)
-                .setPlayStyle(Robot.PlayStyle.FAR)
                 .setOpModeType(Robot.OpModeType.AUTO)
+                .setPlayStyle(Robot.PlayStyle.CLOSE)
                 .initialize();
-        sleep(500);
-        turretpos= Robot.alliance==Alliance.RED? .1895 : 0.81;
-        Turret.setNeutralPosition(turretpos);
-        LLMath.init(hardwareMap);
         follower= Constants.createFollower(hardwareMap);
+        Storage.status = Storage.Status.EMPTY;
+        Shooter.shooterEnabled = false;
         auto= new Command(follower);
-        pos = Shooter.hoodFAR;
-        Shooter.shooterEnabled = true;
-        Shooter.velocity =Shooter.velocityFAR;
+        offset = alliance == Alliance.RED ? -3 : -1.5;
+        Shooter.offset = -50;
         buildAuto();
     }
 
-    public static Pose robotPose = new Pose();
     @Override
     public void initialize_loop() {
         follower.update();
         Pose robotPose= follower.getPose();
-        Blocker.block();
-        Shooter.hoodServo.setPosition(Shooter.hoodFAR);
+        telemetry.addData("status", Storage.status);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
-        telemetry.addData("flwX", flwX);
         telemetry.update();
+        Shooter.hoodServo.setPosition(pos);
+        Blocker.block();
     }
 
     @Override
-    public void on_start() {}
+    public void on_start() {
+    }
 
     @Override
     public void active_loop() {
         robot.update();
         follower.update();
         auto.update();
-        robotPose= follower.getPose();
-        Globals.lastPose = robotPose;
+        Pose robotPose= follower.getPose();
         Turret.turrStatus = Turret.TurretStatus.ACTIVE;
+        Turret.updateAuto(follower , offset);
+        now = System.nanoTime();
+        dt = now - last;
+        telemetry.addData("hz", 1e9 / dt);
+        last = now;
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
-        telemetry.addData("velo",Shooter.motor1.getVelocity());
-        telemetry.addData("dist" , Turret.virtualDist);
-        telemetry.addData("targetVel", Shooter.velocityFAR);
-        telemetry.addData("cond", Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - ShootFar.treshhold);
-        telemetry.addData("alliance", alliance);
-        telemetry.addData("optimal pose" , LLMath.optimalPose);
-        telemetry.addData("transferPower" , Storage.transfer.getPower());
-
-
-        if(LLMath.results != null) telemetry.addData("LLMath results empty?", LLMath.results.isEmpty());
+        Vector velo = follower.getVelocity();
+        velo.setComponents(velo.getMagnitude(), velo.getTheta());
+        telemetry.addData("velo", velo.getMagnitude());
+        telemetry.addData("veloX", velo.getXComponent());
+        telemetry.addData("veloY", velo.getYComponent());
+        telemetry.addData("flwX", flwX);
         telemetry.update();
-        Shooter.shooterEnabled = true;
-        Turret.updateAuto(follower, offset);
         Shooter.AutoUpdate(velocity, pos);
-        Storage.updateAuto();
+        Storage.update2();
     }
 
     @Override
     public void end() {
-            Globals.lastPose = robotPose;
+
     }
 }

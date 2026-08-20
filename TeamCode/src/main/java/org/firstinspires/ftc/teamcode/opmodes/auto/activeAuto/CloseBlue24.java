@@ -1,32 +1,35 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.activeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Auto;
+import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Poses;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.ThreadedTask;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
-import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
+import org.firstinspires.ftc.teamcode.util.DoNotFUCKINGTouch;
 import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
 
-@Autonomous(name = "Close Red", group = "Auto Close")
-@NotVibeCoded
-public class CloseRedOriginal extends Auto {
+@Autonomous(name = "Close Blue", group = "Auto Close")
+@NotVibeCoded @DoNotFUCKINGTouch
+public class CloseBlue24 extends Auto {
+    public double fieldLength = 144;
     public class ShootPreload implements Task {
         Command command;
 
         public ShootPreload(){
             command = new Command(follower);
             command.addTask(() -> Shooter.shooterEnabled = true)
-                    .lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
+                    .lineToConstantSync(Poses.ClosePoses.shootPose.mirror(fieldLength), Math.toRadians(270))
                     .addTask(() -> follower.getCurrentTValue() > 0.75)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(new ThreadedTask(Shoot::new, 0.2));
+                    .addTask(new ThreadedTask(Shoot::new, 0.1));
 
         }
         @Override
@@ -43,13 +46,13 @@ public class CloseRedOriginal extends Auto {
             command.addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> follower.setMaxPower(1))
-                    .curveToConstantAsync(Poses.ClosePoses.collectSecondSpikeCP, Poses.ClosePoses.collectSecondSpike, 0)
+                    .curveToConstantAsync(Poses.ClosePoses.collectSecondSpikeCP.mirror(fieldLength), Poses.ClosePoses.collectSecondSpike.mirror(fieldLength), Math.PI)
                     .addTask(Storage::stop)
-                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
-                    .addTask(() -> follower.getCurrentTValue() > 0.5)
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose.mirror(fieldLength))
+                    .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(()->follower.getCurrentTValue()>0.6)
-                    .addTask(new ThreadedTask(Shoot::new, 0.2))
+                    .addTask(()->follower.getCurrentTValue()>0.7)
+                    .addTask(new ThreadedTask(Shoot::new, 0.1))
                     .addTask(() -> follower.setMaxPower(1));
         }
         @Override
@@ -62,37 +65,21 @@ public class CloseRedOriginal extends Auto {
     public class GateCycle implements Task {
         Command command;
         ElapsedTime time;
-        /*
         public GateCycle() {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
-                    .lineToLinearSync(Poses.ClosePoses.gateCollect)
-                    .addTask(() -> follower.getCurrentTValue() >= 0.8)
-                    .addTask(() -> follower.setMaxPower(0.7))
-                    .addTask(() -> time = new ElapsedTime())
-                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1400))
-                    .addTask(() -> follower.setMaxPower(1))
-                    .lineToTangentialAsyncReversed(Poses.ClosePoses.shootPose)
-                    .waitSeconds(0.05)
-                    .addTask(new ShootAutoClose());
-        }
-         */
-        public GateCycle() {
-            command = new Command(follower);
-            command.addTask(Intake::start)
-                    .addTask(Storage::start)
-                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP,Poses.ClosePoses.gateCollect,0.4)/// ////////
+                    .curveToTangentialToConstantSync(Poses.ClosePoses.gateCollectCP.mirror(fieldLength), Poses.ClosePoses.gateCollectBlue, 0.4)
                     .addTask(() -> follower.getCurrentTValue() >= 0.5)/// ///////
                     .addTask(() -> follower.setMaxPower(0.8))/// ///////
                     .addTask(() -> time = new ElapsedTime())
-                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1900))
+                    .addTask(() -> (Storage.status.equals(Storage.Status.STORAGEFULL) || time.milliseconds() > 1700))
                     .addTask(() -> follower.setMaxPower(1))
-                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
-                    .addTask(() -> follower.getCurrentTValue() > 0.5)
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose.mirror(fieldLength))
+                    .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(()->follower.getCurrentTValue()>0.6)
-                    .addTask(new ThreadedTask(Shoot::new, 0.2))
+                    .addTask(()->follower.getCurrentTValue()>0.7)
+                    .addTask(new ThreadedTask(Shoot::new, 0.1))
                     .addTask(() -> follower.setMaxPower(1));
         }
 
@@ -108,12 +95,13 @@ public class CloseRedOriginal extends Auto {
             command = new Command(follower);
             command .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
-                    .lineToTangentialSyncReversed(Poses.ClosePoses.shootPose)
-                    .addTask(() -> follower.getCurrentTValue() > 0.6)
+                    //.addTask(() -> pos = 0.465)
+                    .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike.mirror(fieldLength))
+                    .lineToTangentialSyncReversed(Poses.ClosePoses.insideLeave.mirror(fieldLength))
+                    .addTask(()-> follower.getCurrentTValue() > 0.3)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(()->follower.getCurrentTValue()>0.7)
-                    .addTask(new ThreadedTask(Shoot::new, 0.2));
+                    .addTask(() -> follower.getCurrentTValue() > 0.4)
+                    .addTask(new ThreadedTask(Shoot::new, 0.05));
         }
 
         @Override
@@ -140,23 +128,24 @@ public class CloseRedOriginal extends Auto {
 
     @Override
     public void buildAuto() {
-        pos = 0.834+inc;
-        velocity = 1600;
-        follower.setStartingPose(Poses.ClosePoses.startingPose);
+        pos = 0.4717;
+        velocity = 860;
+        follower.setStartingPose(Poses.ClosePoses.startingPose.mirror(fieldLength));
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
                 .addTask(new GateCycle())
-                .addTask(new ShootFirstSpike())
-                .addTask(new Park());
+                .addTask(new GateCycle())
+                .addTask(new ShootFirstSpike());
+        // .addTask(new Park());
 
 
     }
 
     @Override
     public void setAlliance() {
-        alliance = Alliance.RED;
+        alliance = Alliance.BLUE;
     }
 }

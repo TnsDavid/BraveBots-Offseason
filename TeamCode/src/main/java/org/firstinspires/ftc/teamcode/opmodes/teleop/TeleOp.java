@@ -116,7 +116,7 @@ public abstract class TeleOp extends BetterOpMode {
                 }
             }
         });
-        Storage.status = Storage.Status.EMPTY;
+        Shooter.offset = -40;
     }
 
     @Override

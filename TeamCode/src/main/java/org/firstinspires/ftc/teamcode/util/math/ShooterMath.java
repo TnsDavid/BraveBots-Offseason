@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.robot.subsystem.Shooter.minHoodpos;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
 
 @Configurable
@@ -19,7 +20,8 @@ public class ShooterMath {
     //y=\left(4.95536\times10^{-7}\right)x^{2}-0.000119071x+0.157958
     public static final double aHClose2 = 4.95536e-7, bHClose2 = -0.000119071, cHClose2 = 0.157958;
 
-    public static double TOFCoef = 1;
+    public static double TOFCoef = 0.85;
+    public static double TOFCoefFar = 0.75;
 
     public static double maxdegrees = Math.toRadians(60);
     public static double goalPosition = 0.98 ;
@@ -49,8 +51,6 @@ public class ShooterMath {
         double velocityTransformed = transformInMeters(vel);
         double positionTransformed = pos * maxdegrees;
         double verticalSpeed = velocityTransformed * Math.sin(positionTransformed);
-        return ((verticalSpeed +
-                Math.sqrt(Math.pow(verticalSpeed, 2) + 2 * g * (goalPosition - robotPosition)) ) / g ) * TOFCoef;
-
+        return ((verticalSpeed + Math.sqrt(Math.pow(verticalSpeed, 2) + 2 * g * (goalPosition - robotPosition)) ) / g ) * (Robot.playStyle == Robot.PlayStyle.CLOSE ? TOFCoef : TOFCoefFar);
     }
 }

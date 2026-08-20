@@ -20,7 +20,6 @@ public class Turret {
     public static double turretRange=351;
     public static double x, y, heading, xCorner, yCorner, dist, TOF, virtualDist;
     public static final double FIELD_LENGTH= 3.65, goalCircleRadius = .18;
-    public static double tofCoeff = 0.875;
     public static BetterServoEx turret1, turret2;
     public static boolean reseted = false;
     public static boolean sotm = false;
@@ -60,7 +59,7 @@ public class Turret {
 
             sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
 
-            TOF = tofCoeff *  ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
+            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
 
             xCorner -= velocity.getXComponent() * TOF;
             yCorner -= velocity.getYComponent() * TOF;
@@ -104,7 +103,7 @@ public class Turret {
 
             sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
 
-            TOF = tofCoeff *  ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
+            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
 
             xCorner -= velocity.getXComponent() * TOF;
             yCorner -= velocity.getYComponent() * TOF;

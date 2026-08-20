@@ -12,7 +12,7 @@ public class ShootFar implements Task {
     Command command ;
 
     public static double treshhold = 80;
-    public static double totalShootTime=0.7;
+    public static double totalShootTime=0.5;
     public ShootFar() {
         command = new Command()
                 .addTask(() -> {

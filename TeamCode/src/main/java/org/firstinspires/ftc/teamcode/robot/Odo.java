@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.opmodes.auto.Poses;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
-import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
 
 public class Odo {
     public static GoBildaPinpointDriver odo;

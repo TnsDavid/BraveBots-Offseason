@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.notInUse;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.AutoFar;
+import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Poses;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Odo;
-import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
@@ -15,8 +15,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
-@Autonomous(name = "Far Red PlayOff", group = "Auto Far")
-public class AutoFarLLREDPlayoff extends AutoFar{
+public class AutoFarLLRED extends AutoFar {
     public class HPCollect implements Task {
         Command s;
 
@@ -83,14 +82,12 @@ public class AutoFarLLREDPlayoff extends AutoFar{
                     .addTask(() -> SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
                     .addTask(() -> !follower.isBusy() || Odo.odo.getVelX(DistanceUnit.METER) < 0.5)
-                    .addTask(() -> follower.turn(Math.toRadians(30), true))
+                    .addTask(() -> follower.turn(Math.toRadians(20), true))
                     .waitSeconds(0.05)
-                    .addTask(() -> follower.turn(Math.toRadians(30), false))
+                    .addTask(() -> follower.turn(Math.toRadians(20), false))
                     .waitSeconds(0.05)
                     .addTask(()->follower.setMaxPower(1))
-                    .lineToTangentialToConstantSync(Poses.FarPoses.shootPoseScan, 0.7, true)
-                    .addTask(() -> follower.getCurrentTValue() > 0.55)
-                    .addTask(Intake::stop)
+                    .lineToTangentialToConstantAsync(Poses.FarPoses.shootPoseScan, 0.7, true)
                     .waitSeconds(0.1)
                     .addTask(new ShootFar());
         }
@@ -123,8 +120,8 @@ public class AutoFarLLREDPlayoff extends AutoFar{
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
-        offset = -3;
-        velocity = Shooter.velocityFAR - 30;
+        offset = 1;
+        velocity = Shooter.velocityFAR - 20;
         pos = Shooter.hoodFAR;
         auto
                 //.addTask(() -> Turret.setNeutralPosition(0.1895))
@@ -135,7 +132,7 @@ public class AutoFarLLREDPlayoff extends AutoFar{
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
-                .addTask(new CycleCollect());
+                .addTask(new Leave());
     }
 
     @Override

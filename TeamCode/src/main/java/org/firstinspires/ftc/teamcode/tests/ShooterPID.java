@@ -7,8 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
+import org.firstinspires.ftc.teamcode.tasks.command_based.core.Scheduler;
+import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
 @TeleOp(name = "Shooter Tuning", group = "Teste")
@@ -28,9 +31,20 @@ public class ShooterPID extends LinearOpMode {
         while( opModeIsActive() ) {
             robot.update();
             Shooter.tuningupdate(velocity);
+            Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() +
+                    0.025 * (gamepad1.left_trigger - gamepad1.right_trigger)
+            );
+            if( gamepad1.crossWasPressed() )
+                Intake.toggle();
+            if( gamepad1.rightBumperWasPressed() )
+                Scheduler.now(new Shoot());
+            telemetry.addData("hoodpos", Shooter.hoodServo.getPosition());
             telemetry.addData(" target velocity", Shooter.velocity);
             telemetry.addData("curr vel", Shooter.motor1.getVelocity());
             telemetry.update();
+            robot.update();
+            Intake.update();
+            Scheduler.update();
         }
     }
 
