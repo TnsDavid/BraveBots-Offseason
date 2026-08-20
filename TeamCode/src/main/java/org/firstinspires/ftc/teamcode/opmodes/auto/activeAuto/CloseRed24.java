@@ -64,7 +64,7 @@ public class CloseRed24 extends Auto {
     public class GateCycle implements Task {
         Command command;
         ElapsedTime time;
-        public GateCycle() {
+        public GateCycle(boolean lastCycle) {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
@@ -78,7 +78,7 @@ public class CloseRed24 extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
-                    .addTask(new ThreadedTask(Shoot::new, 0))
+                    .addTask(new ThreadedTask(Shoot::new, lastCycle ? 0.3 : 0))
                     .addTask(() -> follower.setMaxPower(1));
         }
 
@@ -97,10 +97,10 @@ public class CloseRed24 extends Auto {
                     //.addTask(() -> pos = 0.465)
                     .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
                     .lineToTangentialSyncReversed(Poses.ClosePoses.insideLeave)
-                    .addTask(()-> follower.getCurrentTValue() > 0.3)
-                    .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(() -> follower.getCurrentTValue() > 0.4)
-                    .addTask(new ThreadedTask(Shoot::new, 0));
+                    .addTask(()-> follower.getCurrentTValue() > 0.5)
+                    .addTask(() -> follower.setMaxPower(0.4))
+                    .addTask(() -> follower.getCurrentTValue() > 0.6)
+                    .addTask(new Shoot());
         }
 
         @Override
@@ -127,16 +127,16 @@ public class CloseRed24 extends Auto {
 
     @Override
     public void buildAuto() {
-        pos = 0.4717;
-        velocity = 860;
+        pos = 0.4417;
+        velocity = 840;
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
-                .addTask(new GateCycle())
-                .addTask(new GateCycle())
-                .addTask(new GateCycle())
-                .addTask(new GateCycle())
-                .addTask(new GateCycle())
+                .addTask(new GateCycle(false))
+                .addTask(new GateCycle(false))
+                .addTask(new GateCycle(false))
+                .addTask(new GateCycle(false))
+                .addTask(new GateCycle(false))
                 .addTask(new ShootFirstSpike());
                // .addTask(new Park());
 
