@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
@@ -53,6 +54,7 @@ public class Test extends BetterOpMode {
     public void on_start() {
         last = 0;
     }
+    boolean eVasileProst = false;
     @Override
     public void active_loop() {
 
@@ -69,7 +71,12 @@ public class Test extends BetterOpMode {
         if(gamepad1.optionsWasPressed()) robila.resetPinPoint();
         if(gamepad2.touchpadWasPressed()) Drivetrain.robotCentric = !Drivetrain.robotCentric;
         if(gamepad1.shareWasPressed()) Robot.switchPlayStyle();
-        Drivetrain.betterDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+        if(gamepad2.dpadUpWasPressed() )
+            eVasileProst = !eVasileProst;
+        if( !eVasileProst )
+            Drivetrain.betterDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+        else
+            Drivetrain.betterDrive(0, -1, 0);
         if( shooterEnabled ) {
             Shooter.AutoUpdate(Shooter.velocity , 0);
         } else
@@ -86,6 +93,12 @@ public class Test extends BetterOpMode {
         telemetry.addData("yCorner", yCorner);
         telemetry.addData("distance to goal", virtualDist);
         telemetry.addData("play style", Robot.playStyle);
+        telemetry.addData("front left amps", Drivetrain.leftFront.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("front right amps", Drivetrain.rightFront.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("back left amps", Drivetrain.leftBack.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("back right amps", Drivetrain.rightBack.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("e vasile prost?", eVasileProst);
+
 
         robila.update();
         Storage.update2();

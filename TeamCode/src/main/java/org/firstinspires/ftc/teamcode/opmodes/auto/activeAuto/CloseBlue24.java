@@ -29,7 +29,7 @@ public class CloseBlue24 extends Auto {
                     .lineToConstantSync(Poses.ClosePoses.shootPose.mirror(fieldLength), Math.toRadians(270))
                     .addTask(() -> follower.getCurrentTValue() > 0.75)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(new ThreadedTask(Shoot::new, 0.1));
+                    .addTask(new ThreadedTask(Shoot::new, 0.2));
 
         }
         @Override
@@ -52,7 +52,7 @@ public class CloseBlue24 extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
-                    .addTask(new ThreadedTask(Shoot::new, 0.1))
+                    .addTask(new ThreadedTask(Shoot::new, 0.2))
                     .addTask(() -> follower.setMaxPower(1));
         }
         @Override
@@ -65,7 +65,7 @@ public class CloseBlue24 extends Auto {
     public class GateCycle implements Task {
         Command command;
         ElapsedTime time;
-        public GateCycle() {
+        public GateCycle(boolean lastCycle) {
             command = new Command(follower);
             command.addTask(Intake::start)
                     .addTask(Storage::start)
@@ -79,7 +79,7 @@ public class CloseBlue24 extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
-                    .addTask(new ThreadedTask(Shoot::new, 0.1))
+                    .addTask(new ThreadedTask(Shoot::new, lastCycle ? 0.3 : 0.1))
                     .addTask(() -> follower.setMaxPower(1));
         }
 
@@ -95,13 +95,16 @@ public class CloseBlue24 extends Auto {
             command = new Command(follower);
             command .addTask(Intake::start)
                     .addTask(Storage::start)
-                    //.addTask(() -> pos = 0.465)
+                    .addTask(() -> {
+                        pos = 0.475;
+                        velocity -= 20;
+                    })
                     .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike.mirror(fieldLength))
                     .lineToTangentialSyncReversed(Poses.ClosePoses.insideLeave.mirror(fieldLength))
                     .addTask(()-> follower.getCurrentTValue() > 0.3)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(() -> follower.getCurrentTValue() > 0.4)
-                    .addTask(new ThreadedTask(Shoot::new, 0.05));
+                    .addTask(() -> follower.getCurrentTValue() > 0.6)
+                    .addTask(new Shoot());
         }
 
         @Override
@@ -128,16 +131,16 @@ public class CloseBlue24 extends Auto {
 
     @Override
     public void buildAuto() {
-        pos = 0.4717;
-        velocity = 860;
+        pos = 0.4602;
+        velocity = 880;
         follower.setStartingPose(Poses.ClosePoses.startingPose.mirror(fieldLength));
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
-                .addTask(new GateCycle())
-                .addTask(new GateCycle())
-                .addTask(new GateCycle())
-                .addTask(new GateCycle())
-                .addTask(new GateCycle())
+                .addTask(new GateCycle(false))
+                .addTask(new GateCycle(false))
+                .addTask(new GateCycle(false))
+                .addTask(new GateCycle(false))
+                .addTask(new GateCycle(false))
                 .addTask(new ShootFirstSpike());
         // .addTask(new Park());
 

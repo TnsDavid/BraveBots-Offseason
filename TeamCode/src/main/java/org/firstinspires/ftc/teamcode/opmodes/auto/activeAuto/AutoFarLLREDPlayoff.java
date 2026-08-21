@@ -31,12 +31,13 @@ public class AutoFarLLREDPlayoff extends AutoFar {
                     .addTask(()->follower.getCurrentTValue()>0.75)
                     .addTask(() -> follower.setMaxPower(0.7))
                     .addTask(() -> !follower.isBusy())
-                    .waitSeconds(0.25)
-                    .addTask(()->follower.setMaxPower(0.6))
+                    .addTask(() -> follower.turn(Math.toRadians(20), false))
+                    .waitSeconds(0.13)
+                    .addTask(() -> follower.turn(Math.toRadians(25), true))
+                    .waitSeconds(0.07)
+                    .addTask(()->follower.setMaxPower(1))
                     .lineToConstantSync(Poses.FarPoses.shootPose, Poses.FarPoses.shootPose.getHeading())
-                    .addTask(() -> follower.getCurrentTValue()>0.3)
-                    .addTask(() -> follower.setMaxPower(1))
-                    .addTask(()->follower.getCurrentTValue() > 0.6)
+                    .addTask(()->follower.getCurrentTValue() > 0.8)
                     .addTask(Intake::stop)
                     .addTask(() -> !follower.isBusy())
                     .waitSeconds(0.1)
@@ -76,13 +77,11 @@ public class AutoFarLLREDPlayoff extends AutoFar {
 
     public class CycleCollect implements Task {
         Command s;
-        ElapsedTime SmartCollectTimer;
         public CycleCollect() {
             s = new Command(follower)
                     .addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> LLMath.scan(follower))
-                    .addTask(() -> SmartCollectTimer = new ElapsedTime())
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
                     .addTask(() -> !follower.isBusy() || Odo.odo.getVelX(DistanceUnit.METER) < 0.5)
                     .addTask(() -> follower.turn(Math.toRadians(30), true))
@@ -91,11 +90,10 @@ public class AutoFarLLREDPlayoff extends AutoFar {
                     .waitSeconds(0.05)
                     .addTask(()->follower.setMaxPower(1))
                     .lineToTangentialToConstantSync(Poses.FarPoses.shootPoseScan, 0.7, true)
-                    .addTask(() -> follower.getCurrentTValue() > 0.45)
+                    .addTask(() -> follower.getCurrentTValue() > 0.55)
                     .addTask(Intake::stop)
-                    .waitSeconds(0.1)
-                    .addTask(new ShootFar())
-                    .waitSeconds(0.1);
+                    .addTask(() -> !follower.isBusy())
+                    .addTask(new ShootFar());
         }
 
         @Override
@@ -126,9 +124,9 @@ public class AutoFarLLREDPlayoff extends AutoFar {
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
-        offset = -3.5;
+        offset = -3;
         velocity = Shooter.velocityFAR - 40;
-        pos = Shooter.hoodFAR;
+        pos = 0.5392;
         auto
                 //.addTask(() -> Turret.setNeutralPosition(0.1895))
                 .addTask(new ShootFar())

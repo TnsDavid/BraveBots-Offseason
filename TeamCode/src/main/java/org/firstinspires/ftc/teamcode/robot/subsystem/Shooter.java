@@ -87,4 +87,8 @@ public class Shooter {
         if (shooterEnabled) setPower(output);
         else setPower(0);
     }
+    public static boolean reachedRPM() {
+        double velo = Math.abs(motor1.getVelocity());
+        return Math.abs(velocity - velo) < 20;
+    }
 }

@@ -28,7 +28,8 @@ public class CloseRed24 extends Auto {
                     .lineToConstantSync(Poses.ClosePoses.shootPose, Math.toRadians(270))
                     .addTask(() -> follower.getCurrentTValue() > 0.75)
                     .addTask(() -> follower.setMaxPower(0.5))
-                    .addTask(new ThreadedTask(Shoot::new, 0));
+                    .addTask(Shooter::reachedRPM)
+                    .addTask(new ThreadedTask(Shoot::new, 0.2));
 
         }
         @Override
@@ -78,7 +79,7 @@ public class CloseRed24 extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
-                    .addTask(new ThreadedTask(Shoot::new, lastCycle ? 0.3 : 0))
+                    .addTask(new ThreadedTask(Shoot::new, lastCycle ? 0.3 : 0.1))
                     .addTask(() -> follower.setMaxPower(1));
         }
 
@@ -94,7 +95,7 @@ public class CloseRed24 extends Auto {
             command = new Command(follower);
             command .addTask(Intake::start)
                     .addTask(Storage::start)
-                    //.addTask(() -> pos = 0.465)
+                    .addTask(() -> pos = 0.475)
                     .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
                     .lineToTangentialSyncReversed(Poses.ClosePoses.insideLeave)
                     .addTask(()-> follower.getCurrentTValue() > 0.5)
@@ -127,8 +128,8 @@ public class CloseRed24 extends Auto {
 
     @Override
     public void buildAuto() {
-        pos = 0.4417;
-        velocity = 840;
+        pos = 0.4602;
+        velocity = 880;
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
