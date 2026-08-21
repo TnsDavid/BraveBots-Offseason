@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Auto;
 import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Poses;
-import org.firstinspires.ftc.teamcode.robot.Alliance;
+import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.Threaded
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
-import org.firstinspires.ftc.teamcode.util.wrappers.NotVibeCoded;
+import org.firstinspires.ftc.teamcode.util.annotations.NotVibeCoded;
 
 //@Autonomous(name = "Close Red (21)", group = "Auto Close")
 @NotVibeCoded

@@ -7,9 +7,9 @@ import com.pedropathing.math.Vector;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.robot.Alliance;
-import org.firstinspires.ftc.teamcode.robot.Odo;
-import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
+import org.firstinspires.ftc.teamcode.robot.globals.Odo;
+import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.util.math.LowPassFilter;
 import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterServoEx;

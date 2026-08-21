@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util.wrappers;
+package org.firstinspires.ftc.teamcode.util.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

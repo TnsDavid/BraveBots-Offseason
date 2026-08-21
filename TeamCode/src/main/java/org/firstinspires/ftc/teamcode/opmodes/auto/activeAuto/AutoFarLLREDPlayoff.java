@@ -1,28 +1,27 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.activeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.AutoFar;
 import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Poses;
-import org.firstinspires.ftc.teamcode.robot.Alliance;
-import org.firstinspires.ftc.teamcode.robot.Odo;
+import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
+import org.firstinspires.ftc.teamcode.robot.globals.Odo;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
+import org.firstinspires.ftc.teamcode.util.annotations.DoNotFUCKINGTouch;
+import org.firstinspires.ftc.teamcode.util.annotations.NotVibeCoded;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
-@Autonomous(name = "Far Red", group = "Auto Far")
+@Autonomous(name = "Far Red", group = "Auto Far", preselectTeleOp = "TeleOp Red")
+@NotVibeCoded @DoNotFUCKINGTouch
 public class AutoFarLLREDPlayoff extends AutoFar {
     public class HPCollect implements Task {
         Command s;
-
-        ElapsedTime SmartCollectTimer;
-
         public HPCollect() {
             s = new Command(follower)
                     .addTask(Intake::start)
@@ -127,9 +126,7 @@ public class AutoFarLLREDPlayoff extends AutoFar {
         offset = -3;
         velocity = Shooter.velocityFAR - 40;
         pos = 0.5392;
-        auto
-                //.addTask(() -> Turret.setNeutralPosition(0.1895))
-                .addTask(new ShootFar())
+        auto.addTask(new ShootFar())
                 .addTask(new HPCollect())
                 .addTask(new SpikeCollect())
                 .addTask(new CycleCollect())

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.subsystem;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.util.math.LowPassFilter;
 import org.firstinspires.ftc.teamcode.util.math.PDSFController;
 import org.firstinspires.ftc.teamcode.util.math.ShooterMath;

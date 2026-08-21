@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.robot.subsystem;
 import com.pedropathing.math.Vector;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.robot.Alliance;
-import org.firstinspires.ftc.teamcode.robot.Odo;
-import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
+import org.firstinspires.ftc.teamcode.robot.globals.Odo;
+import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedropathing;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PredictiveBrakingCoefficients;
 import com.pedropathing.follower.Follower;
@@ -15,9 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.firstinspires.ftc.teamcode.tasks.command_based.core.Scheduler;
-import org.firstinspires.ftc.teamcode.util.math.MathStuff;
+
 @Configurable
 public class Constants {
     public static double dtLength =0.435;

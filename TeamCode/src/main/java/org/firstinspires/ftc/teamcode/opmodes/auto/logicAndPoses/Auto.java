@@ -6,8 +6,8 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
 
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
-import org.firstinspires.ftc.teamcode.robot.Alliance;
-import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
+import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
@@ -30,16 +30,18 @@ public abstract class Auto extends BetterOpMode {
     @Override
     public void initialize() {
         setAlliance();
-        robot= new Robot(hardwareMap, telemetry, alliance)
+        robot = new Robot(hardwareMap, telemetry, alliance)
                 .setOpModeType(Robot.OpModeType.AUTO)
                 .setPlayStyle(Robot.PlayStyle.CLOSE)
                 .initialize();
         follower= Constants.createFollower(hardwareMap);
+
         Storage.status = Storage.Status.EMPTY;
         Shooter.shooterEnabled = false;
-        auto= new Command(follower);
+        auto = new Command(follower);
         offset = alliance == Alliance.RED ? -3 : -1.5;
         Shooter.offset = -50;
+
         buildAuto();
     }
 
@@ -47,13 +49,15 @@ public abstract class Auto extends BetterOpMode {
     public void initialize_loop() {
         follower.update();
         Pose robotPose= follower.getPose();
+
+        Shooter.hoodServo.setPosition(pos);
+        Blocker.block();
+
         telemetry.addData("status", Storage.status);
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
         telemetry.update();
-        Shooter.hoodServo.setPosition(pos);
-        Blocker.block();
     }
 
     @Override
@@ -62,27 +66,25 @@ public abstract class Auto extends BetterOpMode {
 
     @Override
     public void active_loop() {
-        robot.update();
-        follower.update();
-        auto.update();
+
         Pose robotPose= follower.getPose();
         Turret.turrStatus = Turret.TurretStatus.ACTIVE;
-        Turret.updateAuto(follower , offset);
+
         now = System.nanoTime();
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
+
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
-        Vector velo = follower.getVelocity();
-        velo.setComponents(velo.getMagnitude(), velo.getTheta());
-        telemetry.addData("velo", velo.getMagnitude());
-        telemetry.addData("veloX", velo.getXComponent());
-        telemetry.addData("veloY", velo.getYComponent());
-        telemetry.addData("flwX", flwX);
         telemetry.update();
+
+        robot.update();
+        follower.update();
+        auto.update();
         Shooter.AutoUpdate(velocity, pos);
+        Turret.updateAuto(follower , offset);
         Storage.update2();
     }
 

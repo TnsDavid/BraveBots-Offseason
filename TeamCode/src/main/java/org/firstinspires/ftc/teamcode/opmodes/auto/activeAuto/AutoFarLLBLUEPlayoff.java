@@ -1,22 +1,24 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.activeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.AutoFar;
 import org.firstinspires.ftc.teamcode.opmodes.auto.logicAndPoses.Poses;
-import org.firstinspires.ftc.teamcode.robot.Alliance;
-import org.firstinspires.ftc.teamcode.robot.Odo;
+import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
+import org.firstinspires.ftc.teamcode.robot.globals.Odo;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
+import org.firstinspires.ftc.teamcode.util.annotations.DoNotFUCKINGTouch;
+import org.firstinspires.ftc.teamcode.util.annotations.NotVibeCoded;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
-@Autonomous(name = "Far Blue", group = "Auto Far")
+@Autonomous(name = "Far Blue", group = "Auto Far", preselectTeleOp = "TeleOp Blue")
+@NotVibeCoded @DoNotFUCKINGTouch
 public class AutoFarLLBLUEPlayoff extends AutoFar {
     public double fieldLength = 144;
     public class HPCollect implements Task {

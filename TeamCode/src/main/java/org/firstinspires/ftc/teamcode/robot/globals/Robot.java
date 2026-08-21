@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot;
+package org.firstinspires.ftc.teamcode.robot.globals;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
@@ -22,9 +22,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.HussamDogEater;
-import org.firstinspires.ftc.teamcode.RaduFaceHam;
-import org.firstinspires.ftc.teamcode.TanaseECiung;
+import org.firstinspires.ftc.teamcode.util.annotations.HussamDogEater;
+import org.firstinspires.ftc.teamcode.util.annotations.RaduFaceHam;
+import org.firstinspires.ftc.teamcode.util.annotations.TanaseECiung;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Intake;

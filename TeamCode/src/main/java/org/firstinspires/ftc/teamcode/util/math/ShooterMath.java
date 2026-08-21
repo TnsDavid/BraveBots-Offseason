@@ -6,8 +6,7 @@ import static org.firstinspires.ftc.teamcode.robot.subsystem.Shooter.minHoodpos;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.firstinspires.ftc.teamcode.robot.subsystem.Turret;
+import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 
 @Configurable
 public class ShooterMath {
