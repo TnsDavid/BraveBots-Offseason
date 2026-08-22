@@ -48,7 +48,6 @@ public class Robot {
     public static Pose robotPose;
 
     public static  double nominalVoltage = 10.1;
-    public static double odometryResolution = 34.310551;
     public static VoltageSensor voltageSensor;
     List<LynxModule> hubs;
     LynxModule controlHub, expansionHub;
@@ -221,7 +220,7 @@ public class Robot {
 
         Storage.startedTimer = false;
         Odo.init(hm, opModeType, playStyle);
-        Drivetrain.robotCentric = false;
+        Drivetrain.robotCentric = true;
         robotPose = new Pose(Odo.odo.getPosX(DistanceUnit.METER), Odo.odo.getPosY(DistanceUnit.METER), Odo.odo.getHeading(AngleUnit.RADIANS));
         Turret.ChassisLpf = new LowPassFilter(0.8, 0.0);
         Shooter.HoodLpf = new LowPassFilter(lpf, 0.0);

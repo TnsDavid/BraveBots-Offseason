@@ -78,26 +78,6 @@ public class AutoFarLLBLUEPlayoff extends AutoFar {
 
     public class CycleCollect implements Task {
         Command s;
-        /*
-        public CycleCollect() {
-            s = new Command(follower)
-                    .addTask(Intake::start)
-                    .addTask(Storage::start)
-                    .addTask(() -> LLMath.scan(follower))
-                    .addTask(() -> follower.getCurrentTValue() > 0.5)
-                    .addTask(() -> !follower.isBusy() || Odo.odo.getVelX(DistanceUnit.METER) < 0.5)
-                    .addTask(() -> follower.turn(Math.toRadians(30), true))
-                    .waitSeconds(0.05)
-                    .addTask(() -> follower.turn(Math.toRadians(30), false))
-                    .waitSeconds(0.05)
-                    .addTask(()->follower.setMaxPower(1))
-                    .lineToTangentialToConstantSync(Poses.FarPoses.shootPoseScan, 0.7, true)
-                    .addTask(() -> follower.getCurrentTValue() > 0.55)
-                    .addTask(Intake::stop)
-                    .addTask(() -> !follower.isBusy())
-                    .addTask(new ShootFar());
-        }
-         */
         public CycleCollect() {
             s = new Command(follower)
                     .addTask(Intake::start)
