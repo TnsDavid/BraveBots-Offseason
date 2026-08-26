@@ -29,6 +29,7 @@ public class CloseBlue24 extends Auto {
                     .lineToConstantSync(Poses.ClosePoses.shootPose.mirror(fieldLength), Math.toRadians(270))
                     .addTask(() -> follower.getCurrentTValue() > 0.75)
                     .addTask(() -> follower.setMaxPower(0.5))
+                    .addTask(Shooter::reachedRPM)
                     .addTask(new ThreadedTask(Shoot::new, 0.2));
 
         }
@@ -96,7 +97,7 @@ public class CloseBlue24 extends Auto {
             command .addTask(Intake::start)
                     .addTask(Storage::start)
                     .addTask(() -> {
-                        pos = 0.475;
+                        pos = 0.465;
                         velocity -= 20;
                     })
                     .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike.mirror(fieldLength))
@@ -131,8 +132,8 @@ public class CloseBlue24 extends Auto {
 
     @Override
     public void buildAuto() {
-        pos = 0.4602;
-        velocity = 880;
+        pos = 0.4509;
+        velocity = 860;
         follower.setStartingPose(Poses.ClosePoses.startingPose.mirror(fieldLength));
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())

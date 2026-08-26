@@ -95,7 +95,10 @@ public class CloseRed24 extends Auto {
             command = new Command(follower);
             command .addTask(Intake::start)
                     .addTask(Storage::start)
-                    .addTask(() -> pos = 0.475)
+                    .addTask(() -> {
+                        pos = 0.465;
+                        velocity -= 20;
+                    })
                     .lineToTangentialASync(Poses.ClosePoses.collectFirstSpike)
                     .lineToTangentialSyncReversed(Poses.ClosePoses.insideLeave)
                     .addTask(()-> follower.getCurrentTValue() > 0.5)
@@ -128,8 +131,8 @@ public class CloseRed24 extends Auto {
 
     @Override
     public void buildAuto() {
-        pos = 0.4602;
-        velocity = 880;
+        pos = 0.4569;
+        velocity = 840;
         follower.setStartingPose(Poses.ClosePoses.startingPose);
         auto.addTask(new ShootPreload())
                 .addTask(new ShootSecondSpike())
@@ -139,6 +142,7 @@ public class CloseRed24 extends Auto {
                 .addTask(new GateCycle(false))
                 .addTask(new GateCycle(false))
                 .addTask(new ShootFirstSpike());
+
                // .addTask(new Park());
 
 

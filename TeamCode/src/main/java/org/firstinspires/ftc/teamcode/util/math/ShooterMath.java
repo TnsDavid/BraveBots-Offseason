@@ -10,17 +10,18 @@ import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 
 @Configurable
 public class ShooterMath {
-    public static double aVFar = -32.30065, bVFar = 341.02654, cVFar = 347.6482;
+    public static double aVFar = 0, bVFar = 160, cVFar = 536;
     public static final double aHFar = 0.004, bHFar = -0.0882, cHFar = 0.85144;
-    //y=160x+572
-    public static final double aVClose = 0, bVClose = 160, cVClose = 572;
-    //y=0.0126857x^{2}+0.0716514x+0.25198
-    public static final double aHClose = 0.0126857, bHClose = 0.0716514, cHClose = 0.25198;
-    //y=\left(4.95536\times10^{-7}\right)x^{2}-0.000119071x+0.157958
-    public static final double aHClose2 = 4.95536e-7, bHClose2 = -0.000119071, cHClose2 = 0.157958;
+
+    //y=160x+552
+    public static final double aVClose = 0, bVClose = 160, cVClose = 552;
+    //y=0.180343x^{2}-0.433714x+0.623712
+    public static final double aHClose = 0.180343, bHClose = -0.433714, cHClose = 0.623712;
+    //y=0.00000704464x^{2}-0.010488x+4.26656
+    public static final double aHClose2 = 0.00000704464, bHClose2 = -0.010488, cHClose2 = 4.26656;
 
     public static double TOFCoef = 0.85;
-    public static double TOFCoefFar = 0.75;
+    public static double TOFCoefFar = 0.6;
 
     public static double maxdegrees = Math.toRadians(60);
     public static double goalPosition = 0.98 ;
@@ -31,9 +32,10 @@ public class ShooterMath {
         return Range.clip(aHClose * Math.pow(dist, 2) + bHClose * dist + cHClose, minHoodpos, maxHoodPos);
     }
     public static double calculateHoodAngleFromVelocity(double velo) {
+        velo = Math.abs(velo);
         return Range.clip(aHClose2 * Math.pow(velo, 2) + bHClose2 * velo + cHClose2, minHoodpos, maxHoodPos);
     }
-    public static double  calculateVelocityFromDistance(double dist){
+    public static double calculateVelocityFromDistance(double dist){
         return (aVClose * Math.pow(dist, 2) + bVClose * dist + cVClose);
     }
     public static double calculateVelocityFARFromDistance(double dist){

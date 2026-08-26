@@ -13,9 +13,9 @@ public class Shoot implements Task {
     public static double totalShootTime=0.7;
     public Shoot() {
         command = new Command()
-                .addTask(() -> {
-                    if (Storage.status.equals(Storage.Status.ONEBALL)) Storage.oneBall = true;
-                })
+//                .addTask(() -> {
+//                    if (Storage.status.equals(Storage.Status.ONEBALL)) Storage.oneBall = true;
+//                })
                 .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.1)

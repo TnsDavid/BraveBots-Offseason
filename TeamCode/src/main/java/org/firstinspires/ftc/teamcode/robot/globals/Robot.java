@@ -5,6 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogInputController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -21,6 +22,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.util.annotations.HussamDogEater;
 import org.firstinspires.ftc.teamcode.util.annotations.RaduFaceHam;
@@ -60,6 +62,10 @@ public class Robot {
     DigitalChannel downLaser, middleLaser;
 
     public BetterServoEx turret1, turret2;
+
+
+    public AnalogInput floodgate;
+
 
     public static GoBildaPinpointDriver odo;
     public BetterMotorEx intake, transfer, shooter, shooter2,FrontRight,FrontLeft,BackLeft,BackRight;
@@ -112,6 +118,7 @@ public class Robot {
     //
     public static void switchPlayStyle(){
         playStyle = playStyle == PlayStyle.CLOSE ? PlayStyle.FAR : PlayStyle.CLOSE;
+        Shooter.offset = playStyle == PlayStyle.CLOSE ? -40 : 0;
     }
     public void resetPinPoint() {
         Odo.odo.resetPosAndIMU();
@@ -162,10 +169,10 @@ public class Robot {
         transfer.setDirection(DcMotorSimple.Direction.FORWARD);
 
         shooter2= new BetterMotorEx(expansionHubMotors, 3).setCachingTolerance(.01)
-                .setMaxVelocity(1660)
+                .setMaxVelocity(1860)
                 .setPFCoefficients(Shooter.pClose, Shooter.fClose);
         shooter= new BetterMotorEx(controlHubMotors, 3).setCachingTolerance(.01)
-                .setMaxVelocity(1660)
+                .setMaxVelocity(1860)
                 .setPFCoefficients(Shooter.pClose, Shooter.fClose);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -207,6 +214,7 @@ public class Robot {
 
     public static double lpf = 0.85;
     public static double chassislpf = 0.8;
+
     public void initializeRest(){
         if(opModeType== null)
             throw new IllegalArgumentException("OpMode type nesetat");
@@ -217,6 +225,7 @@ public class Robot {
         upLaser = new BreakBeam(controller, 0);
         middleLaser = hm.get(DigitalChannel.class, "laser");
         middleLaser.setMode(DigitalChannel.Mode.INPUT);
+        floodgate = hm.get(AnalogInput.class, "Floodgate");
 
         Storage.startedTimer = false;
         Odo.init(hm, opModeType, playStyle);
@@ -225,8 +234,11 @@ public class Robot {
         Turret.ChassisLpf = new LowPassFilter(0.8, 0.0);
         Shooter.HoodLpf = new LowPassFilter(lpf, 0.0);
 
+        Globals.playingDefense = false;
     }
     ElapsedTime timer;
+    public static double totalCurrentDrawn, voltage ,  current ;
+
     public void update(){
         if(timer== null)
             timer= new ElapsedTime();
@@ -237,7 +249,11 @@ public class Robot {
             robotPose = new Pose(Odo.odo.getPosX(DistanceUnit.METER), Odo.odo.getPosY(DistanceUnit.METER), Odo.odo.getHeading(AngleUnit.RADIANS));
         }
 
+        totalCurrentDrawn = controlHub.getCurrent(CurrentUnit.AMPS) + expansionHub.getCurrent(CurrentUnit.AMPS);
+        voltage = floodgate.getVoltage();
     }
+
+
     public Robot initialize()
     {
         hubs= hm.getAll(LynxModule.class);

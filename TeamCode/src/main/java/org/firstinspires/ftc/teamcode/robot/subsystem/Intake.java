@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.robot.subsystem;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.robot.globals.Globals;
+import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterMotorEx;
 
 public class Intake {
@@ -40,7 +42,11 @@ public class Intake {
         }
     }
     public static void update() {
-        if(Storage.status.equals(Storage.Status.STORAGEFULL) && !status.equals(IntakeStatus.FORCEDINTAKE) && !Shooter.readyForShoot ) stop();
+        if (Storage.status.equals(Storage.Status.STORAGEFULL) && !status.equals(IntakeStatus.FORCEDINTAKE) && !Shooter.readyForShoot) {
+            stop();
+        }
+        if(Globals.playingDefense )
+            if(Robot.voltage * (80/3.3) > 30) stop();
     }
 
 }

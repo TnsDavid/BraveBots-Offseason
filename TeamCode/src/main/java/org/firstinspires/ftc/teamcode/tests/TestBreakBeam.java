@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannelController;
 
 import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
 import org.firstinspires.ftc.teamcode.robot.globals.Robot;
+import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.util.wrappers.BreakBeam;
 
 @TeleOp(name = "Test BreakBeam", group = "Teste")
@@ -18,15 +19,14 @@ public class TestBreakBeam extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
         Robot r = new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
-        controller = hardwareMap.get(DigitalChannelController.class,"Control Hub");
-        //bm = new BreakBeam(controller, portNumber);       „
-        bmup = new BreakBeam(controller , portNumber);
         //bm.setMode(DigitalChannel.Mode.INPUT);
 
         waitForStart();
         while(opModeIsActive()){
           //  telemetry.addData("status", bm.getBeamState());
-            telemetry.addData("status up" , bmup.getBeamState());
+            telemetry.addData("status up" , Storage.bUp.getBeamState());
+            telemetry.addData("status middle", Storage.laserMiddle.getState());
+            telemetry.addData("status down", Storage.bDown.getState());
             telemetry.update();
             r.update();
         }

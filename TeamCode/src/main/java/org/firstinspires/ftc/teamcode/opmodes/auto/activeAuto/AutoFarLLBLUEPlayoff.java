@@ -126,8 +126,8 @@ public class AutoFarLLBLUEPlayoff extends AutoFar {
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose.mirror(fieldLength));
         offset = 0;
-        velocity = Shooter.velocityFAR - 20;
-        pos = 0.5392;
+        velocity = 1080;
+        pos = 0.5792;
         auto.addTask(new ShootFar())
                 .addTask(new HPCollect())
                 .addTask(new SpikeCollect())

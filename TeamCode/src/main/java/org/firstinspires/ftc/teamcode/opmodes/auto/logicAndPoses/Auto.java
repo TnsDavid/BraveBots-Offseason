@@ -39,7 +39,7 @@ public abstract class Auto extends BetterOpMode {
         Storage.status = Storage.Status.EMPTY;
         Shooter.shooterEnabled = false;
         auto = new Command(follower);
-        offset = alliance == Alliance.RED ? -3 : -1.5;
+        offset = alliance == Alliance.RED ? -1 : -1.5;
         Shooter.offset = -50;
 
         buildAuto();

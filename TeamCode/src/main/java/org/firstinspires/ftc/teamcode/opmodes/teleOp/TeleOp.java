@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.opmodes.teleOp;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
+import org.firstinspires.ftc.teamcode.robot.globals.Globals;
 import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Blocker;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
@@ -18,6 +20,10 @@ import org.firstinspires.ftc.teamcode.util.BetterOpMode;
 import org.firstinspires.ftc.teamcode.util.MultipleTelemetry;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterGamepad;
 
+import java.util.LinkedList;
+
+import javax.xml.transform.dom.DOMLocator;
+
 @Configurable
 public abstract class TeleOp extends BetterOpMode {
 
@@ -27,7 +33,6 @@ public abstract class TeleOp extends BetterOpMode {
     MultipleTelemetry telemetry;
     volatile boolean shooterThreadRunning, turretThreadRunning, driveThreadRunning;
     Thread shooterThread, turretThread, driveThread;
-    Shoot shootcom = new Shoot();
     public abstract void setAlliance();
 
     @Override
@@ -39,7 +44,8 @@ public abstract class TeleOp extends BetterOpMode {
                 .setOpModeType(Robot.OpModeType.TELEOP)
                 .setPlayStyle(Robot.PlayStyle.FAR)
                 .initialize();
-        gamepadEx1.getButton(BetterGamepad.Buttons.CROSS)
+
+        gamepadEx1.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
                 .whenPressed(Intake::toggle, BetterGamepad.Type.PARALLEL);
         gamepadEx1.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Shoot::new, BetterGamepad.Type.MAIN);
@@ -54,16 +60,21 @@ public abstract class TeleOp extends BetterOpMode {
                     Intake.start();
                     Intake.status= Intake.IntakeStatus.FORCEDINTAKE;
                 },BetterGamepad.Type.PARALLEL);//intake fortat
-        gamepadEx2.getButton(BetterGamepad.Buttons.TRIANGLE)
-                .whenPressed(Blocker::block, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.CIRCLE)
                 .whenPressed(Spit::new, BetterGamepad.Type.PARALLEL);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_UP)
                 .whenPressed(Drivetrain::toggleControlMethod, BetterGamepad.Type.PARALLEL);
+
+        gamepadEx2.getButton(BetterGamepad.Buttons.TRIANGLE)
+                .whenPressed(Blocker::block, BetterGamepad.Type.MAIN);
+        gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
+                .whenPressed(Robot::switchPlayStyle, BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.CROSS)
                 .whenPressed(() -> Shooter.shooterEnabled = !Shooter.shooterEnabled, BetterGamepad.Type.MAIN);
         gamepadEx2.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
                 .whenPressed(Turret::toggleStatus,  BetterGamepad.Type.PARALLEL);
+        gamepadEx2.getButton(BetterGamepad.Buttons.LEFT_BUMPER)
+                .whenPressed(() -> Globals.playingDefense = !Globals.playingDefense, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_RIGHT)
                 .whenPressed(() -> Turret.offset -= .5, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_LEFT)
@@ -72,10 +83,6 @@ public abstract class TeleOp extends BetterOpMode {
                 .whenPressed(() -> Turret.offset += 2, BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.DPAD_DOWN)
                 .whenPressed(() -> Turret.offset -= 2, BetterGamepad.Type.PARALLEL);
-
-        gamepadEx2.getButton(BetterGamepad.Buttons.OPTIONS)
-                .whenPressed(Robot::switchPlayStyle, BetterGamepad.Type.MAIN);
-
         gamepadEx2.getButton(BetterGamepad.Buttons.SQUARE)
                 .whenPressed(()->Shooter.offset += 10 , BetterGamepad.Type.PARALLEL);
         gamepadEx2.getButton(BetterGamepad.Buttons.CIRCLE)
@@ -112,7 +119,6 @@ public abstract class TeleOp extends BetterOpMode {
                 }
             }
         });
-        Shooter.offset = Robot.playStyle == Robot.PlayStyle.CLOSE ? -40 : -60;
     }
 
     @Override
@@ -138,15 +144,13 @@ public abstract class TeleOp extends BetterOpMode {
     long now, last, dt;
 
     boolean rumbleIN = false, rumbleOUT = false;
+    LinkedList<Double> volt, amps;
     @Override
     public void active_loop() {
         now = System.nanoTime();
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
-       // Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() +
-           //     0.01 * (gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) -
-              //          gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER)));
 
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("x", Robot.robotPose.getX());
@@ -160,22 +164,22 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("cur vel", Shooter.motor1.getVelocity());
         telemetry.addData("target vel", Shooter.velocity);
         telemetry.addData("isRobotCentric" ,Drivetrain.robotCentric);
-
+        telemetry.addData("amps", Robot.voltage * (80/3.3));
+        telemetry.addData("limit", Drivetrain.powerLimit);
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
-            gamepad1.rumble(300);
+            gamepad1.rumble(700);
             rumbleIN = true;
             rumbleOUT = false;
         }
         if(Storage.status == Storage.Status.EMPTY && !rumbleOUT){
-            gamepad1.rumble(300);
+            gamepad1.rumble(700);
             rumbleIN = false;
             rumbleOUT = true;
         }
         if(!Blocker.blocked && !Shooter.readyForShoot){
             gamepad2.rumble(300);
         }
-
         Intake.update();
         robot.update();
         telemetry.update();
