@@ -52,7 +52,7 @@ public class CloseRed24 extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
-                    .addTask(new ThreadedTask(Shoot::new, 0))
+                    .addTask(new ThreadedTask(Shoot::new, 0.1))
                     .addTask(() -> follower.setMaxPower(1));
         }
         @Override
