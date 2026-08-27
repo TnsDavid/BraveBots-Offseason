@@ -123,7 +123,7 @@ public class AutoFarLLREDPlayoff extends AutoFar {
     @Override
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose);
-        offset = -3;
+        offset = -1.5;
         velocity = 1080;
         pos = 0.5792;
         auto.addTask(new ShootFar())

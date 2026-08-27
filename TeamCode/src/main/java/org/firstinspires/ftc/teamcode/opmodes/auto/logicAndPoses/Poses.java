@@ -8,9 +8,9 @@ public class Poses {
         public static Pose shootPose = new Pose(84.45469522240526 , 82.79406919275122);
         public static Pose collectSecondSpike = new Pose(127.3858319604613, 61, 0);
         public static Pose collectSecondSpikeCP = new Pose(89.83767281105992, 57.27868663594469);
-        public static Pose gateCollect = new Pose(131.7 , 58.15, Math.toRadians(29.5));
+        public static Pose gateCollect = new Pose(131.3 , 58.2, Math.toRadians(30));
         public static Pose PULAAAAA = gateCollect.mirror(144);
-        public static Pose gateCollectBlue = new Pose(PULAAAAA.getX(), PULAAAAA.getY(), Math.toRadians(151.5));
+        public static Pose gateCollectBlue = new Pose(PULAAAAA.getX(), PULAAAAA.getY(), Math.toRadians(150.5));
         public static Pose collectThirdSpike = new Pose(129.3, 35.11037891268535, Math.toRadians(0));
         public static Pose collectThirdSpikeCP = new Pose(86.58978583196047, 28.467874794069186);
         public static Pose gateCollectCP = new Pose(105.56836902800659, 67.44678747940692, 0);

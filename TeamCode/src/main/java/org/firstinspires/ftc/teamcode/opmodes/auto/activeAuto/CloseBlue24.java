@@ -53,6 +53,7 @@ public class CloseBlue24 extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
+                    .addTask(Shooter::reachedRPM)
                     .addTask(new ThreadedTask(Shoot::new, 0.2))
                     .addTask(() -> follower.setMaxPower(1));
         }
@@ -80,6 +81,7 @@ public class CloseBlue24 extends Auto {
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(()->follower.getCurrentTValue()>0.7)
+                    .addTask(Shooter::reachedRPM)
                     .addTask(new ThreadedTask(Shoot::new, lastCycle ? 0.3 : 0.1))
                     .addTask(() -> follower.setMaxPower(1));
         }
@@ -105,6 +107,7 @@ public class CloseBlue24 extends Auto {
                     .addTask(()-> follower.getCurrentTValue() > 0.3)
                     .addTask(() -> follower.setMaxPower(0.5))
                     .addTask(() -> follower.getCurrentTValue() > 0.6)
+                    .addTask(Shooter::reachedRPM)
                     .addTask(new Shoot());
         }
 

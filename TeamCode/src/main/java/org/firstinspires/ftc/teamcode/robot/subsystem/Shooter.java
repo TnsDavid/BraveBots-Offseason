@@ -89,6 +89,6 @@ public class Shooter {
     }
     public static boolean reachedRPM() {
         double velo = Math.abs(motor1.getVelocity());
-        return Math.abs(velocity - velo) < 40;
+        return Math.abs(velocity - velo) <= 20;
     }
 }

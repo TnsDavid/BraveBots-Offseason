@@ -118,7 +118,7 @@ public class Robot {
     //
     public static void switchPlayStyle(){
         playStyle = playStyle == PlayStyle.CLOSE ? PlayStyle.FAR : PlayStyle.CLOSE;
-        Shooter.offset = playStyle == PlayStyle.CLOSE ? -40 : 0;
+        Shooter.offset = playStyle == PlayStyle.CLOSE ? -20 : 0;
     }
     public void resetPinPoint() {
         Odo.odo.resetPosAndIMU();

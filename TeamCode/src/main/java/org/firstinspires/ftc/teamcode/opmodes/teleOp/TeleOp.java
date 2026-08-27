@@ -52,7 +52,7 @@ public abstract class TeleOp extends BetterOpMode {
         gamepadEx1.getButton(BetterGamepad.Buttons.OPTIONS)
                 .whenPressed(() -> {
                     robot.resetPinPoint();
-                     Turret.offset = -3;
+                     Turret.offset = -1.5;
                     gamepad1.rumble(200);
                 }, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.DPAD_DOWN)
@@ -157,15 +157,12 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("y", Robot.robotPose.getY());
         telemetry.addData("heading", Robot.robotPose.getHeading());
         telemetry.addData("dist", Turret.virtualDist);
-        telemetry.addData("hoodPos", Shooter.hoodServo.getPosition());
         telemetry.addData("turret offset", Turret.offset);
         telemetry.addData("shooter offset", Shooter.offset);
-        telemetry.addData("transfer status", Storage.activeStatus);
         telemetry.addData("cur vel", Shooter.motor1.getVelocity());
         telemetry.addData("target vel", Shooter.velocity);
-        telemetry.addData("isRobotCentric" ,Drivetrain.robotCentric);
-        telemetry.addData("amps", Robot.voltage * (80/3.3));
-        telemetry.addData("limit", Drivetrain.powerLimit);
+        telemetry.addData("isRobotCentric", Drivetrain.robotCentric);
+        telemetry.addData("current limit", Globals.playingDefense);
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
             gamepad1.rumble(700);
@@ -180,6 +177,7 @@ public abstract class TeleOp extends BetterOpMode {
         if(!Blocker.blocked && !Shooter.readyForShoot){
             gamepad2.rumble(300);
         }
+
         Intake.update();
         robot.update();
         telemetry.update();
