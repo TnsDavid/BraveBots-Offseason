@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tasks.command_based.improvedCore;
+package org.firstinspires.ftc.teamcode.tasks.command_based.improved_core;
 
 public interface BetterTask {
     static BetterTaskBuilder createTask(){

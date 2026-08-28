@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.tasks.command_based.improvedCore;
+package org.firstinspires.ftc.teamcode.tasks.command_based.improved_core;
 
-import static org.firstinspires.ftc.teamcode.tasks.command_based.improvedCore.ExecuteType.ONCE;
-import static org.firstinspires.ftc.teamcode.tasks.command_based.improvedCore.TaskType.SEQUENTIAL;
+import static org.firstinspires.ftc.teamcode.tasks.command_based.improved_core.ExecuteType.ONCE;
+import static org.firstinspires.ftc.teamcode.tasks.command_based.improved_core.TaskType.SEQUENTIAL;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;

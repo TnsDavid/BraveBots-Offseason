@@ -1,8 +1,11 @@
-package org.firstinspires.ftc.teamcode.tasks.command_based.improvedCore;
+package org.firstinspires.ftc.teamcode.tasks.command_based.improved_core.test_commands;
+
+import org.firstinspires.ftc.teamcode.tasks.command_based.improved_core.BetterTask;
+import org.firstinspires.ftc.teamcode.tasks.command_based.improved_core.ExecuteType;
+import org.firstinspires.ftc.teamcode.tasks.command_based.improved_core.TaskType;
 
 public class TestCommand {
     public static BetterTask testTask;
-
     public static void createCommand(){
         testTask = BetterTask.createTask()
                 .setTaskStart(() -> {System.out.println("start");})
