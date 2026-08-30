@@ -79,7 +79,7 @@ public abstract class AutoFar extends BetterOpMode {
         telemetry.addData("x", robotPose.getX());
         telemetry.addData("y", robotPose.getY());
         telemetry.addData("heading", robotPose.getHeading());
-        telemetry.addData("velo",Shooter.motor1.getVelocity());
+        telemetry.addData("velo",Shooter.motor2.getVelocity());
         telemetry.update();
 
         robot.update();

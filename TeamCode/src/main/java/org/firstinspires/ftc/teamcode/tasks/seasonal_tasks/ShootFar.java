@@ -18,7 +18,7 @@ public class ShootFar implements Task {
                 .addTask(() -> {
                     if (Storage.status.equals(Storage.Status.ONEBALL)) Storage.oneBall = true;
                 })
-                .addTask(() -> Math.abs(Shooter.motor1.getVelocity()) > Shooter.velocityFAR - treshhold)
+                .addTask(() -> Math.abs(Shooter.motor2.getVelocity()) > Shooter.velocityFAR - treshhold)
                 .addTask(() -> Shooter.readyForShoot = true)
                 .addTask(Blocker::unblock)
                 .waitSeconds(0.1)

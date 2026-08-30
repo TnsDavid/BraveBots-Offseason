@@ -25,7 +25,7 @@ public class nustiu extends LinearOpMode {
                 Shooter.motor1.setPower(0);
                 Shooter.motor2.setPower(0);
             }
-            telemetry.addData("m1 vel", Shooter.motor1.getVelocity());
+            telemetry.addData("m1 vel", Shooter.motor2.getVelocity());
             telemetry.addData("m2 vel", Shooter.motor2.getVelocity());
             telemetry.update();
             r.update();

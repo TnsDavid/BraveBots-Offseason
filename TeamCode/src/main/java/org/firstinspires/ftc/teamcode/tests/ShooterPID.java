@@ -39,7 +39,7 @@ public class ShooterPID extends LinearOpMode {
                 Scheduler.now(new Shoot());
             telemetry.addData("hoodpos", Shooter.hoodServo.getPosition());
             telemetry.addData(" target velocity", Shooter.velocity);
-            telemetry.addData("curr vel", Shooter.motor1.getVelocity());
+            telemetry.addData("curr vel", Shooter.motor2.getVelocity());
             telemetry.update();
             robot.update();
             Intake.update();

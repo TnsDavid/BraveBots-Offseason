@@ -83,7 +83,7 @@ public abstract class Auto extends BetterOpMode {
         robot.update();
         follower.update();
         auto.update();
-        Shooter.AutoUpdate(velocity, pos);
+        Shooter.update();
         Turret.updateAuto(follower , offset);
         Storage.update2();
     }

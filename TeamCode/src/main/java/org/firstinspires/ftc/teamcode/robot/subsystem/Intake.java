@@ -45,8 +45,6 @@ public class Intake {
         if (Storage.status.equals(Storage.Status.STORAGEFULL) && !status.equals(IntakeStatus.FORCEDINTAKE) && !Shooter.readyForShoot) {
             stop();
         }
-        if(Globals.playingDefense )
-            if(Robot.voltage * (80/3.3) > 30) stop();
     }
 
 }

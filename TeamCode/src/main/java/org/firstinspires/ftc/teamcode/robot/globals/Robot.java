@@ -176,7 +176,7 @@ public class Robot {
                 .setPFCoefficients(Shooter.pClose, Shooter.fClose);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter2.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     private void assignHardware(){
         Blocker.blocker=blocker;
@@ -207,7 +207,6 @@ public class Robot {
         blocker = new BetterServo(expansionHubServos, 1);
         ledST=new RGBIndicator(controlHubServos,5);
         ledDR=new RGBIndicator(expansionHubServos,5);
-
         hood.setDirection(Servo.Direction.REVERSE);
     }
 
@@ -225,7 +224,6 @@ public class Robot {
         upLaser = new BreakBeam(controller, 0);
         middleLaser = hm.get(DigitalChannel.class, "laser");
         middleLaser.setMode(DigitalChannel.Mode.INPUT);
-        floodgate = hm.get(AnalogInput.class, "Floodgate");
 
         Storage.startedTimer = false;
         Odo.init(hm, opModeType, playStyle);
@@ -234,10 +232,9 @@ public class Robot {
         Turret.ChassisLpf = new LowPassFilter(0.8, 0.0);
         Shooter.HoodLpf = new LowPassFilter(lpf, 0.0);
 
-        Globals.playingDefense = false;
     }
     ElapsedTime timer;
-    public static double totalCurrentDrawn, voltage ,  current ;
+    public static double totalCurrentDrawn ;
 
     public void update(){
         if(timer== null)
@@ -250,7 +247,6 @@ public class Robot {
         }
 
         totalCurrentDrawn = controlHub.getCurrent(CurrentUnit.AMPS) + expansionHub.getCurrent(CurrentUnit.AMPS);
-        voltage = floodgate.getVoltage();
     }
 
 

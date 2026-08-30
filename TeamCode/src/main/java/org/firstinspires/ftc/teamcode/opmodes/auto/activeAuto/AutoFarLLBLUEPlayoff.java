@@ -33,7 +33,7 @@ public class AutoFarLLBLUEPlayoff extends AutoFar {
                     .addTask(() -> follower.setMaxPower(0.7))
                     .addTask(() -> !follower.isBusy())
                     .addTask(() -> follower.turn(Math.toRadians(20), true))
-                    .waitSeconds(0.13)
+                    .waitSeconds(0.1)
                     .addTask(() -> follower.turn(Math.toRadians(25), false))
                     .waitSeconds(0.07)
                     .addTask(()->follower.setMaxPower(1))
@@ -41,7 +41,7 @@ public class AutoFarLLBLUEPlayoff extends AutoFar {
                     .addTask(()->follower.getCurrentTValue() > 0.8)
                     .addTask(Intake::stop)
                     .addTask(() -> !follower.isBusy())
-                    .waitSeconds(0.1)
+                    .waitSeconds(0.05)
                     .addTask(new ShootFar());
         }
 
@@ -64,9 +64,8 @@ public class AutoFarLLBLUEPlayoff extends AutoFar {
                     .addTask(() -> !follower.isBusy())
                     .addTask(() -> follower.setMaxPower(1))
                     .lineToTangentialToConstantAsync(Poses.FarPoses.shootPoseScan.mirror(fieldLength), 0.7, true)
-                    .waitSeconds(0.1)
-                    .addTask(new ShootFar())
-                    .waitSeconds(0.1);
+                    .waitSeconds(0.05)
+                    .addTask(new ShootFar());
         }
 
         @Override
@@ -85,10 +84,6 @@ public class AutoFarLLBLUEPlayoff extends AutoFar {
                     .addTask(() -> LLMath.scan(follower))
                     .addTask(() -> follower.getCurrentTValue() > 0.5)
                     .addTask(() -> !follower.isBusy() || Math.abs(Odo.odo.getVelX(DistanceUnit.METER)) < 0.5)
-                    .addTask(() -> follower.turn(Math.toRadians(30), true))
-                    .waitSeconds(0.05)
-                    .addTask(() -> follower.turn(Math.toRadians(30), false))
-                    .waitSeconds(0.05)
                     .addTask(()->follower.setMaxPower(1))
                     .lineToTangentialToConstantSync(Poses.FarPoses.shootPoseScan.mirror(fieldLength), 0.7, true)
                     .addTask(() -> follower.getCurrentTValue() > 0.55)
@@ -126,7 +121,7 @@ public class AutoFarLLBLUEPlayoff extends AutoFar {
     public void buildAuto(){
         follower.setStartingPose(Poses.FarPoses.startingPose.mirror(fieldLength));
         offset = 0;
-        velocity = 1080;
+        velocity = 1090;
         pos = 0.5792;
         auto.addTask(new ShootFar())
                 .addTask(new HPCollect())
@@ -136,7 +131,7 @@ public class AutoFarLLBLUEPlayoff extends AutoFar {
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
                 .addTask(new CycleCollect())
-                .addTask(new PLEACA_BA_DE_ACOLO());
+                .addTask(new CycleCollect());
     }
 
     @Override

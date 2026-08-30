@@ -27,9 +27,9 @@ public class Drivetrain {
         double br = (y + x - rx) / d;
 
         if(Globals.playingDefense ) {
-            if (Robot.voltage * (80 / 3.3) > 30) powerLimit = 0.5;
+            if (Robot.totalCurrentDrawn * (80 / 3.3) > 30) powerLimit = 0.5;
             else powerLimit = 1;
-        } else powerLimit = 1;
+        }
 
         fl *= powerLimit;
         bl *= powerLimit;
@@ -42,13 +42,6 @@ public class Drivetrain {
         rightFront.setPower(fr);
     }
 
-    public static double climbPower = 1;
-    public static void climb(){
-        leftFront.setPower(climbPower);
-        rightFront.setPower(climbPower);
-        leftBack.setPower(climbPower);
-        rightBack.setPower(climbPower);
-    }
     public static boolean robotCentric = true;
     public static void toggleControlMethod() {
         robotCentric = !robotCentric;

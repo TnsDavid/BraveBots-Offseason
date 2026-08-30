@@ -159,10 +159,9 @@ public abstract class TeleOp extends BetterOpMode {
         telemetry.addData("dist", Turret.virtualDist);
         telemetry.addData("turret offset", Turret.offset);
         telemetry.addData("shooter offset", Shooter.offset);
-        telemetry.addData("cur vel", Shooter.motor1.getVelocity());
+        telemetry.addData("cur vel", Shooter.motor2.getVelocity());
         telemetry.addData("target vel", Shooter.velocity);
         telemetry.addData("isRobotCentric", Drivetrain.robotCentric);
-        telemetry.addData("current limit", Globals.playingDefense);
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
             gamepad1.rumble(700);

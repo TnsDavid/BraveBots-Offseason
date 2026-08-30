@@ -81,7 +81,7 @@ public class Test extends BetterOpMode {
             Shooter.AutoUpdate(Shooter.velocity , 0);
         } else
             Shooter.setPower(0);
-        telemetry.addData("velocity", Shooter.motor1.getVelocity());
+        telemetry.addData("velocity", Shooter.motor2.getVelocity());
         telemetry.addData("target velocity", Shooter.velocity);
         telemetry.addData("hood pos", Shooter.hoodServo.getPosition());
         telemetry.addData("shooter enabled", shooterEnabled);

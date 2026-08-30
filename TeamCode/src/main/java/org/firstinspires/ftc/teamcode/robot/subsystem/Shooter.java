@@ -35,7 +35,7 @@ public class Shooter {
     public static boolean shooterEnabled = false;
     public static double hoodCompensation;
     public static double calculateHoodByError(double pos, double velocity) {
-        hoodCompensation = HoodLpf.update(pos * (Math.abs(motor1.getVelocity()) / velocity));
+        hoodCompensation = HoodLpf.update(pos * (Math.abs(motor2.getVelocity()) / velocity));
         return Range.clip(hoodCompensation, minHoodpos, maxHoodPos);
     }
 
@@ -53,16 +53,16 @@ public class Shooter {
         HoodLpf.setAlpha(Robot.opModeType == Robot.OpModeType.AUTO ? thetaAuto : theta);
         if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
             velocity = ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) + offset;
-            hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor1.getVelocity());
+            hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor2.getVelocity());
         } else {
             velocity = Turret.virtualDist <= 2.7 ? 1000 : ShooterMath.calculateVelocityFARFromDistance(Turret.virtualDist) + offset;
             hoodPos = calculateHoodByError(hoodFAR, velocity);
         }
         hoodServo.setPosition(hoodPos);
         double currentVoltage = Robot.voltageSensor.getVoltage();
-        double pid = controller.calculate(Math.abs(motor1.getVelocity()), velocity);
+        double pid = controller.calculate((motor2.getVelocity()), velocity);
         double output = pid * (Robot.nominalVoltage / currentVoltage);
-        if (shooterEnabled) setPower(output);
+        if (shooterEnabled) setPower(-output);
         else setPower(0);
     }
 
@@ -71,10 +71,10 @@ public class Shooter {
         HoodLpf.setAlpha(thetaAuto);
         if (Shooter.readyForShoot) hoodPos = calculateHoodByError(hoodPos, velocity);
         double currentvoltage = Robot.voltageSensor.getVoltage();
-        double pid = controller.calculate(Math.abs(motor1.getVelocity()), velocity);
+        double pid = controller.calculate(Math.abs(motor2.getVelocity()), velocity);
         double output = pid * (Robot.nominalVoltage / currentvoltage);
         hoodServo.setPosition(hoodPos);
-        setPower(output);
+        setPower(-output);
     }
 
     public static void tuningupdate(double velocity) {
@@ -82,13 +82,13 @@ public class Shooter {
         HoodLpf.setAlpha(thetaAuto);
         Shooter.velocity = velocity;
         double currentvoltage = Robot.voltageSensor.getVoltage();
-        double pid = controller.calculate(Math.abs(motor1.getVelocity()), velocity);
+        double pid = controller.calculate(Math.abs(motor2.getVelocity()), velocity);
         double output = pid * (Robot.nominalVoltage / currentvoltage);
-        if (shooterEnabled) setPower(output);
+        if (shooterEnabled) setPower(-output);
         else setPower(0);
     }
     public static boolean reachedRPM() {
-        double velo = Math.abs(motor1.getVelocity());
+        double velo = Math.abs(motor2.getVelocity());
         return Math.abs(velocity - velo) <= 20;
     }
 }
