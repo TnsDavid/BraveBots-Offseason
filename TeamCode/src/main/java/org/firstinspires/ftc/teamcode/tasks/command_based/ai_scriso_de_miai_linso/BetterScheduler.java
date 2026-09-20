@@ -4,6 +4,8 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.tasks.command_based.ai_scriso_de_miai_linso.auto.ExecutionMode;
+import org.firstinspires.ftc.teamcode.tasks.command_based.ai_scriso_de_miai_linso.useful_commands.Conditional;
+import org.firstinspires.ftc.teamcode.tasks.command_based.ai_scriso_de_miai_linso.useful_commands.WaitSeconds;
 import org.firstinspires.ftc.teamcode.tasks.command_based.ai_scriso_de_miai_linso.useful_commands.WaitUntil;
 
 import java.util.Iterator;
@@ -126,10 +128,25 @@ public class BetterScheduler {
     }
 
     public BetterScheduler waitUntil(BooleanSupplier condition){
-        WaitUntil.createCommand(condition);
-        schedule(WaitUntil.getCommand());
+        schedule(WaitUntil.getCommand(condition));
         return this;
     }
+
+    public BetterScheduler waitSeconds(double seconds){
+        schedule(WaitSeconds.getCommand(seconds));
+        return this;
+    }
+
+    public BetterScheduler conditional(Runnable ifTrue, Runnable ifFalse, BooleanSupplier condition, TaskType type){
+        schedule(Conditional.getCommand(ifTrue, ifFalse, condition, type));
+        return this;
+    }
+
+    public BetterScheduler conditional(BetterTask ifTrue, BetterTask ifFalse, BooleanSupplier condition){
+        schedule(Conditional.getCommand(ifTrue, ifFalse, condition));
+        return this;
+    }
+
 
     public void update(){
         if(!list.isEmpty()){

@@ -7,13 +7,9 @@ import java.util.function.BooleanSupplier;
 
 public class WaitUntil {
     public static BetterTask command;
-    public static void createCommand(BooleanSupplier condition){
-        command = BetterTask.createTask()
+    public static BetterTask getCommand(BooleanSupplier condition){
+        return BetterTask.createTask()
                 .setTaskJustDone(condition)
                 .setTaskType(TaskType.SEQUENTIAL);
-    }
-
-    public static BetterTask getCommand(){
-        return command;
     }
 }

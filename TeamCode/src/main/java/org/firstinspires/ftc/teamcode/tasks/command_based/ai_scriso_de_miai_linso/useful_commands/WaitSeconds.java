@@ -6,13 +6,10 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.ai_scriso_de_miai_lins
 import org.firstinspires.ftc.teamcode.tasks.command_based.ai_scriso_de_miai_linso.TaskType;
 
 public class WaitSeconds {
-    public static BetterTask command;
-
     public static BetterTask getCommand(double seconds){
         ElapsedTime timer = new ElapsedTime();
-        command = BetterTask.createTask()
+        return BetterTask.createTask()
                 .setTaskJustDone(() -> timer.seconds() > seconds)
                 .setTaskType(TaskType.SEQUENTIAL);
-        return command;
     }
 }
