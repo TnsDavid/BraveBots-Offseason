@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.extendedPedro;
+package org.firstinspires.ftc.teamcode.madoarerauinpula;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.extendedPedro.PathPlanning.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+import org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning.Pose2D;
 import org.firstinspires.ftc.teamcode.robot.globals.Odo;
 import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.util.math.LowPassFilter;
@@ -37,7 +38,6 @@ public class Localizer {
         Odo.odo.setPosY(pose.getY() , DistanceUnit.INCH);
         Odo.odo.setHeading(pose.getHeading() , AngleUnit.RADIANS);
     }
-
     public double getPredictedX(){
         return predictedX;
     }
@@ -45,9 +45,27 @@ public class Localizer {
         return predictedY;
     }
 
+
+    public Pose2D getPredictedPose(){
+        return new Pose2D(getPredictedX() , getPredictedY());
+    }
+    public Pose2D getCurrentPose(){
+        return currentPose;
+    }
+
+    public double getHeadingVelocity(){
+        return Odo.odo.getHeadingVelocity(UnnormalizedAngleUnit.RADIANS);
+    }
     public boolean distancePathCompletion(Pose2D target){
         return (currentPose.getDistance(target) < target.defaultTolerance);
     }
+
+    public double getXYVelocity() {
+        return Math.hypot(getXVelocity(), getYVelocity());
+    }
+
+    public double getXVelocity() { return xVelocity; }
+    public double getYVelocity() { return yVelocity; }
 
     public static double filterParameter = 0.8;
     private static final LowPassFilter xVelocityFilter = new LowPassFilter(filterParameter, 0);

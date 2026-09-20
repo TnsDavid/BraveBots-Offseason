@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.extendedPedro.tests;
+package org.firstinspires.ftc.teamcode.madoarerauinpula.tests;
 
-import org.firstinspires.ftc.teamcode.extendedPedro.PathPlanning.Pose2D;
-import org.firstinspires.ftc.teamcode.extendedPedro.PathPlanning.Trajectory;
+import org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning.Pose2D;
+import org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning.Trajectory;
 
 public class Trajectorytest {
     public static void main(String[] args) {
