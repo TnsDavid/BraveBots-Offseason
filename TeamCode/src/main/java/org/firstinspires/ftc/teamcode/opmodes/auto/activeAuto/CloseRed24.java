@@ -13,11 +13,9 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.Threaded
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
-import org.firstinspires.ftc.teamcode.util.annotations.DoNotFUCKINGTouch;
-import org.firstinspires.ftc.teamcode.util.annotations.NotVibeCoded;
+
 
 @Autonomous(name = "Close Red", group = "Auto Close", preselectTeleOp = "TeleOp Red")
-@NotVibeCoded @DoNotFUCKINGTouch
 public class CloseRed24 extends Auto {
     public class ShootPreload implements Task {
         Command command;

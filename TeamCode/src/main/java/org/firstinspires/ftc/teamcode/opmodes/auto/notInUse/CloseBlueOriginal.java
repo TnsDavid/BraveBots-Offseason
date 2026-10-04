@@ -11,10 +11,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystem.Storage;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootAutoClose;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
-import org.firstinspires.ftc.teamcode.util.annotations.NotVibeCoded;
 
 //@Autonomous(name = "Close Blue", group = "Auto Close")
-@NotVibeCoded
 public class CloseBlueOriginal extends Auto {
     double fieldLength = 141;
 

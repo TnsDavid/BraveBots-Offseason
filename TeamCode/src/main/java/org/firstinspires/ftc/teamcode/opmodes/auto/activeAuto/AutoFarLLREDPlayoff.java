@@ -14,12 +14,10 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.Threaded
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.ShootFar;
-import org.firstinspires.ftc.teamcode.util.annotations.DoNotFUCKINGTouch;
-import org.firstinspires.ftc.teamcode.util.annotations.NotVibeCoded;
 import org.firstinspires.ftc.teamcode.util.math.LLMath;
 
 @Autonomous(name = "Far Red", group = "Auto Far", preselectTeleOp = "TeleOp Red")
-@NotVibeCoded @DoNotFUCKINGTouch
+
 public class AutoFarLLREDPlayoff extends AutoFar {
     public class HPCollect implements Task {
         Command s;

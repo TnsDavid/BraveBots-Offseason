@@ -16,9 +16,7 @@ public class Shooter {
     public static double velocity = 0;
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
-   // public static double pClose = 0.005, fClose = 1.175, s = 0.1, d = 0;
     public static double pClose = 0.006, fClose = 1.12, s = 0.15, d = 0;
-    public static double alpha = 0.5;
 
 
     public static PDSFController controller = new PDSFController(pClose, 0, s, fClose / 1860);
@@ -38,12 +36,6 @@ public class Shooter {
         hoodCompensation = HoodLpf.update(pos * (Math.abs(motor2.getVelocity()) / velocity));
         return Range.clip(hoodCompensation, minHoodpos, maxHoodPos);
     }
-
-    //1120 - auto
-
-    //3.94 1190
-    //3.29 1120
-    //3.14 1100
 
     public static double error = 0;
     public static double theta = 0.85;

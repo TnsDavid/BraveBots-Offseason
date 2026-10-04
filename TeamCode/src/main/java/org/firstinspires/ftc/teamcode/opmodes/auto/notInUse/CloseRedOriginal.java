@@ -12,10 +12,7 @@ import org.firstinspires.ftc.teamcode.tasks.command_based.command_types.Threaded
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Command;
 import org.firstinspires.ftc.teamcode.tasks.command_based.core.Task;
-import org.firstinspires.ftc.teamcode.util.annotations.NotVibeCoded;
 
-//@Autonomous(name = "Close Red (21)", group = "Auto Close")
-@NotVibeCoded
 public class CloseRedOriginal extends Auto {
     public class ShootPreload implements Task {
         Command command;

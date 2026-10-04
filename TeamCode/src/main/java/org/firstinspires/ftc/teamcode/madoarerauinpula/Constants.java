@@ -7,8 +7,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.firstinspires.ftc.teamcode.util.math.PIDFController;
 
 public class Constants {
-    public static double xOffset = 0 ;
-    public static double yOffset = 0 ;
+    public static double xOffset = -4.02, yOffset = 0.944;
 
     public static double headingConstraint = 0.1;
     public static double headingVelocityConstraint = 0.1;
@@ -17,6 +16,10 @@ public class Constants {
     public static double p = 0;
     public static double linearbraking = 0;
     public static double kquadratric = 0;
+
+
+    /// Aici pui valorile din deceleration tuner
+    public static double xDeceleration , yDeceleration = 0;
 
     public static double pforward , pstrafe , pheading , dstrafe , dforward , dheading , fstrafe , fforward , fheading;
     public static PIDFController forward = new PIDFController(new PIDFCoefficients(pforward , 0 , dforward , fforward));
