@@ -188,7 +188,7 @@ public class RelayFeedBackAutoTune extends LinearOpMode {
             List<Double> amplitudes = new ArrayList<>();
 
             while (op.opModeIsActive()) {
-                if (op.gamepad1.b) throw new IllegalStateException("Cancelled with B");
+                if (op.gamepad1.circleWasPressed()) throw new IllegalStateException("Cancelled with B");
                 loc.update();
                 double now = seconds();
                 if (now - started > c.timeoutSeconds) throw new IllegalStateException("Relay timeout");
@@ -241,7 +241,7 @@ public class RelayFeedBackAutoTune extends LinearOpMode {
                 op.telemetry.addData("Displacement / error", "%.5f / %.5f", measured, error);
                 op.telemetry.addData("Relay command", command);
                 op.telemetry.addData("Measured cycles", "%d / %d", periods.size(), c.measuredCycles);
-                op.telemetry.addLine("B cancels. Untested axes have zero command.");
+                op.telemetry.addLine("Circle  cancels. Untested axes have zero command.");
                 op.telemetry.update();
                 op.idle();
             }

@@ -12,12 +12,8 @@ import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 public class ShooterMath {
     public static double aVFar = 0, bVFar = 160, cVFar = 536;
     public static final double aHFar = 0.004, bHFar = -0.0882, cHFar = 0.85144;
-
-    //y=160x+552
     public static final double aVClose = 0, bVClose = 160, cVClose = 552;
-    //y=0.180343x^{2}-0.433714x+0.623712
     public static final double aHClose = 0.180343, bHClose = -0.433714, cHClose = 0.623712;
-    //y=0.00000704464x^{2}-0.010488x+4.26656
     public static final double aHClose2 = 0.00000704464, bHClose2 = -0.010488, cHClose2 = 4.26656;
 
     public static double TOFCoef = 0.85;
