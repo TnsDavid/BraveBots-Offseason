@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.extendedPedro.PathPlanning;
-
-import com.pedropathing.math.Vector;
+package org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.util.math.Vector;
 
 
 public class Pose2D {
@@ -53,14 +52,12 @@ public class Pose2D {
     }
 
     public Vector getAsVector() {
-        Vector vector =  new Vector();
-        vector.setOrthogonalComponents(x , y);
-        return vector;
+        return new Vector(x , y);
     }
 
-    public Vector convertToPolar(){
+        public Vector convertToPolar(){
         coordinateSystem = CoordinateSystem.POLAR;
-        return new Vector(this.getAsVector().getMagnitude() , this.getAsVector().getTheta());
+        return new Vector(this.getAsVector().getMagnitude() , this.getAsVector().getTheta() , Vector.Type.POLAR);
     }
     public double getDistance(Pose2D other){
         return Math.sqrt((other.getX() - x)*(other.getX() - x) + (other.getY() - y)*(other.getY() - y));
@@ -68,5 +65,20 @@ public class Pose2D {
 
     public boolean isReached(Pose2D other){
         return getDistance(other) <= defaultTolerance;
+    }
+
+    public Pose2D mirrorOnYAxis(){
+        Pose2D p= this;
+        double x, heading;
+        x= 144- p.getX();
+        heading = p.getHeading();
+        while (heading > 2* Math.PI)
+            heading-= 2 * Math.PI;
+        while (heading< 0)
+            heading+= 2* Math.PI;
+
+        heading= heading<= Math.PI ? Math.PI- heading : 3 * Math.PI - heading;
+
+        return new Pose2D(x, p.getY(), heading);
     }
 }

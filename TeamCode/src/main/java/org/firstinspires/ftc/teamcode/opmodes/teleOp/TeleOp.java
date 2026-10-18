@@ -175,6 +175,10 @@ public abstract class TeleOp extends BestOpMode {
         long elapsed = System.nanoTime() - start;
 
         telemetry.addData("Scheduler ms", elapsed / 1_000_000.0);
+        telemetry.addData("deltaX" , Turret.xDelta);
+        telemetry.addData("deltaY", Turret.yDelta);
+        telemetry.addData("posx", Robot.robotPose.getX());
+        telemetry.addData("posy", Robot.robotPose.getY());
 
         if(Storage.status == Storage.Status.STORAGEFULL && !rumbleIN){
             gamepad1.rumble(700);

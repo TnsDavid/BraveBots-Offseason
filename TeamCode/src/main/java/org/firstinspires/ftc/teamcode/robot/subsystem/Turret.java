@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.globals.Alliance;
 import org.firstinspires.ftc.teamcode.robot.globals.Odo;
@@ -20,7 +21,9 @@ public class Turret {
     public static double turretRange=351;
     public static double x, y, heading, xCorner, yCorner, dist, TOF, virtualDist;
     public static final double FIELD_LENGTH= 3.65, goalCircleRadius = .18;
+    public static double tofCoeff = 1.15;
     public static BetterServoEx turret1, turret2;
+    public static double xDelta, yDelta;
     public static boolean reseted = false;
     public static boolean sotm = false;
     public static boolean checkedStatus = false;
@@ -28,13 +31,13 @@ public class Turret {
     public static LowPassFilter ChassisLpf;
 
     public enum TurretStatus {
-        NONACTIVE, ACTIVE
+        INACTIVE, ACTIVE
     }
 
-    public static TurretStatus turrStatus = TurretStatus.NONACTIVE;
+    public static TurretStatus turrStatus = TurretStatus.INACTIVE;
 
     public static void toggleStatus(){
-        turrStatus = turrStatus.equals(TurretStatus.ACTIVE) ? TurretStatus.NONACTIVE : TurretStatus.ACTIVE;
+        turrStatus = turrStatus.equals(TurretStatus.ACTIVE) ? TurretStatus.INACTIVE : TurretStatus.ACTIVE;
     }
     public static void setNeutralPosition(double pos){
         turret1.setPosition(pos);
@@ -59,7 +62,7 @@ public class Turret {
 
             sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
 
-            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
+            TOF = tofCoeff *  ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
 
             xCorner -= velocity.getXComponent() * TOF;
             yCorner -= velocity.getYComponent() * TOF;
@@ -81,56 +84,54 @@ public class Turret {
             } else setNeutralPosition(0.5);
         }
     }
-    public static double offset = -3, addedOffset = 0 , coef = 4.5 ;
+    public static double offset = 2, addedOffset = 0 , coef = 4.5 ;
     public static double xComp, yComp;
-    public static double alpha, offsetCenter = 0.037985, adjustableOffset = 4.5;
+    public static final double hiveLength = 20, hiveWidth = 14;
+    public static double alpha, offsetCenter = 1.5, adjustableOffset = 4.5;
     public static void update(){
         Pose robotPose= Robot.robotPose;
         if (robotPose.getX() != 0 && robotPose.getY() != 0) {
 
-            x= robotPose.getX();
-            y= robotPose.getY();
-            heading= robotPose.getHeading();
+            double robotX = robotPose.getX() * 39.3701;
+            double robotY = robotPose.getY() * 39.3701;
+            double robotHeading = robotPose.getHeading();
 
-            yCorner= FIELD_LENGTH- y - goalCircleRadius;
-            xCorner= Robot.alliance == Alliance.RED ? FIELD_LENGTH- x - goalCircleRadius : -x + goalCircleRadius;
+            boolean switchedHive = robotY > 72;
+            double hiveX = (Robot.alliance == Alliance.RED) ? 60 : 84;
+            double hiveY = (robotY < 72) ? 60 : 84;
+            Pose hivePose = new Pose(hiveX, hiveY);
 
+            xDelta = hivePose.getX() - robotX;
+            double xOffset = (xDelta / hivePose.getX()) * (hiveLength / 2);
+            double yOffset = switchedHive ? (hivePose.getY() / robotY) * (hiveWidth / 2) : -(robotY / hivePose.getY()) * (hiveWidth / 2) ;
+            if(Math.abs(xOffset) > hiveLength / 2 || Math.abs(yOffset) > hiveWidth / 2) /*limit logic*/ ;
+            
             double Vx = Odo.odo.getVelX(DistanceUnit.METER);
             double Vy = Odo.odo.getVelY(DistanceUnit.METER);
-            Vector velocity = new Vector();
-            velocity.setOrthogonalComponents(Vx , Vy);
-            velocity.setMagnitude(ChassisLpf.update(velocity.getMagnitude()));
+            Vy *= switchedHive ? -1 : 1;
+            double TOF = 1;
+            xOffset -= Vx * TOF;
+            yOffset -= Vy * TOF;
 
-            sotm = Shooter.readyForShoot && velocity.getMagnitude() > 1;
+            hivePose = new Pose(hivePose.getX() + xOffset, hivePose.getY() + yOffset);
+            xDelta = hivePose.getX() - robotX;
+            yDelta = hivePose.getY() - robotY;
 
-            TOF = ShooterMath.calculateTOF(ShooterMath.transformInMeters(ShooterMath.calculateVelocityFromDistance(dist)),ShooterMath.calculateHoodAngleFromDistance(dist));
-
-            xCorner -= velocity.getXComponent() * TOF;
-            yCorner -= velocity.getYComponent() * TOF;
-
-            virtualDist = Math.hypot(xCorner, yCorner);
+            virtualDist = Math.hypot(xDelta, yDelta);
 
             if(turrStatus.equals(TurretStatus.ACTIVE)) {
                 Vector offsetVector = new Vector();
                 offsetVector.setOrthogonalComponents(-offsetCenter, 0);
-                offsetVector.rotateVector(heading);
+                offsetVector.rotateVector(robotHeading);
 
-                xComp = offsetVector.getXComponent() * 100;
-                yComp = offsetVector.getYComponent() * 100;
-
-                xCorner -= offsetVector.getXComponent();
-                yCorner -= offsetVector.getYComponent();
+                xDelta -= offsetVector.getXComponent();
+                yDelta -= offsetVector.getYComponent();
 
                 Vector turrVector = new Vector();
-                turrVector.setOrthogonalComponents(xCorner, yCorner);
-                turrVector.rotateVector(-heading);
+                turrVector.setOrthogonalComponents(xDelta, yDelta);
+                turrVector.rotateVector(-robotHeading);
 
-                double headingInDeg = Math.toDegrees(heading);
-                if(Robot.playStyle == Robot.PlayStyle.FAR) {
-                    addedOffset = (headingInDeg >= 0 ? headingInDeg : -headingInDeg) * adjustableOffset / 180;
-                } else addedOffset = 0;
-
-                alpha = Math.toDegrees(turrVector.getTheta()) + offset + addedOffset;
+                alpha = Math.toDegrees(turrVector.getTheta()) + offset;
                 alpha = Range.clip(alpha, 0, 360);
 
                 double finalPos = 0.5 + (alpha - 180) / turretRange;
