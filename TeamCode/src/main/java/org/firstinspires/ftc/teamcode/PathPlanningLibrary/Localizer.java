@@ -1,15 +1,15 @@
-package org.firstinspires.ftc.teamcode.madoarerauinpula;
+package org.firstinspires.ftc.teamcode.PathPlanningLibrary;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.xDeceleration;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.yDeceleration;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.xDeceleration;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.yDeceleration;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
-import org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning.Pose2D;
+import org.firstinspires.ftc.teamcode.PathPlanningLibrary.PathPlanning.Pose2D;
 import org.firstinspires.ftc.teamcode.robot.globals.Odo;
 import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.util.math.LowPassFilter;

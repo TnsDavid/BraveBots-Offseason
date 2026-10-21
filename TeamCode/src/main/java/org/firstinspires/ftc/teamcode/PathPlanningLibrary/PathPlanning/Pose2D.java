@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning;
+package org.firstinspires.ftc.teamcode.PathPlanningLibrary.PathPlanning;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;

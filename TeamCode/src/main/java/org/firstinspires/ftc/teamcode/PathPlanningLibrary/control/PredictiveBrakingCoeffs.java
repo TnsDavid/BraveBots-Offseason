@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.madoarerauinpula.control;
+package org.firstinspires.ftc.teamcode.PathPlanningLibrary.control;
 
 public class PredictiveBrakingCoeffs {
     public double kLinearBraking;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.madoarerauinpula.tuning;
+package org.firstinspires.ftc.teamcode.PathPlanningLibrary.tuning;
 
 import static org.firstinspires.ftc.teamcode.robot.globals.Alliance.RED;
 
@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.madoarerauinpula.Localizer;
-import org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning.Pose2D;
+import org.firstinspires.ftc.teamcode.PathPlanningLibrary.Localizer;
+import org.firstinspires.ftc.teamcode.PathPlanningLibrary.PathPlanning.Pose2D;
 import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
 

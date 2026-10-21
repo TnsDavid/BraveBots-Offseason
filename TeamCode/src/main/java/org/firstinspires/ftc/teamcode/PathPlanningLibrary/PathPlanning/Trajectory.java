@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning;
+package org.firstinspires.ftc.teamcode.PathPlanningLibrary.PathPlanning;
 
 import com.qualcomm.robotcore.util.Range;
 

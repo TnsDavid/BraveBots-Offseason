@@ -1,28 +1,28 @@
-package org.firstinspires.ftc.teamcode.madoarerauinpula;
+package org.firstinspires.ftc.teamcode.PathPlanningLibrary;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.INCH;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.XYVelocityConstraint;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.dforward;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.dheading;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.dstrafe;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.fforward;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.fheading;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.forward;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.fstrafe;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.heading;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.headingConstraint;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.headingVelocityConstraint;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.pforward;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.pheading;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.pstrafe;
-import static org.firstinspires.ftc.teamcode.madoarerauinpula.Constants.strafe;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.XYVelocityConstraint;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.dforward;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.dheading;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.dstrafe;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.fforward;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.fheading;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.forward;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.fstrafe;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.heading;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.headingConstraint;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.headingVelocityConstraint;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.pforward;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.pheading;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.pstrafe;
+import static org.firstinspires.ftc.teamcode.PathPlanningLibrary.Constants.strafe;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning.Pose2D;
-import org.firstinspires.ftc.teamcode.madoarerauinpula.PathPlanning.Trajectory;
+import org.firstinspires.ftc.teamcode.PathPlanningLibrary.PathPlanning.Pose2D;
+import org.firstinspires.ftc.teamcode.PathPlanningLibrary.PathPlanning.Trajectory;
 import org.firstinspires.ftc.teamcode.robot.globals.Odo;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
 import org.firstinspires.ftc.teamcode.util.math.MathStuff;
