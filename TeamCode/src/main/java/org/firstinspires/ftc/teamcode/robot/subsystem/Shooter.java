@@ -17,7 +17,7 @@ public class Shooter {
     public static BetterServo hoodServo;
     public static boolean readyForShoot = false;
    // public static double pClose = 0.005, fClose = 1.175, s = 0.1, d = 0;
-    public static double pClose = 0.006, fClose = 1.12, s = 0.15, d = 0;
+    public static double pClose = 0.002, fClose = 1.16, s = 0.155, d = 0;
     public static double alpha = 0.5;
 
 

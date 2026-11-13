@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import com.pedropathing.math.Vector;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -8,6 +10,7 @@ import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Shooter;
 
 @TeleOp(name = "MUIE LUI VASILE", group = "Vasile este Prost")
+@Disabled
 public class nustiu extends LinearOpMode {
     Robot r;
 

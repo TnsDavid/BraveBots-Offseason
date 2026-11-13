@@ -5,5 +5,5 @@ import com.pedropathing.geometry.Pose;
 public class Globals {
     public static Pose lastPose = new Pose();
 
-    public static boolean playingDefense = true;
+    public static boolean playingDefense = false;
 }

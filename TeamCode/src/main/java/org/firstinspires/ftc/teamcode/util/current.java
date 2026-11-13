@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.util;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit.AMPS;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.robot.globals.Robot;
 import org.firstinspires.ftc.teamcode.robot.subsystem.Drivetrain;
 
 @TeleOp
-
+@Disabled
 public class current extends LinearOpMode {
     Robot r;
 

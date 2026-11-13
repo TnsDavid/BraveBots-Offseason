@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.madoarerauinpula.tuning;
 
 import static org.firstinspires.ftc.teamcode.robot.globals.Alliance.RED;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -15,8 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-// todo: de observat de la ce vin inconsistentele pentru maine;
+// todo: de observat de la ce vin inconsistentele intre teste pentru maine;
 @TeleOp
+@Disabled
 public class DecelarationTuner extends LinearOpMode {
 
     public boolean stopped  , running , finished , forward;

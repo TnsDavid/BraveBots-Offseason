@@ -23,7 +23,7 @@ public class AutoTuning extends BetterOpMode {
     @Override
     public void initialize() {
         r = new Robot(hardwareMap, telemetry, Alliance.RED).setOpModeType(Robot.OpModeType.TELEOP).initialize();
-        //Turret.setNeutralPosition(0);
+        Turret.setNeutralPosition(0.5);
         gamepadEx1.getButton(BetterGamepad.Buttons.CROSS)
                 .whenPressed(Intake::toggle, BetterGamepad.Type.MAIN);
         gamepadEx1.getButton(BetterGamepad.Buttons.RIGHT_BUMPER)
@@ -64,7 +64,7 @@ public class AutoTuning extends BetterOpMode {
         Shooter.hoodServo.setPosition(pos);
         Shooter.tuningupdate(Shooter.velocity);
         Drivetrain.betterDrive(gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_X), -gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_Y), gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_X) );
-        Turret.update();
+        //Turret.update();
         Intake.update();
         Storage.update2();
         //Storage.update();
