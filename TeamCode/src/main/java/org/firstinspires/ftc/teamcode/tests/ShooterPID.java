@@ -29,7 +29,7 @@ public class ShooterPID extends LinearOpMode {
         waitForStart();
         while( opModeIsActive() ) {
             robot.update();
-            Shooter.tuningupdate(velocity);
+            //Shooter.tuningupdate(velocity);
             Shooter.hoodServo.setPosition(Shooter.hoodServo.getPosition() +
                     0.025 * (gamepad1.left_trigger - gamepad1.right_trigger)
             );

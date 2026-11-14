@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Shoot;
 import org.firstinspires.ftc.teamcode.tasks.seasonal_tasks.Spit;
 import org.firstinspires.ftc.teamcode.util.BetterOpMode;
 import org.firstinspires.ftc.teamcode.util.MultipleTelemetry;
+import org.firstinspires.ftc.teamcode.util.math.ShooterMath;
 import org.firstinspires.ftc.teamcode.util.wrappers.BetterGamepad;
 
 import java.util.LinkedList;
@@ -28,6 +29,7 @@ import javax.xml.transform.dom.DOMLocator;
 public abstract class TeleOp extends BetterOpMode {
 
     public Alliance a;
+    public double targetVelocity, targetHoodPos;
     boolean updateTurret;
     Robot robot;
     MultipleTelemetry telemetry;
@@ -91,6 +93,7 @@ public abstract class TeleOp extends BetterOpMode {
         shooterThread = new Thread(() -> {
             while( shooterThreadRunning && !Thread.currentThread().isInterrupted() ) {
                 try {
+                    //Shooter.tuningupdate(targetVelocity, targetHoodPos);
                     Shooter.update();
                     Thread.sleep(3);
                 } catch (InterruptedException e ) {
@@ -151,6 +154,13 @@ public abstract class TeleOp extends BetterOpMode {
         dt = now - last;
         telemetry.addData("hz", 1e9 / dt);
         last = now;
+        targetVelocity = (Robot.playStyle == Robot.PlayStyle.CLOSE) ?
+                ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) :
+                ShooterMath.calculateVelocityFARFromDistance(Turret.virtualDist);
+        targetVelocity += Shooter.offset;
+        targetHoodPos = Shooter.readyForShoot ?
+                ShooterMath.calculateHoodAngleFromVelocity(Math.abs(Shooter.motor2.getVelocity())) :
+                ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist);
 
         telemetry.addData("playstyle", Robot.playStyle);
         telemetry.addData("x", Robot.robotPose.getX());

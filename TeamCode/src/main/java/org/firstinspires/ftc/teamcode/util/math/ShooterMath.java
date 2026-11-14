@@ -18,7 +18,8 @@ public class ShooterMath {
     //y=0.180343x^{2}-0.433714x+0.623712
     public static final double aHClose = 0.180343, bHClose = -0.433714, cHClose = 0.623712;
     //y=0.00000704464x^{2}-0.010488x+4.26656
-    public static final double aHClose2 = 0.00000704464, bHClose2 = -0.010488, cHClose2 = 4.26656;
+    //y=0.00000705357x^{2}-0.0105038x+4.27345
+    public static final double aHClose2 = 0.00000705357, bHClose2 = -0.0105038, cHClose2 = 4.27345;
 
     public static double TOFCoef = 0.85;
     public static double TOFCoefFar = 0.6;

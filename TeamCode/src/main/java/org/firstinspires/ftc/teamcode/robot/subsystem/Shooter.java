@@ -31,7 +31,7 @@ public class Shooter {
     }
     public static double hoodPos = 0, minHoodpos = 0.3322, maxHoodPos = 0.8506, velocityFAR = 1120, closeInc = 0.0082;
     public static double hoodFAR = 0.5792;
-    public static double offset = 0, velocityThreshold = 60;
+    public static double offset = 50, velocityThreshold = 60;
     public static boolean shooterEnabled = false;
     public static double hoodCompensation;
     public static double calculateHoodByError(double pos, double velocity) {
@@ -53,14 +53,17 @@ public class Shooter {
         HoodLpf.setAlpha(Robot.opModeType == Robot.OpModeType.AUTO ? thetaAuto : theta);
         if (Robot.playStyle == Robot.PlayStyle.CLOSE) {
             velocity = ShooterMath.calculateVelocityFromDistance(Turret.virtualDist) + offset;
-            hoodPos = !Shooter.readyForShoot ? ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist) : ShooterMath.calculateHoodAngleFromVelocity(motor2.getVelocity());
+            hoodPos = ShooterMath.calculateHoodAngleFromDistance(Turret.virtualDist);
+            if( readyForShoot ) {
+                hoodPos = calculateHoodByError(hoodPos, velocity);
+            }
         } else {
             velocity = Turret.virtualDist <= 2.7 ? 1000 : ShooterMath.calculateVelocityFARFromDistance(Turret.virtualDist) + offset;
             hoodPos = calculateHoodByError(hoodFAR, velocity);
         }
         hoodServo.setPosition(hoodPos);
         double currentVoltage = Robot.voltageSensor.getVoltage();
-        double pid = controller.calculate((motor2.getVelocity()), velocity);
+        double pid = controller.calculate(Math.abs((motor2.getVelocity())), velocity);
         double output = pid * (Robot.nominalVoltage / currentVoltage);
         if (shooterEnabled) setPower(-output);
         else setPower(0);
@@ -77,13 +80,15 @@ public class Shooter {
         setPower(-output);
     }
 
-    public static void tuningupdate(double velocity) {
+    public static void tuningupdate(double velocity, double hoodPos) {
         controller.setCoefficients(pClose, 0, fClose / 1860, s);
         HoodLpf.setAlpha(thetaAuto);
         Shooter.velocity = velocity;
         double currentvoltage = Robot.voltageSensor.getVoltage();
         double pid = controller.calculate(Math.abs(motor2.getVelocity()), velocity);
         double output = pid * (Robot.nominalVoltage / currentvoltage);
+        //if (Shooter.readyForShoot) hoodPos = calculateHoodByError(hoodPos, velocity);
+        hoodServo.setPosition(hoodPos);
         if (shooterEnabled) setPower(-output);
         else setPower(0);
     }

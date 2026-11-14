@@ -62,7 +62,7 @@ public class AutoTuning extends BetterOpMode {
         //Shooter.motor2.update(Shooter.velocity);\
         double pos = Shooter.hoodServo.getPosition() + 0.02 * (gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_TRIGGER) - gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_TRIGGER));
         Shooter.hoodServo.setPosition(pos);
-        Shooter.tuningupdate(Shooter.velocity);
+        //Shooter.tuningupdate(Shooter.velocity);
         Drivetrain.betterDrive(gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_X), -gamepadEx1.getDouble(BetterGamepad.Trigger.LEFT_Y), gamepadEx1.getDouble(BetterGamepad.Trigger.RIGHT_X) );
         //Turret.update();
         Intake.update();
